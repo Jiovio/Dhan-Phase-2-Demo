@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <title>Start Video Call</title>
+    <!-- Include Jitsi Meet external script -->
+    <script src="https://meet.jit.si/external_api.js"></script>
+    
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+    .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    h1 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        background-color: #007bff;
+        color: #fff;
+    }
+    .card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 300px;
+        left:80%;
+       
+    }
+    .mother-details {
+        margin-top: 20px;
+    }
+    .video-container {
+        position: relative;
+        width: 800px;
+        height: 550px;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .video-popup {
+        position: fixed;
+        top: 70%;
+        left: 37%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        display: none;
+    }
+    .video-popup.active {
+        display: block;
+    }
+    .close-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        color: #555;
+    }
+    #jitsi-container {
+        width: 800px;
+        height: 550px;
+    }
+</style>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1>Start Video Call</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mother ID</th>
+                        <th>Mother Name</th>
+                        <th>Phone Number</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mother in mom %}
+                    <tr>
+                        <td>{{ mother.mother_id }}</td>
+                        <td>{{ mother.mother_name }}</td>
+                        <td>{{ mother.phone_number }}</td>
+                        <!-- Button to start video call -->
+                        <td><button onclick="startVideoCall('{{ mother.mother_id }}', '{{ mother.mother_name }}', '{{ mother.phone_number }}')"><i class="fas fa-video"></i></button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+           <div id="video-popup" class="video-popup">
+    <div class="content">
+        <div class="video-container col-md-6">
+            <!-- Container for Jitsi Meet video conference -->
+            <div id="jitsi-container" class="jitsi-container"></div>
+            <!-- Close button for the video popup -->
+            <button class="close-btn" onclick="closeVideoPopup()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="card col-md-6">
+            <h2>Mother Details</h2>
+            <div id="mother-details" class="mother-details"></div>
+        </div>
+    </div>
+</div>
+        </div>
+    </div>
+
+    <!-- Your JavaScript code -->
+    <script>
+        // Variable to store the Jitsi Meet API instance
+        let api = null;
+
+        function generateRandomString(length = 8) {
+            // Function to generate a random string
+            return Array.from({ length: length }, () => Math.random().toString(36)[2]).join('');
+        }
+
+        function startVideoCall(motherId, motherName, phoneNumber) {
+            // Get a random room name
+            const roomName = generateRandomString();
+
+            // Get the video popup element
+            const videoPopup = document.getElementById('video-popup');
+
+            // Check if the element exists
+            if (videoPopup) {
+                // Show the video popup
+                videoPopup.style.display = 'block';
+
+                // Create a new Jitsi Meet API object
+                const domain = 'meet.jit.si';
+                const options = {
+                    roomName: roomName, // Use the generated room name
+                    parentNode: document.getElementById('jitsi-container'),
+                    userInfo: {
+                        displayName: motherName // Use mother's name as display name
+                    }
+                };
+                api = new JitsiMeetExternalAPI(domain, options);
+
+                // Display mother details
+                document.getElementById('mother-details').innerHTML = `
+                    <p><strong>Mother ID:</strong> ${motherId}</p>
+                    <p><strong>Mother Name:</strong> ${motherName}</p>
+                    <p><strong>Phone Number:</strong> ${phoneNumber}</p>
+                `;
+
+                // Handle events if needed
+                api.addEventListener('videoConferenceJoined', () => {
+                    console.log('Local User Joined');
+                });
+
+                // Join the video call
+                api.executeCommand('displayName', motherName); // Set display name to mother's name
+            } else {
+                console.error('Video popup element not found.');
+            }
+        }
+
+        function closeVideoPopup() {
+            // Function to close the video popup
+            const videoPopup = document.getElementById('video-popup');
+            if (videoPopup) {
+                videoPopup.style.display = 'none';
+            }
+
+            // Close the Jitsi Meet API instance if it exists
+            if (api) {
+                api.dispose();
+                api = null;
+            }
+        }
+
+        // Add an event listener for beforeunload to close the Jitsi Meet API instance before the page is unloaded or refreshed
+        window.addEventListener('beforeunload', () => {
+            closeVideoPopup();
+        });
+    </script>
+</body>
+</html>

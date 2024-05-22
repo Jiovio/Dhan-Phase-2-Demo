@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% load static %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>View</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-omnivore/0.9.0/leaflet-omnivore.min.js"></script>
+    </head>
+        
+    
+    <style>
+        body {
+            font-family: 'Roboto', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f2f2f2;
+            height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            font-size: 15px;
+        }
+    
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+    
+        .btn-primary {
+            background-color: #9381ff;
+            border-color: #9381ff;
+        }
+    
+        .btn-primary:hover {
+            background-color: #9381ff;
+            border-color: #9381ff;
+        }
+    
+        .alert {
+            margin-top: 20px;
+            color: red;
+        }
+    
+        nav.sidebar {
+            background-color: #f2f2f2;
+            color: #000;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            z-index: 1000;
+        }
+    
+        main {
+            transition: margin-left 0.5s;
+            padding: 20px;
+        }
+    
+        nav .navbar-brand {
+            font-family: 'Roboto', sans-serif;
+            color: black;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    
+        nav .nav-link {
+            color: #000;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+    
+        nav .nav-link:hover {
+            color: purple;
+        }
+    
+        section {
+            padding: 20px;
+        }
+    
+        @media (min-width: 768px) {
+            nav.sidebar {
+                width: 250px;
+            }
+    
+            main {
+                margin-left: 250px;
+            }
+        }
+    
+        @media (max-width: 600px) {
+            nav.sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+    
+            main {
+                margin-left: 0;
+            }
+        }
+    
+        .card,
+        #map {
+            max-width: 100%;
+            width: 100%;
+            text-align: center;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+    
+        .card {
+            background: grey;
+            margin-bottom: 20px;
+            color: black;
+            transition: transform 0.3s ease-in-out;
+        }
+    
+        .card:hover {
+            transform: scale(1.05);
+        }
+    
+        header {
+            background-color:#9381ff;
+        
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+            transition: background-color 0.3s ease-in-out;
+        }
+    
+        .card:hover header {
+            background-color: #444;
+        }
+    
+        section {
+            background-color: #f2f2f2;
+            border-radius: 0 0 10px 10px;
+            padding: 15px;
+            transition: background-color 0.3s ease-in-out;
+        }
+    
+        .section-content {
+            margin-top: 10px;
+            
+        }
+    
+        
+    
+        button {
+            color: #666;
+            padding: 0.7em 1.7em;
+            font-size: 12px;
+            border-radius: 0.5em;
+            background: #e8e8e8;
+            cursor: pointer;
+            border: 1px solid #e8e8e8;
+            transition: all 0.3s;
+            box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+            margin-left: 25px;
+        }
+    
+        button:active {
+            color: #666;
+            box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #ffffff;
+        }
+    
+        #map {
+            height: 300px;
+            border-radius: 0 0 10px 10px;
+        }
+    </style>
+    
+    
+  
+
+<body>
+
+  
+    <!--a href="{% url 'admin:index' %}" class="nav-link">
+      <i class="fas fa-user-cog"></i>
+      Django Admin
+  </a-->
+  
+
+  <div class="container-fluid">
+
+    <div class="row">
+        <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <!-- Existing links in the sidebar -->
+                    <li class="nav-item">
+                        <a class="navbar-brand" href="{% url 'admin-dashboard' %}">
+                            <img src="{% static 'Image/logoT.png' %}" alt="Hospital Portal Logo" style="height: 30px; width: auto;">
+                            WaterDMS
+                        </a>
+                    </li><br>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin-dashboard' %}">
+                            <i class="fas fa-chart-line"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <!--li class="nav-item">
+                        <a class="nav-link" href="{%url 'tableau_visualization' %}">
+                            <i class="fas fa-chart-line"></i>
+                            Map Analytics
+                        </a>
+                    </li-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'volunteers_list' %}">
+                            <i class="fas fa-users"></i>
+                            Volunteers List
+                        </a>
+                    </li>
+                    <!-- MasterData Dropdown -->
+                    <!--li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#masterDataDropdown" role="button" aria-expanded="false" aria-controls="masterDataDropdown">
+                            <i class="fas fa-database"></i>
+                            MasterData
+                            <i class="fas fa-caret-down"></i>
+                        </a>
+                        <div class="collapse" id="masterDataDropdown">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Location Master</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Waterbody Master</a>
+                                </li>
+                              
+                            </ul>
+                        </div>
+                    </li-->
+        
+                    <!-- User Management Dropdown -->
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#userManagementDropdown" role="button" aria-expanded="false" aria-controls="userManagementDropdown">
+                            <i class="fas fa-user"></i>
+                            User Management
+                            <i class="fas fa-caret-down"></i>
+                        </a>
+                        <div class="collapse" id="userManagementDropdown">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'field_worker_list' %}">FieldWorkers</a>
+                                </li>
+                                <!--li class="nav-item">
+                                    <a class="nav-link" href="#">Role</a>
+                                </li-->
+                              
+                            </ul>
+                        </div>
+                    </li>
+        
+                    <!-- Permission Management Dropdown -->
+                    <!--li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#permissionManagementDropdown" role="button" aria-expanded="false" aria-controls="permissionManagementDropdown">
+                            <i class="fas fa-lock"></i>
+                            Permission
+                            <i class="fas fa-caret-down"></i>
+                        </a>
+                        <div class="collapse" id="permissionManagementDropdown">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Permissions</a>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </li-->
+        
+                    <!-- Waterbodies Dropdown -->
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#waterbodiesDropdown" role="button" aria-expanded="false" aria-controls="waterbodiesDropdown">
+                            <i class="fas fa-water"></i>
+                            Waterbodies
+                            <i class="fas fa-caret-down"></i>
+                        </a>
+                        <div class="collapse" id="waterbodiesDropdown">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'waterbody-list' %}"> Government Waterbodies</a>
+                                </li>
+                                <!-- Add more nested dropdown items as needed -->
+                            </ul>
+                        </div>
+                    </li>
+        
+                    <!-- Report Dropdown -->
+                    <!--li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#reportDropdown" role="button" aria-expanded="false" aria-controls="reportDropdown">
+                            <i class="fas fa-clipboard-list"></i>
+                            Report
+                            <i class="fas fa-caret-down"></i>
+                        </a>
+                        <div class="collapse" id="reportDropdown">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Reports</a>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </li-->
+        
+                    <!-- Continue with other sidebar links -->
+                    <!-- Add more links as needed -->
+                </ul>
+            </div>
+        </nav>
+        
+      
+        
+       
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="row mt-3">
+                <!-- Added button-container class -->
+                    <a href="{% url 'waterbody-list' %}">
+                        <button >BACK</button>
+                    </a>
+                
+            </div>
+            <br><br>
+            
+            <section class="container">
+                <div class="row">
+                    <!-- Card Column -->
+                    <div class="col-md-6">
+                        <div class="container">
+                            <div class="card hover-card">
+                                <header>
+                                    <h5 class="card-title">{{ water_body.Tank_Name }}</h5>
+                                </header>
+                                <section class="card-body">
+                                    <p class="card-text">Block: {{ water_body.Block }}</p>
+                                    <p class="card-text">Taluk: {{ water_body.Taluk }}</p>
+                                    <p class="card-text">District: {{ water_body.District }}</p>
+                                    <p class="card-text">Capacity (MCM): {{ water_body.Cap_MCM }}</p>
+                                    <p class="card-text">Latitude: {{ water_body.Latitude }}</p>
+                                    <p class="card-text">Longitude: {{ water_body.Longitude }}</p>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map Column -->
+                    <div class="col-md-6">
+                        <div id="map"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-omnivore/0.9.0/leaflet-omnivore.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet-plugins/layer/vector/KML.js"></script>
+<script>
+    // Initialize the map
+    var map = L.map('map').setView([{{ water_body.Latitude }}, {{ water_body.Longitude }}], 13);
+
+    // Add a tile layer (OpenStreetMap)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Add a marker for the water body
+    L.marker([{{ water_body.Latitude }}, {{ water_body.Longitude }}])
+        .addTo(map)
+        .bindPopup('<b>{{ water_body.Tank_Name }}</b><br>{{ water_body.Block }}, {{ water_body.Taluk }}, {{ water_body.District }}');
+
+    // You can customize the popup content as needed
+</script>
+<!--script>
+    // Wait for the DOM content to be fully loaded
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize the map
+        var map = L.map('map').setView([9.9252, 78.1198], 8);
+
+        // Add a tile layer (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Define the URL of the KML file
+        var kmlUrl = "{% static 'Kalathi_kanmoi.kml' %}";
+
+        // Fetch the KML file
+        fetch(kmlUrl)
+            .then(response => response.text())
+            .then(kmlData => {
+                // Create a GeoJSON layer with custom style
+                var geoJsonLayer = L.geoJSON(null, {
+                    style: function(feature) {
+                        return {
+                            color: 'red',
+                            transparent: true,
+                            opacity: 1,
+                            fillOpacity: 0.05
+                        };
+                    }
+                });
+
+                // Add KML data to the GeoJSON layer using Omnivore
+                L.omnivore.kml(kmlData, null, geoJsonLayer).addTo(map);
+            })
+            .catch(error => console.error('Error fetching KML file:', error));
+    });
+</script-->
+<!--script>
+    var map = L.map('map').setView([9.9252, 78.1198], 8);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var kmlLayer = new L.KML("{% static 'Kalathi_kanmoi.kml' %}", {async: true});
+    kmlLayer.addTo(map);
+</script-->
+<!--script>
+    // Initialize the map
+    var map = L.map('map').setView([{{ water_body.Latitude }}, {{ water_body.Longitude }}], 13);
+
+    // Add a tile layer (OpenStreetMap)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Define the URL of the KML file
+    var kmlUrl = "{% static 'Kalathi_kanmoi.kml' %}";
+
+    // Add KML layer to the map
+    var kmlLayer = new L.KML(kmlUrl, {async: true});
+    kmlLayer.addTo(map);
+</script-->
+</body>
+</html>

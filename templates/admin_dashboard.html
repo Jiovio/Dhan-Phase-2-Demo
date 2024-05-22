@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Map</title>
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js" defer></script>
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+   
+
+</head>
+<style>
+    body {
+        font-family: 'Roboto', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f2f2f2;
+        height: 100vh;
+        margin: 0;
+        overflow-x: hidden;
+        font-size: 15px;
+    }
+
+    nav.sidebar {
+        background-color: #f2f2f2;
+        color: #000;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: 1000;
+        overflow-y: auto; /* Enable vertical scrolling */
+    }
+
+    nav .navbar-brand {
+        font-family: 'Roboto', sans-serif;
+        color: black;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    nav .nav-link {
+        color: #000;
+        font-size: 15px;
+        transition: color 0.3s ease;
+    }
+
+    nav .nav-link:hover {
+        color: purple;
+    }
+
+    section {
+        padding: 20px;
+        padding-top: 70px; /* Add padding top to accommodate the fixed navbar in mobile view */
+    }
+
+    .has-background-gradient-green {
+        background: rgb(147, 223, 148);
+        background: linear-gradient(90deg, rgba(147, 223, 148, 1) 0%, rgba(94, 200, 90, 1) 66%);
+        color: white;
+      }
+      
+      .has-background-gradient-green .my-icon {
+        background: rgba(147, 223, 148, 0.9);
+      }
+      
+      
+      .has-background-gradient-blue {
+        background: rgb(179, 186, 255);
+        background: linear-gradient(90deg, rgba(179, 186, 255, 1) 0%, rgba(125, 143, 255, 1) 66%);
+        color: white;
+      }
+      
+      .has-background-gradient-blue .my-icon {
+        background: rgba(179, 186, 255, 0.9);
+      }
+      
+      
+      .has-background-gradient-orange {
+        background: rgb(255, 204, 149);
+        background: linear-gradient(90deg, rgba(255, 204, 149, 1) 0%, rgba(255, 112, 67, 1) 66%);
+        color: white;
+      }
+      
+      .has-background-gradient-orange .my-icon {
+        background: rgba(255, 204, 149, 0.9);
+      }
+      
+      .has-background-gradient-teal {
+        background: rgb(182, 225, 221);
+        background: linear-gradient(90deg, rgba(182, 225, 221, 1) 0%, rgba(38, 166, 154, 1) 66%);
+        color: white;
+      }
+      
+      .has-background-gradient-teal .my-icon {
+        background: rgba(182, 225, 221, 0.9);
+      }
+
+    .my-card {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        min-height: 120px;
+        border: none;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column; /* Display children vertically */
+        justify-content: space-around; /* Distribute items evenly */
+        align-items: center;
+    }
+
+    .my-card .my-icon {
+        border-radius: 8px;
+        font-size: 34px;
+        margin-bottom: 10px;
+    }
+
+    #map {
+        height: 300px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (min-width: 768px) {
+        nav.sidebar {
+            width: 250px;
+        }
+
+        main {
+            margin-left: 250px;
+        }
+
+        .my-card {
+            flex-direction: row; /* Reset direction for larger screens */
+        }
+
+        section {
+            
+            padding:20px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        nav.sidebar {
+            width: 100%;
+            height: auto;
+            position: static; /* Change position to static to avoid overlapping */
+        }
+
+        main {
+            margin-left: 0;
+        }
+
+        .my-card {
+            margin-top: 20px; /* Adjust margin top to avoid overlap with navbar in mobile view */
+        }
+    }
+    #myChartContainer {
+        margin: auto;
+        width: 80%; /* Set your desired maximum width */
+    }
+    
+    #myChart {
+        width: 100%;
+        height: auto;
+    }
+    .text-box {
+        margin-left: 44vw;
+        margin-top: -2vh;
+        display: flex;
+        flex-direction: row;  /* Make the child elements flow horizontally */
+        align-items: center;  /* Center the items vertically */
+    }
+    
+    
+    
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn:active {
+        transform: translateY(-1px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-white {
+        background-color: #fff;
+        color: #777;
+    }
+    
+    
+    
+    .btn-white::after {
+        background-color: #fff;
+    }
+    
+    .btn:hover::after {
+        transform: scaleX(1.4) scaleY(1.6);
+        opacity: 0;
+    }
+    
+    .btn-animated {
+        animation: moveInBottom 5s ease-out;
+        animation-fill-mode: backwards;
+    }
+    
+    @keyframes moveInBottom {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+    
+        100% {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+    }
+    .card-header {
+        padding: 0.5rem 1rem;
+        margin-bottom: 0;
+        background-color: white;
+        border-bottom: 1px solid rgba(0,0,0,.125);
+    }
+    .Btn {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 45px;
+        height: 45px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition-duration: .3s;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+        background-color: rgb(255, 65, 65);
+      }
+      
+      /* plus sign */
+      .sign {
+        width: 100%;
+        transition-duration: .3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .sign svg {
+        width: 17px;
+      }
+      
+      .sign svg path {
+        fill: white;
+      }
+      /* text */
+      .text {
+        position: absolute;
+        right: 0%;
+        width: 0%;
+        opacity: 0;
+        color: white;
+        font-size: 1.2em;
+        font-weight: 600;
+        transition-duration: .3s;
+      }
+      /* hover effect on button width */
+      .Btn:hover {
+        width: 125px;
+        border-radius: 40px;
+        transition-duration: .3s;
+      }
+      
+      .Btn:hover .sign {
+        width: 30%;
+        transition-duration: .3s;
+        padding-left: 20px;
+      }
+      /* hover effect button's text */
+      .Btn:hover .text {
+        opacity: 1;
+        width: 70%;
+        transition-duration: .3s;
+        padding-right: 10px;
+      }
+      /* button click effect*/
+      .Btn:active {
+        transform: translate(2px ,2px);
+      }
+       
+    
+</style>
+
+
+<body>
+    
+    <div class="container-fluid">
+        
+
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky">
+                    <ul class="nav flex-column">
+                        <!-- Existing links in the sidebar -->
+                        <li class="nav-item">
+                            <a class="navbar-brand" href="{% url 'admin-dashboard' %}">
+                                <img src="{% static 'Image/logoT.png' %}" alt="Hospital Portal Logo" style="height: 30px; width: auto;">
+                                WaterDMS
+                            </a>
+                        </li><br>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'admin-dashboard' %}">
+                                <i class="fas fa-chart-line"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <!--li class="nav-item">
+                            <a class="nav-link" href="{%url 'tableau_visualization' %}">
+                                <i class="fas fa-chart-line"></i>
+                                Map Analytics
+                            </a>
+                        </li-->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'volunteers_list' %}">
+                                <i class="fas fa-users"></i>
+                                Volunteers List
+                            </a>
+                        </li>
+                        <!-- MasterData Dropdown -->
+                        <!--li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="collapse" href="#masterDataDropdown" role="button" aria-expanded="false" aria-controls="masterDataDropdown">
+                                <i class="fas fa-database"></i>
+                                MasterData
+                                <i class="fas fa-caret-down"></i>
+                            </a>
+                            <div class="collapse" id="masterDataDropdown">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Location Master</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Waterbody Master</a>
+                                    </li>
+                                  
+                                </ul>
+                            </div>
+                        </li-->
+            
+                        <!-- User Management Dropdown -->
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="collapse" href="#userManagementDropdown" role="button" aria-expanded="false" aria-controls="userManagementDropdown">
+                                <i class="fas fa-user"></i>
+                                User Management
+                                <i class="fas fa-caret-down"></i>
+                            </a>
+                            <div class="collapse" id="userManagementDropdown">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'field_worker_list' %}">FieldWorkers</a>
+                                    </li>
+                                    <!--li class="nav-item">
+                                        <a class="nav-link" href="#">Role</a>
+                                    </li-->
+                                  
+                                </ul>
+                            </div>
+                        </li>
+            
+                        <!-- Permission Management Dropdown -->
+                        <!--li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="collapse" href="#permissionManagementDropdown" role="button" aria-expanded="false" aria-controls="permissionManagementDropdown">
+                                <i class="fas fa-lock"></i>
+                                Permission
+                                <i class="fas fa-caret-down"></i>
+                            </a>
+                            <div class="collapse" id="permissionManagementDropdown">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Permissions</a>
+                                    </li>
+                                    
+                                </ul>
+                            </div>
+                        </li-->
+            
+                        <!-- Waterbodies Dropdown -->
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="collapse" href="#waterbodiesDropdown" role="button" aria-expanded="false" aria-controls="waterbodiesDropdown">
+                                <i class="fas fa-water"></i>
+                                Waterbodies
+                                <i class="fas fa-caret-down"></i>
+                            </a>
+                            <div class="collapse" id="waterbodiesDropdown">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'waterbody-list' %}"> Government Waterbodies</a>
+                                    </li>
+                                    <!-- Add more nested dropdown items as needed -->
+                                </ul>
+                            </div>
+                        </li>
+            
+                        <!-- Report Dropdown -->
+                        <!--li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="collapse" href="#reportDropdown" role="button" aria-expanded="false" aria-controls="reportDropdown">
+                                <i class="fas fa-clipboard-list"></i>
+                                Report
+                                <i class="fas fa-caret-down"></i>
+                            </a>
+                            <div class="collapse" id="reportDropdown">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Reports</a>
+                                    </li>
+                                    
+                                </ul>
+                            </div>
+                        </li-->
+            
+                        <!-- Continue with other sidebar links -->
+                        <!-- Add more links as needed -->
+                    </ul>
+                </div>
+            </nav>
+            
+          
+            
+            
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <section class="container">
+                    
+                    
+                    <div class="row">
+                        <div class="container">
+                            <div class="card border-light mb-3" style="background-color: rgba(255, 255, 255, 0.8);">
+                                <header class="custom-header-bg custom-header-text-color card-header py-3">
+                                    <div class="container-fluid">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h2 class="m-0">DASHBOARD</h2>
+                                            <div class="dropdown">
+                                                <a class="nav-link dropdown-toggle text-white" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <img src="{% static 'Image/admin7.png' %}" alt="User Image" class="user-image" style="height: 40px; width: auto;">
+                                                </a>
+                                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                                    <li><a class="dropdown-item" href=""><i class="fas fa-user"></i> {{ user.username }}</a></li>
+                                                    <li><a class="dropdown-item" href="{% url 'change_password' %}"><i class="fas fa-lock"></i> Change Password</a></li>
+                                                    <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                                                    
+                                                      
+                                                </ul>
+                                               
+                                                  
+                                                  
+                                            </div>
+
+                                        </div>
+                                       
+                                    </div>
+                                    <!--a href="{% url 'logout' %}" class="Btn"> 
+                                        <div class="sign">
+                                            <svg viewBox="0 0 512 512">
+                                                <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="text">Logout</div>
+                                    </a-->
+                                </header>
+                            </div>
+                        </div>
+                    </div>
+                     <!--div class="row mt-4">
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="card my-card has-background-gradient-teal">
+                                    <div class="my-auto mx-auto">
+                                        <span class="fa fa-hospital my-icon py-3 px-4"></span>
+                                    </div>
+                                    <div class="my-auto px-4">
+                                        <p class="mb-1">Total Waterbodies</p>
+                                        <h3 id="totalHospitals">Loading...</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="card my-card has-background-gradient-blue">
+                                    <div class="my-auto mx-auto">
+                                        <span class="fa fa-clinic-medical my-icon py-3 px-4"></span>
+                                    </div>
+                                    <div class="my-auto px-4">
+                                        <p class="mb-1">.......</p>
+                                        <h3 id="privateHospitals">Loading...</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="card my-card has-background-gradient-green">
+                                    <div class="my-auto mx-auto">
+                                        <span class="fa fa-clinic-medical my-icon py-3 px-4"></span>
+                                    </div>
+                                    <div class="my-auto px-4">
+                                        <p class="mb-1">....</p>
+                                        <h3 id="governmentHospitals">Loading...</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div--> 
+                    
+                    
+                    
+                  
+                   
+    <br>
+    <div class="three-body">
+        <div class="three-body__dot"></div>
+        <div class="three-body__dot"></div>
+        <div class="three-body__dot"></div>
+    </div>
+                    
+                    <!-- Add this button where you want it in your HTML -->
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Taluk Chart</h5>
+                                    <div class="my-auto px-4" style="width: 100%; height: 350px;">
+                                        <div id="talukChartContainer">
+                                            <canvas id="talukChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">WaterCapacity Chart</h5>
+                                    <div class="my-auto px-4" style="width: 100%; height: 350px;">
+                                        <div id="myChartContainer">
+                                            <canvas id="myChart"style="height:300px;"></canvas>
+                                        </div>
+                                        <div class="mt-3 d-flex justify-content-end">
+                                            <div class="mt-3">
+                                                <div class="text-box">
+                                                    <button class="btn btn-white btn-animate" onclick="previousPage()"><i class="fas fa-chevron-left"></i></button>
+                                                    <button class="btn btn-white btn-animate" onclick="nextPage()"><i class="fas fa-chevron-right"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <!--div class="row">
+                        <div class="col-md-12">
+                            <div class="my-auto px-4">
+                                <div id="blockChartContainer" class="chart-container">
+                                    <canvas id="blockChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div-->
+                    
+                        <br>
+                        <!--div class="col-12">
+                            
+                                <div class="my-auto px-4">
+                                    
+                                    <div id="myChartContainer">
+                                        <canvas id="myChart"></canvas>
+                                    </div>
+                                    <div class="mt-3 d-flex justify-content-end">
+                                        <div class="mt-3">
+                                            <div class="text-box">
+                                            
+                                                <button  class="btn btn-white btn-animate" onclick="previousPage()"><i class="fas fa-chevron-left"></i></button>
+                                                <button  class="btn btn-white btn-animate" onclick="nextPage()"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                           
+                                        </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div-->
+                                <br><br>
+                                <div id="map"></div>
+                                <!--div class='tableauPlaceholder' id='viz1707126665242' style='position: relative'>
+    <noscript>
+        <a href='#'>
+            <img alt=' ' src='https://public.tableau.com/static/images/Ol/Olympic_16789479316180/Sheet1/1_rss.png' style='border: none' />
+        </a>
+    </noscript>
+    <object class='tableauViz'  style='display:none;'>
+        <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+        <param name='embed_code_version' value='3' />
+        <param name='site_root' value='' />
+        <param name='name' value='Olympic_16789479316180/Sheet1' />
+        <param name='tabs' value='no' />
+        <param name='toolbar' value='yes' />
+        <param name='static_image' value='https://public.tableau.com/static/images/Ol/Olympic_16789479316180/Sheet1/1.png' />
+        <param name='animate_transition' value='yes' />
+        <param name='display_static_image' value='yes' />
+        <param name='display_spinner' value='yes' />
+        <param name='display_overlay' value='yes' />
+        <param name='display_count' value='yes' />
+        <param name='language' value='en-US' />
+    </object>
+</div-->
+                        </div><br><br>
+                        
+
+
+
+            </section>
+            </main>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <script>
+        var map = L.map('map').setView([9.9252, 78.1198], 12);
+    
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+    
+        var markers = L.markerClusterGroup();
+    
+        // Django template tag for looping through WaterBody queryset
+        var waterbodies = [
+            {% for waterbody in waterbodies %}
+                { 
+                    "Tank_Name": "{{ waterbody.Tank_Name }}",
+                    "Taluk": "{{ waterbody.Taluk }}",
+                    "Block": "{{ waterbody.Block }}",
+                    "Latitude": {{ waterbody.Latitude }},
+                    "Longitude": {{ waterbody.Longitude }},
+                    "Cap_MCM":{{waterbody.Cap_MCM}},
+                    
+                },
+            {% endfor %}
+        ];
+    
+        waterbodies.forEach(function (waterbody) {
+            var latitude = parseFloat(waterbody.Latitude);
+            var longitude = parseFloat(waterbody.Longitude);
+    
+            // Check if latitude and longitude are valid numbers
+            if (!isNaN(latitude) && !isNaN(longitude)) {
+                var marker = L.marker([latitude, longitude]);
+                marker.bindPopup("<b>" + waterbody.Tank_Name + "</b><br>Taluk: " + waterbody.Taluk + "<br>Block: " + waterbody.Block +"</b><br>Capacity: " + waterbody.Cap_MCM);
+                markers.addLayer(marker);
+            } else {
+                // Log invalid coordinates for debugging
+                console.log("Invalid coordinates for", waterbody.Tank_Name);
+            }
+        });
+    
+        // Add markers to the map
+        map.addLayer(markers);
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Water Body Capacities (MCM)',
+                    data: [],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function (tooltipItem) {
+                                // Display full text on hover
+                                return myChart.data.datasets[0].fullLabels[tooltipItem[0].dataIndex];
+                            },
+                            label: function (tooltipItem) {
+                                return 'Capacity: ' + tooltipItem.formattedValue + ' MCM';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        var page = 1;
+        var pageSize = 8;
+
+        function updateChart(data) {
+            var startIndex = (page - 1) * pageSize;
+            var endIndex = startIndex + pageSize;
+
+            var labels = data.slice(startIndex, endIndex).map(body => body.Tank_Name.slice(0, 4));
+            var fullLabels = data.slice(startIndex, endIndex).map(body => body.Tank_Name);
+            var values = data.slice(startIndex, endIndex).map(body => body.Cap_MCM);
+
+            myChart.data.labels = labels;
+            myChart.data.datasets[0].data = values;
+
+            // Save the full labels as a custom attribute for tooltips
+            myChart.data.datasets[0].fullLabels = fullLabels;
+
+            myChart.update();
+        }
+
+        function fetchAndUpdateChartData() {
+            fetch('/api/get-water-body-data/?page=' + page)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Fetched data:', data);
+                    updateChart(data.data);
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function nextPage() {
+            page++;
+            fetchAndUpdateChartData();
+        }
+
+        function previousPage() {
+            if (page > 1) {
+                page--;
+                fetchAndUpdateChartData();
+            }
+        }
+
+        // Fetch and update data every 5 seconds (adjust as needed)
+        setInterval(fetchAndUpdateChartData, 5000);
+
+        // Initial fetch on page load
+        fetchAndUpdateChartData();
+    </script>
+    <script>
+        var talukChart = new Chart(document.getElementById('talukChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#63FF84', '#84FF63', '#6384FF', '#CE56FF',
+                    '#FF8C00', '#7B68EE', '#20B2AA', '#FFD700', '#8A2BE2'
+                        // You can add more colors as needed
+                    ],
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'right',  // Adjust the legend position
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem, data) {
+                                var dataset = data.datasets[tooltipItem.datasetIndex];
+                                var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                                    return previousValue + currentValue;
+                                });
+                                var currentValue = dataset.data[tooltipItem.index];
+                                var percentage = Math.floor(((currentValue / total) * 100) + 0.5);
+                                return data.labels[tooltipItem.index] + ': ' + percentage + '%';
+                            },
+                        },
+                    },
+                    title: {
+                        display: true,
+                        text: 'Taluk Division',  // Add the title for the chart
+                        fontSize: 16,
+                    },
+                },
+            },
+        });
+    
+        function updateTalukChart(data) {
+            var taluks = Array.from(new Set(data.map(body => body.Taluk))); // Get unique taluk names
+            var talukCounts = taluks.map(taluk => data.filter(body => body.Taluk === taluk).length); // Count water bodies in each taluk
+    
+            // Update taluk chart data
+            talukChart.data.labels = taluks;
+            talukChart.data.datasets[0].data = talukCounts;
+    
+            talukChart.update();
+        }
+    
+        function fetchAndUpdateTalukChartData() {
+            fetch('/api/get-taluk-data/')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Fetched taluk data:', data);
+                    updateTalukChart(data.data);
+                })
+                .catch(error => console.error('Error fetching taluk data:', error));
+        }
+    
+        // Fetch and update taluk data every 5 seconds (adjust as needed)
+        setInterval(fetchAndUpdateTalukChartData, 5000);
+    
+        // Initial fetch on page load
+        fetchAndUpdateTalukChartData();
+    </script>
+    
+
+    <script>
+        var blockChart = new Chart(document.getElementById('blockChart').getContext('2d'), {
+    type: 'bar',  // Use 'bar' type for a horizontal bar chart
+    data: {
+        labels: [],
+        datasets: [{
+            data: [],
+            backgroundColor: '#FF6384',  // Use a single color for all bars
+        }],
+    },
+    options: {
+        indexAxis: 'y',  // Specify the y-axis for a horizontal bar chart
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false,  // Hide the legend for simplicity
+            },
+            tooltip: {
+                callbacks: {
+                    label: function (context) {
+                        var label = context.dataset.label || '';
+
+                        if (label) {
+                            label += ': ';
+                        }
+                        label += Math.round(context.parsed.y * 100) / 100;
+                        return label;
+                    },
+                },
+            },
+        },
+    },
+});
+    
+        function updateBlockChart(data) {
+            var blocks = Array.from(new Set(data.map(body => body.Block))); // Get unique block names
+            var blockCounts = blocks.map(block => data.filter(body => body.Block === block).length); // Count water bodies in each block
+    
+            // Update block chart data
+            blockChart.data.labels = blocks;
+            blockChart.data.datasets[0].data = blockCounts;
+    
+            blockChart.update();
+        }
+    
+        function fetchAndUpdateBlockChartData() {
+            fetch('/api/get-block-data/')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Fetched block data:', data);
+                    updateBlockChart(data.data);
+                })
+                .catch(error => console.error('Error fetching block data:', error));
+        }
+    
+        // Fetch and update block data every 5 seconds (adjust as needed)
+        setInterval(fetchAndUpdateBlockChartData, 5000);
+    
+        // Initial fetch on page load
+        fetchAndUpdateBlockChartData();
+    </script>
+    
+   
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Show loader on page load
+            showLoader();
+
+            // Simulate a delay (you can adjust this value)
+            setTimeout(function() {
+                // Hide loader after the delay
+                hideLoader();
+            }, 2000); // Adjust the delay in milliseconds (e.g., 2000ms = 2 seconds)
+
+            // Function to show the loader
+            function showLoader() {
+                var loader = document.querySelector('.three-body');
+                if (loader) {
+                    loader.style.display = 'block';
+                }
+            }
+
+            // Function to hide the loader
+            function hideLoader() {
+                var loader = document.querySelector('.three-body');
+                if (loader) {
+                    loader.style.display = 'none';
+                }
+            }
+        });
+    </script>
+<script type='text/javascript'>
+    var divElement = document.getElementById('viz1707126665242');
+    var vizElement = divElement.getElementsByTagName('object')[0];
+    vizElement.style.width='100%';
+    vizElement.style.height=(divElement.offsetWidth*0.75)+'px';
+    
+    var scriptElement = document.createElement('script');
+    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+    vizElement.parentNode.insertBefore(scriptElement, vizElement);
+</script>
+</body>
+
+
+</html>

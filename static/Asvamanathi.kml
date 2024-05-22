@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Aswamanathi.kml</name>
+	<Style id="PolyStyle00">
+		<LabelStyle>
+			<color>00000000</color>
+			<scale>0</scale>
+		</LabelStyle>
+		<LineStyle>
+			<color>ffeb6540</color>
+			<width>0.4</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>fff2db97</color>
+		</PolyStyle>
+	</Style>
+	<Placemark id="ID_01334">
+		<name>Aswamanathi</name>
+		<Snippet maxLines="0"></Snippet>
+		<description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+
+<head>
+
+<META http-equiv="Content-Type" content="text/html">
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+</head>
+
+<body style="margin:0px 0px 0px 0px;overflow:auto;background:#FFFFFF;">
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100%;border-collapse:collapse;padding:3px 3px 3px 3px">
+
+<tr style="text-align:center;font-weight:bold;background:#9CBCE2">
+
+<td>Aswamanathi</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100%;border-spacing:0px; padding:3px 3px 3px 3px">
+
+<tr>
+
+<td>FID</td>
+
+<td>1334</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>CLUSTER</td>
+
+<td></td>
+
+</tr>
+
+<tr>
+
+<td>TANK_NUM</td>
+
+<td>8003</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Unique_id</td>
+
+<td>TNGU-01-T0308</td>
+
+</tr>
+
+<tr>
+
+<td>Tank_Name</td>
+
+<td>Aswamanathi</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Latitude</td>
+
+<td>9.971616</td>
+
+</tr>
+
+<tr>
+
+<td>Longitude</td>
+
+<td>77.754693</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Village</td>
+
+<td>Nattani</td>
+
+</tr>
+
+<tr>
+
+<td>Block</td>
+
+<td>Usilampatti</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Taluk</td>
+
+<td>Usilampatti</td>
+
+</tr>
+
+<tr>
+
+<td>District</td>
+
+<td>Madurai</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Subbasin</td>
+
+<td>Therkar</td>
+
+</tr>
+
+<tr>
+
+<td>Basin</td>
+
+<td>Gundar</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Section</td>
+
+<td></td>
+
+</tr>
+
+<tr>
+
+<td>Sub_Dn</td>
+
+<td></td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Division</td>
+
+<td>Gundar</td>
+
+</tr>
+
+<tr>
+
+<td>Circle</td>
+
+<td>Vaippar basin circle</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Region</td>
+
+<td>Madurai</td>
+
+</tr>
+
+<tr>
+
+<td>Tank_Type</td>
+
+<td>Non system</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Cap_MCM</td>
+
+<td>0.4992</td>
+
+</tr>
+
+<tr>
+
+<td>FTL_m</td>
+
+<td>293.5</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>MWL_m</td>
+
+<td>295</td>
+
+</tr>
+
+<tr>
+
+<td>TBL_m</td>
+
+<td>297</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Sto_Dep_m</td>
+
+<td>0</td>
+
+</tr>
+
+<tr>
+
+<td>Ayacut_ha</td>
+
+<td>153.38</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Catch_sqkm</td>
+
+<td>14.99</td>
+
+</tr>
+
+<tr>
+
+<td>Wat_Spr_ha</td>
+
+<td>0</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>No_of_Weir</td>
+
+<td>0</td>
+
+</tr>
+
+<tr>
+
+<td>Weir_Len_m</td>
+
+<td>0</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>No_Sluice</td>
+
+<td>1</td>
+
+</tr>
+
+<tr>
+
+<td>Low_Sil_m</td>
+
+<td>291</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Bund_Len_m</td>
+
+<td>840</td>
+
+</tr>
+
+<tr>
+
+<td>Dis_cusec</td>
+
+<td>6448.16585</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+</body>
+
+</html>]]></description>
+		<styleUrl>#PolyStyle00</styleUrl>
+		<MultiGeometry>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							77.75392749050386,9.969443100051619,0 77.75586195895984,9.969003448344015,0 77.75665333254469,9.970762055245807,0 77.75559816796559,9.974191340766893,0 77.75383956067779,9.974015480008374,0 77.75243267410369,9.971905150739939,0 77.75392749050386,9.969443100051619,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</MultiGeometry>
+	</Placemark>
+</Document>
+</kml>

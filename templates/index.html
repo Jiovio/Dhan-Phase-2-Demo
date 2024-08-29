@@ -21,13 +21,14 @@
       <meta name="keywords" content="{% block keywords %}{% endblock %}">
       
       <!-- Favicons -->
-      <link rel="icon" href="{% static 'Image/favicon.png' %}">
-      <link rel="apple-touch-icon" href="{% static 'Image/apple-touch-icon.png' %}">
+      <!--link rel="icon" href="{% static 'Image/favicon.png' %}">
+      <link rel="apple-touch-icon" href="{% static 'favicon.png' %}"-->
       
       <!-- Google Fonts -->
       <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
     
       <!-- Vendor CSS Files -->
+      
       <link rel="stylesheet" href="{% static 'assets/vendor/aos/aos.css' %}">
       <link rel="stylesheet" href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}">
       <link rel="stylesheet" href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}">
@@ -69,7 +70,7 @@
           <li><a class="nav-link scrollto" href="#about">About</a></li>
           <li><a class="nav-link scrollto" href="#map1">Map</a></li>
           <li><a class="nav-link scrollto" href="#gallery">Gallery</a></li>
-          <li><a class="nav-link scrollto" href="{% url 'volunteer_form' %}">Volunteers Registration</a></li>
+        
           <!--li><a class="nav-link scrollto" href="#team">Team</a></li-->
           <li><a class="nav-link scrollto" href="{% url 'admin_login' %}"> Login</a></li>
           <!--li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
@@ -106,6 +107,12 @@
           <div data-aos="zoom-out">
             <h1>Track your WaterBody Management System using <span>WaterDMS</span></h1>
             <h2>To create Decision Support System for the efficient management and analysis of waterbodies within the district.</h2>
+            <a href="{% url 'volunteer_form' %}" >
+            <button class="volunteer-btn">
+              Volunteers Registration
+              <span class="arrow">→</span>
+            </button></a>
+            
             <div class="text-center text-lg-start">
               <!--a href="#about" class="btn-get-started scrollto">Get Started</a-->
             </div>
@@ -190,12 +197,25 @@
     <!-- ======= Features Section ======= -->
     <section id="map1" >
       <div class="container">
-
         <div class="section-title" data-aos="fade-up">
-          <h2>Map</h2>
-          <p>Waterbodies Map</p>
+            <h2>Map</h2>
+            <p>Waterbodies Map</p>
         </div>
-        <div id="map" style="height: 400px;"></div>
+    
+        <div class="row">
+            <div class="col-md-8">
+                <div id="map" style="height: 570px;"></div>
+            </div>
+            <div class="col-md-4">
+                <div id="details">
+                    <div class="details-header">Details</div>
+                    <div id="details-content" class="details-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
 
         <!--div class="row" data-aos="fade-left">
           <div class="col-lg-3 col-md-4">
@@ -272,51 +292,11 @@
           </div>
         </div>
 
-      </div-->
-    </section><!-- End Features Section >
-
-    <!-- ======= Counts Section ======= >
-    <section id="counts" class="counts">
-      <div class="container">
-
-        <div class="row" data-aos="fade-up">
-
-          <div class="col-lg-3 col-md-6">
-            <div class="count-box">
-              <i class="bi bi-emoji-smile"></i>
-              <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1" class="purecounter"></span>
-              <p>Happy Clients</p>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6 mt-5 mt-md-0">
-            <div class="count-box">
-              <i class="bi bi-journal-richtext"></i>
-              <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" class="purecounter"></span>
-              <p>Projects</p>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6 mt-5 mt-lg-0">
-            <div class="count-box">
-              <i class="bi bi-headset"></i>
-              <span data-purecounter-start="0" data-purecounter-end="1463" data-purecounter-duration="1" class="purecounter"></span>
-              <p>Hours Of Support</p>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6 mt-5 mt-lg-0">
-            <div class="count-box">
-              <i class="bi bi-people"></i>
-              <span data-purecounter-start="0" data-purecounter-end="15" data-purecounter-duration="1" class="purecounter"></span>
-              <p>Hard Workers</p>
-            </div>
-          </div>
-
-        </div>
-
       </div>
-    </section><!-- End Counts Section -->
+    </section--> >
+
+    <!-- ======= Counts Section =======-- >
+   <!-- End Counts Section -->
 
     <!-- ======= Details Section ======= -->
     <!--section id="details" class="details">
@@ -491,9 +471,10 @@
 
       </div>
     </section><!-- End Gallery Section -->
+    
 
     <!-- ======= Testimonials Section ======= -->
-    <!--section id="testimonials" class="testimonials">
+    <section id="testimonials" class="testimonials">
       <div class="container">
 
         <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
@@ -501,77 +482,139 @@
 
             <div class="swiper-slide">
               <div class="testimonial-item">
-                <img src="assets/img/testimonials/testi2.jpg" class="testimonial-img" alt="">
-                <h3>Vaigai River</h3>
+                
+                <h3>Ponds & Ooranis</h3>
                 
                 <p>
                   <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                  The Vaigai River is one of the major rivers in Tamil Nadu, and it flows through the city of Madurai. The river has historical importance, and many temples and ghats are situated along its banks
+                  Ponds, locally known as Oorani, are small water bodies typically used for domestic purposes, livestock, and community needs in rural areas. They play a crucial role in recharging groundwater and providing water during dry seasons.
                 
                   <i class="bx bxs-quote-alt-right quote-icon-right"></i>
                 </p>
               </div>
-            </div><!-- End testimonial item >
-
+            </div>
             <div class="swiper-slide">
               <div class="testimonial-item">
-                <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
-                <h3>Sara Wilsson</h3>
-                <h4>Designer</h4>
+                
+                <h3>Temple Tanks</h3>
+                
                 <p>
                   <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                  Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
+                  
+                  Temple tanks are sacred water reservoirs associated with temples, used for religious rituals and community events. 
                   <i class="bx bxs-quote-alt-right quote-icon-right"></i>
                 </p>
               </div>
-            </div><!-- End testimonial item >
-
+            </div>
             <div class="swiper-slide">
               <div class="testimonial-item">
-                <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
-                <h3>Jena Karlis</h3>
-                <h4>Store Owner</h4>
+                
+                <h3>Irrigation Tanks</h3>
+                
                 <p>
                   <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                  Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
+                  
+                  Irrigation tanks are larger water bodies designed for agricultural purposes, helping to store rainwater and provide irrigation through an interconnected network of channels. 
                   <i class="bx bxs-quote-alt-right quote-icon-right"></i>
                 </p>
               </div>
-            </div><!-- End testimonial item >
+            </div>
 
-            <div class="swiper-slide">
-              <div class="testimonial-item">
-                <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
-                <h3>Matt Brandon</h3>
-                <h4>Freelancer</h4>
-                <p>
-                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                  Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.
-                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                </p>
-              </div>
-            </div><!-- End testimonial item >
+            
 
-            <div class="swiper-slide">
-              <div class="testimonial-item">
-                <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">
-                <h3>John Larson</h3>
-                <h4>Entrepreneur</h4>
-                <p>
-                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                  Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat legam esse veniam culpa fore nisi cillum quid.
-                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                </p>
-              </div>
-            </div><!-- End testimonial item >
+            
+
+            
+            
 
           </div>
           <div class="swiper-pagination"></div>
         </div>
 
       </div>
-    </section--><!-- End Testimonials Section -->
+    </div>
+    </section><!-- End Testimonials Section -->
+    <section id="counts" class="counts">
+      <div class="container">
 
+        <div class="row" data-aos="fade-up">
+
+          <div class="col-lg-3 col-md-6 mt-5 mt-md-0">
+            <div class="count-box">
+              <i class="bi bi-water"></i>
+              <!-- Wrap the counter and + in a parent span with display flex -->
+              <span style="display: inline-flex; align-items: baseline;">
+                <!-- PureCounter span for counting animation -->
+                <span 
+                  data-purecounter-start="0" 
+                  data-purecounter-end="2000" 
+                  data-purecounter-duration="1" 
+                  class="purecounter">
+                </span>
+                <span>+</span> <!-- The + symbol stays inline with the counter -->
+              </span>
+              <p>Ponds & Ooranis</p>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 mt-5 mt-md-0">
+            <div class="count-box">
+              <i class="bi bi-water"></i>
+              <!-- Wrap the counter and + in a parent span with display flex -->
+              <span style="display: inline-flex; align-items: baseline;">
+                <!-- PureCounter span for counting animation -->
+                <span 
+                  data-purecounter-start="0" 
+                  data-purecounter-end="900" 
+                  data-purecounter-duration="1" 
+                  class="purecounter">
+                </span>
+                <span>+</span> <!-- The + symbol stays inline with the counter -->
+              </span>
+              <p>Tanks</p>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 mt-5 mt-md-0">
+            <div class="count-box">
+              <i class="bi bi-journal-richtext"></i>
+              <!-- Wrap the counter and + in a parent span with display flex -->
+              <span style="display: inline-flex; align-items: baseline;">
+                <!-- PureCounter span for counting animation -->
+                <span 
+                  data-purecounter-start="0" 
+                  data-purecounter-end="300" 
+                  data-purecounter-duration="1" 
+                  class="purecounter">
+                </span>
+                <span>+</span> <!-- The + symbol stays inline with the counter -->
+              </span>
+              <p>Response Summary</p>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 mt-5 mt-md-0">
+            <div class="count-box">
+              <i class="bi bi-people"></i>
+              <!-- Wrap the counter and + in a parent span with display flex -->
+              <span style="display: inline-flex; align-items: baseline;">
+                <!-- PureCounter span for counting animation -->
+                <span 
+                  data-purecounter-start="0" 
+                  data-purecounter-end="20" 
+                  data-purecounter-duration="0.10" 
+                  class="purecounter">
+                </span>
+                <span>+</span> <!-- The + symbol stays inline with the counter -->
+              </span>
+              <p>Field Workers</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
     <!-- ======= Team Section ======= -->
     <!--section id="team" class="team">
       <div class="container">
@@ -738,7 +781,7 @@
     </section><!-- End Pricing Section -->
    
     <!-- ======= F.A.Q Section ======= -->
-    <!--section id="faq" class="faq section-bg">
+    <section id="faq" class="faq section-bg">
       <div class="container">
 
         <div class="section-title" data-aos="fade-up">
@@ -749,46 +792,46 @@
         <div class="faq-list">
           <ul>
             <li data-aos="fade-up">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" class="collapse" data-bs-target="#faq-list-1">Non consectetur a erat nam at lectus urna duis? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" class="collapse" data-bs-target="#faq-list-1">How to apply for volunteer ? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
               <div id="faq-list-1" class="collapse show" data-bs-parent=".faq-list">
                 <p>
-                  Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.
+                  If you want to register for volunteer please fill the registration form <a href="{% url 'volunteer_form' %}" >Click here.</a>
                 </p>
               </div>
             </li>
 
             <li data-aos="fade-up" data-aos-delay="100">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-2" class="collapsed">Feugiat scelerisque varius morbi enim nunc? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-2" class="collapsed">What does the waterbody report consist of? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
               <div id="faq-list-2" class="collapse" data-bs-parent=".faq-list">
                 <p>
-                  Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
+                  Waterbody report consists of detail information of water quality, levels and flow rates, assesment of ecological health, data on population sources and control measures,historical changes and recommendation for maintenance and conservation efforts. 
                 </p>
               </div>
             </li>
 
             <li data-aos="fade-up" data-aos-delay="200">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-3" class="collapsed">Dolor sit amet consectetur adipiscing elit? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-3" class="collapsed">How can I access waterbody data? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
               <div id="faq-list-3" class="collapse" data-bs-parent=".faq-list">
                 <p>
-                  Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis
+                  ........
                 </p>
               </div>
             </li>
 
             <li data-aos="fade-up" data-aos-delay="300">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-4" class="collapsed">Tempus quam pellentesque nec nam aliquam sem et tortor consequat? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-4" class="collapsed">Can I contribute data to the portal? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
               <div id="faq-list-4" class="collapse" data-bs-parent=".faq-list">
                 <p>
-                  Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in.
+                 .......
                 </p>
               </div>
             </li>
 
             <li data-aos="fade-up" data-aos-delay="400">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-5" class="collapsed">Tortor vitae purus faucibus ornare. Varius vel pharetra vel turpis nunc eget lorem dolor? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-5" class="collapsed">Where can I see the Summary Reports of temple tank? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
               <div id="faq-list-5" class="collapse" data-bs-parent=".faq-list">
                 <p>
-                  Laoreet sit amet cursus sit amet dictum sit amet justo. Mauris vitae ultricies leo integer malesuada nunc vel. Tincidunt eget nullam non nisi est sit amet. Turpis nunc eget lorem dolor sed. Ut venenatis tellus in metus vulputate eu scelerisque.
+                  .....
                 </p>
               </div>
             </li>
@@ -800,12 +843,14 @@
     </section><!-- End F.A.Q Section -->
 
     <!-- ======= Contact Section ======= -->
-    <!--section id="contact" class="contact">
+    <section id="contact" class="contact">
       <div class="container">
 
         <div class="section-title" data-aos="fade-up">
-          <h2>Contact</h2>
-          <p>Contact Us</p>
+          
+          <center>
+            <h3 style="color: white;">Contact Us</h3>
+          </center>
         </div>
 
         <div class="row">
@@ -815,20 +860,16 @@
               <div class="address">
                 <i class="bi bi-geo-alt"></i>
                 <h4>Location:</h4>
-                <p>A108 Adam Street, New York, NY 535022</p>
+                <p>Corporate Tower, HCL Technologies Ltd. | Technology Hub, SEZPlot No. 3A, Sector 126 | Noida – 201304, India</p>
               </div>
 
               <div class="email">
                 <i class="bi bi-envelope"></i>
                 <h4>Email:</h4>
-                <p>info@example.com</p>
+                <p>hclfoundtion@hcl.com</p>
               </div>
 
-              <div class="phone">
-                <i class="bi bi-phone"></i>
-                <h4>Call:</h4>
-                <p>+1 5589 55488 55s</p>
-              </div>
+              
 
             </div>
 
@@ -836,7 +877,7 @@
 
           <div class="col-lg-8 mt-5 mt-lg-0" data-aos="fade-left" data-aos-delay="200">
 
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+            <form method="post" role="form" class="php-email-form">
               <div class="row">
                 <div class="col-md-6 form-group">
                   <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
@@ -958,8 +999,11 @@
   <script src="{% static 'assets/js/main.js' %}"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-omnivore/leaflet-omnivore.min.js"></script>
   <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-  <script>
+  <!--script>
     var map = L.map('map').setView([9.9252, 78.1198], 12);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -1000,8 +1044,75 @@
 
     // Add markers to the map
     map.addLayer(markers);
-</script>
+</script-->
+<script>
+  var map = L.map('map').setView([9.917, 78.119], 10);
 
+  // Add a base layer (optional)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  // Load existing KML files from the database
+  var kmlFiles = JSON.parse('{{ kml_files_json|escapejs }}');
+  kmlFiles.forEach(function(kml) {
+      var kmlUrl = kml.kml_file_url;
+      var kmlLayer = omnivore.kml(kmlUrl);
+
+      kmlLayer.on('ready', function() {
+          var bounds = kmlLayer.getBounds();
+          if (bounds.isValid()) {
+              kmlLayer.addTo(map);
+              map.fitBounds(bounds);
+              
+              kmlLayer.eachLayer(function(layer) {
+                  if (layer.feature && layer.feature.properties) {
+                      layer.on('click', function() {
+                          var props = layer.feature.properties;
+                          var detailsContent = document.getElementById('details-content');
+                          detailsContent.innerHTML = ''; // Clear existing details
+
+                          var table = document.createElement('table');
+                          var excludedKeys = ['styleUrl', 'hash', 'description', 'name', 'styleHash'];
+                          for (var key in props) {
+                              if (props.hasOwnProperty(key) && !excludedKeys.includes(key)) {
+                                  var row = document.createElement('tr');
+                                  var cellKey = document.createElement('th');
+                                  cellKey.textContent = key;
+                                  var cellValue = document.createElement('td');
+                                  cellValue.textContent = props[key];
+                                  row.appendChild(cellKey);
+                                  row.appendChild(cellValue);
+                                  table.appendChild(row);
+                              }
+                          }
+
+                          detailsContent.appendChild(table);
+
+                          // Handle description as HTML
+                          if (props.description) {
+                              var descriptionContainer = document.createElement('div');
+                              descriptionContainer.innerHTML = props.description;
+                              detailsContent.appendChild(descriptionContainer);
+                          }
+                      });
+                  }
+              });
+          } else {
+              console.error('Invalid bounds for KML layer:', kmlUrl);
+          }
+      });
+
+      kmlLayer.on('error', function() {
+          console.error('Error loading KML layer:', kmlUrl);
+      });
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/purecounterjs@1.1.5/dist/purecounter_vanilla.js"></script>
+<script>
+  // Initialize PureCounter
+  new PureCounter();
+</script>
 </body>
 
 </html>

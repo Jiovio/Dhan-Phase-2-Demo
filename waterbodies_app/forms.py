@@ -5,6 +5,35 @@ from .models import WaterBody, Volunteer
 from .models import Worker
 from .models import FieldWorker
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm
+from .models import CustomUser
+from .models import KMLFilesz
+from .models import Contact
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ['name', 'email', 'subject', 'message']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Name'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Your Email'}),
+            'subject': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Subject'}),
+            'message': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Message', 'rows': 5}),
+        }
+        
+class KMLFileForm(forms.ModelForm):
+    class Meta:
+        model = KMLFilesz
+        fields = '__all__'
+
+class CustomLoginForm(forms.Form):
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = CustomUser
+        fields = ('email', 'name')
 
 class FieldWorkerLoginForm(AuthenticationForm):
     username = forms.CharField(label='Username', max_length=100)

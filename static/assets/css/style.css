@@ -116,19 +116,19 @@ h6 {
 # Header
 --------------------------------------------------------------*/
 #header {
-  height: 80px;
+  height: 68px;
   transition: all 0.5s;
   z-index: 999;
   transition: all 0.5s;
-  background: rgba(1, 4, 136, 0.9);
+  background: white;
 }
 
 #header.header-transparent {
-  background: transparent;
+  background: white;
 }
 
 #header.header-scrolled {
-  background: rgba(1, 4, 136, 0.9);
+  background: white;
   height: 60px;
 }
 
@@ -142,7 +142,7 @@ h6 {
 
 #header .logo h1 a,
 #header .logo h1 a:hover {
-  color: #fff;
+  color: #3C91FF;
   text-decoration: none;
 }
 
@@ -184,7 +184,7 @@ h6 {
   font-size: 15px;
   font-weight: 500;
   font-family: "Poppins", sans-serif;
-  color: rgba(255, 255, 255, 0.7);
+  color: black;
   white-space: nowrap;
   transition: 0.3s;
 }
@@ -220,7 +220,7 @@ h6 {
 .navbar .active,
 .navbar .active:focus,
 .navbar li:hover>a {
-  color: #fff;
+  color: black;
 }
 
 .navbar .dropdown ul {
@@ -420,12 +420,42 @@ h6 {
 
 #hero:before {
   content: "";
-  background: rgba(2, 5, 161, 0.91);
+  background: linear-gradient(to top right, #0060D9, #2AC5A7);
+
+
   position: absolute;
   bottom: 0;
   top: 0;
   left: 0;
   right: 0;
+}
+.volunteer-btn {
+  background-color: white;
+  color: #006eb7; /* Blue text color */
+  border: 2px solid #006eb7; /* Blue border */
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.volunteer-btn .arrow {
+  margin-left: 8px;
+  font-size: 18px;
+  transition: margin-left 0.3s ease;
+}
+
+.volunteer-btn:hover {
+  background-color: #81aedf;
+  color: white;
+}
+
+.volunteer-btn:hover .arrow {
+  margin-left: 12px;
 }
 
 #hero h1 {
@@ -433,7 +463,7 @@ h6 {
   font-size: 48px;
   font-weight: 700;
   line-height: 56px;
-  color: rgba(255, 255, 255, 0.8);
+  color: white;
 }
 
 #hero h1 span {
@@ -618,7 +648,7 @@ section {
   font-weight: 700;
   text-transform: uppercase;
   font-family: "Poppins", sans-serif;
-  color: #010483;
+  color: #3C91FF;
 }
 
 /*--------------------------------------------------------------
@@ -693,7 +723,7 @@ section {
 .about .icon-boxes h3 {
   font-size: 28px;
   font-weight: 700;
-  color: #010483;
+  color: #0F5FDC;
   margin-bottom: 15px;
 }
 
@@ -714,13 +744,13 @@ section {
 }
 
 .about .icon-box .icon i {
-  color: #1acc8d;
+  color: #4BC3AF;
   font-size: 32px;
 }
 
 .about .icon-box:hover .icon {
-  background: #1acc8d;
-  border-color: #1acc8d;
+  background: #4BC3AF;
+  border-color: #4BC3AF;
 }
 
 .about .icon-box:hover .icon i {
@@ -894,7 +924,7 @@ section {
   left: 50%;
   transform: translateX(-50%);
   font-size: 20px;
-  background: #1acc8d;
+  background: #4BC3AF;
   padding: 12px;
   color: #fff;
   border-radius: 50px;
@@ -910,7 +940,7 @@ section {
   font-size: 36px;
   display: block;
   font-weight: 600;
-  color: #010483;
+  color: #0F5FDC;
 }
 
 .counts .count-box p {
@@ -987,7 +1017,7 @@ section {
   right: 0;
   top: 0;
   bottom: 0;
-  background: rgba(1, 3, 111, 0.8);
+  background: rgba(60, 145, 255, 0.8);
 }
 
 .testimonials .section-header {
@@ -1354,18 +1384,21 @@ section {
 /*--------------------------------------------------------------
 # Contact
 --------------------------------------------------------------*/
+.contact{
+  background: url("../img/test.png");
+}
 .contact .info {
   width: 100%;
-  background: #fff;
+ 
 }
 
 .contact .info i {
   font-size: 20px;
-  color: #3f43fd;
+  color: white;
   float: left;
   width: 44px;
   height: 44px;
-  background: #f0f0ff;
+  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1378,14 +1411,14 @@ section {
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 5px;
-  color: #010483;
+  color: white;
 }
 
 .contact .info p {
   padding: 0 0 0 60px;
   margin-bottom: 0;
   font-size: 14px;
-  color: #0205a1;
+  color: white;
 }
 
 .contact .info .email,
@@ -1396,13 +1429,13 @@ section {
 .contact .info .email:hover i,
 .contact .info .address:hover i,
 .contact .info .phone:hover i {
-  background: #1acc8d;
+  background: #4BC3AF;
   color: #fff;
 }
 
 .contact .php-email-form {
   width: 100%;
-  background: #fff;
+
 }
 
 .contact .php-email-form .form-group {
@@ -1414,7 +1447,7 @@ section {
   color: #fff;
   background: #ed3c0d;
   text-align: left;
-  padding: 15px;
+  padding: 25px;
   font-weight: 600;
 }
 
@@ -1425,7 +1458,7 @@ section {
 .contact .php-email-form .sent-message {
   display: none;
   color: #fff;
-  background: #18d26e;
+  background: #4BC3AF;
   text-align: center;
   padding: 15px;
   font-weight: 600;
@@ -1642,4 +1675,46 @@ section {
   #footer .footer-top .footer-info {
     margin: -20px 0 30px 0;
   }
+}
+#map {
+  flex: 1;
+  height: 100vh;
+  position: relative;
+}
+#details {
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 10px;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  background-color: #f9f9f9;
+}
+.details-header {
+  background-color: #3C91FF;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+.details-content {
+  padding: 10px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+table, th, td {
+  border: 1px solid #ddd;
+}
+th, td {
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+.details-value {
+  color: #333;
 }

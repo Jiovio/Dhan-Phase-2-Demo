@@ -1,0 +1,62 @@
+<!-- pond_detail.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pond Detail</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Include Font Awesome CSS -->
+    <style>
+        /* Modal styles */
+        .modal-container {
+            background-color: rgba(0, 0, 0, 0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .back-link {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="modal-container">
+        <div class="modal-content">
+            <a href="{% url 'pond_list' %}" class="modal-close"><i class="fas fa-times"></i></a>
+            <h1>{{ pond.waterbody_name }} Pond Detail</h1>
+            <p>Water Spread Area (Hectares): {{ pond.water_spread_area }}</p>
+            <p>Original Capacity (CUM): {{ pond.original_capacity }}</p>
+            <p>No of Fillings: {{ pond.no_of_fillings }}</p>
+            <p>Month of First Filling: {{ pond.month_of_first_filling }}</p>
+            <p>No of Sources of Water Supply: {{ pond.no_of_sources }}</p>
+            <p>Month of Dry up / Scarcity: {{ pond.month_of_dry_up }}</p>
+            <p>Sources of Supply: {{ pond.sources_of_supply }}</p>
+            <!-- Add other fields here -->
+        </div>
+    </div>
+</body>
+</html>

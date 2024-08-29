@@ -378,7 +378,7 @@
                             <div class="collapse" id="userManagementDropdown">
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'field_worker_list' %}">FieldWorkers</a>
+                                        <a class="nav-link" href="{% url 'user_list' %}">FieldWorkers</a>
                                     </li>
                                     <!--li class="nav-item">
                                         <a class="nav-link" href="#">Role</a>
@@ -412,6 +412,30 @@
                                 Waterbodies
                                 <i class="fas fa-caret-down"></i>
                             </a>
+                            <div class="collapse" id="waterbodiesDropdown">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'waterbody-list' %}"> Government Waterbodies</a>
+                                    </li>
+                                    <!-- Add more nested dropdown items as needed -->
+                                </ul>
+                            </div>
+                            <div class="collapse" id="waterbodiesDropdown">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'pond_list' %}"> Ponds</a>
+                                    </li>
+                                    <!-- Add more nested dropdown items as needed -->
+                                </ul>
+                            </div>
+                            <div class="collapse" id="waterbodiesDropdown">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'waterbody-list' %}"> Government Waterbodies</a>
+                                    </li>
+                                    <!-- Add more nested dropdown items as needed -->
+                                </ul>
+                            </div>
                             <div class="collapse" id="waterbodiesDropdown">
                                 <ul class="nav flex-column">
                                     <li class="nav-item">

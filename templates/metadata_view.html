@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KML Metadata</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h2 {
+            margin-top: 40px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>KML Files Metadata</h1>
+    {% for item in metadata %}
+        <h2>Metadata for: {{ item.file_name }}</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <td>{{ item.name }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ item.description }}</td>
+            </tr>
+            <tr>
+                <th>Coordinates</th>
+                <td>{{ item.coordinates }}</td>
+            </tr>
+        </table>
+    {% endfor %}
+</body>
+</html>

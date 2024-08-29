@@ -1,6 +1,9 @@
 
 
 # waterbodies_app/views.py
+import json
+import os
+from django.core.files.base import ContentFile
 from django.shortcuts import render, get_object_or_404
 from .models import WaterBody
 from django.shortcuts import render, redirect
@@ -9,11 +12,15 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import WaterBody
+import requests
+import zipfile
 from django.db.models import Q
 from .forms import WaterBodyForm 
 from django.http import HttpResponseForbidden
 import matplotlib
 import matplotlib.pyplot as plt
+from django.shortcuts import render, redirect
+from .forms import KMLFileForm
 from io import BytesIO
 import base64
 matplotlib.use('Agg')
@@ -29,6 +36,7 @@ from django.contrib.auth.decorators import permission_required
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_protect
 from rest_framework.views import APIView
+from waterbodies_app.models import WaterbodiesTank
 from rest_framework.response import Response
 from rest_framework import status
 from django.urls import reverse_lazy
@@ -39,6 +47,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .serializers import WaterBodySerializer
 from rest_framework import permissions
 import logging
+from waterbodies_app.models import PoOwaterbody
 from .forms import VolunteerForm
 from .models import Volunteer
 from .forms import FieldWorkerForm
@@ -46,7 +55,17 @@ from .models import FieldWorker
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import FieldWorkerLoginForm
-
+from .forms import CustomLoginForm
+from .forms import CustomUserCreationForm
+from django.core.files.storage import FileSystemStorage
+from .forms import CustomUserCreationForm
+from .models import CustomUser
+from .models import KMLFilesz
+from django.http import JsonResponse
+from xml.etree import ElementTree as ET
+from .models import Pond
+from .models import Contact
+from .forms import ContactForm
 logger = logging.getLogger(__name__)
 def water_body_details(request, water_body_id):
     try:
@@ -61,10 +80,152 @@ def water_body_details(request, water_body_id):
         return render(request, 'error.html', {'error_message': str(e)})
 def tableau_visualization(request):
     return render(request, 'map.html')
-def index(request):
-    waterbodies = WaterBody.objects.all()
-    return render(request, 'index.html', {'waterbodies': waterbodies})
+def tabledesign(request):
+    # Fetch all records from the PoOwaterbody model
+    waterbodies_list = PoOwaterbody.objects.all()
 
+    # Paginate the records
+    paginator = Paginator(waterbodies_list, 10)  # Show 10 records per page
+    page_number = request.GET.get('page')
+    waterbodies = paginator.get_page(page_number)
+
+    # Pass the paginated records to the template
+    context = {
+        'waterbodies': waterbodies
+    }
+
+    return render(request, 'govwbtable.html', context)
+
+
+def dashboardanalytics(request):
+    # Get the count of records in the PoOwaterbody model
+    waterbodies_count = PoOwaterbody.objects.count()
+
+    # Get the count of records in the WaterbodiesTank model
+    tanks_count = WaterbodiesTank.objects.count()
+
+    # Fetch all water bodies
+    waterbodies = WaterBody.objects.all()
+
+    # Fetch all KML files and convert their URLs to JSON
+    fs = FileSystemStorage()
+    kml_files = KMLFilesz.objects.all()
+    kml_files_json = json.dumps([
+        {'kml_file_url': fs.url(kml.kml_file.name)}
+        for kml in kml_files
+    ])
+
+    # Get a fresh token
+    token = get_jwt_token()
+
+    headers = {
+        "Authorization": f"JWT {token}"
+    }
+
+    # Construct the URL to get the total count of field workers
+    field_workers_url = "http://waterbody.cloudonweb.in:5000/waterBodyAdmin/allusers/?limit=1"
+
+    try:
+        response = requests.get(field_workers_url, headers=headers)
+        response.raise_for_status()
+    except requests.exceptions.ConnectionError as e:
+        logger.error(f"ConnectionError: Unable to connect to the API - {e}")
+        total_field_workers_count = 0  # Set a default value or handle accordingly
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 401:  # Unauthorized, handle token expiration
+            logger.info("Token expired, refreshing token...")
+            token = get_jwt_token()
+            headers["Authorization"] = f"JWT {token}"
+            try:
+                response = requests.get(field_workers_url, headers=headers)
+                response.raise_for_status()
+                data = response.json()
+                total_field_workers_count = data.get('count', 0)
+            except requests.exceptions.RequestException as e:
+                logger.error(f"Failed after refreshing token: {e}")
+                total_field_workers_count = 0
+        else:
+            logger.error(f"HTTPError: {e.response.status_code} - {e.response.text}")
+            total_field_workers_count = 0
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}")
+        total_field_workers_count = 0
+    else:
+        data = response.json()
+        total_field_workers_count = data.get('count', 0)
+
+    # Now get the count of water body reviewer responses
+    reviewer_response_url = "http://waterbody.cloudonweb.in:5000/waterBodyAdmin/waterBodyFieldReviewerResponse/?limit=1"
+
+    try:
+        response = requests.get(reviewer_response_url, headers=headers)
+        response.raise_for_status()
+    except requests.exceptions.ConnectionError as e:
+        logger.error(f"ConnectionError: Unable to connect to the API - {e}")
+        total_reviewer_responses_count = 0  # Set a default value or handle accordingly
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 401:  # Unauthorized, handle token expiration
+            logger.info("Token expired, refreshing token...")
+            token = get_jwt_token()
+            headers["Authorization"] = f"JWT {token}"
+            try:
+                response = requests.get(reviewer_response_url, headers=headers)
+                response.raise_for_status()
+                reviewer_response_data = response.json()
+                total_reviewer_responses_count = reviewer_response_data.get('count', 0)
+            except requests.exceptions.RequestException as e:
+                logger.error(f"Failed after refreshing token: {e}")
+                total_reviewer_responses_count = 0
+        else:
+            logger.error(f"HTTPError: {e.response.status_code} - {e.response.text}")
+            total_reviewer_responses_count = 0
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}")
+        total_reviewer_responses_count = 0
+    else:
+        reviewer_response_data = response.json()
+        total_reviewer_responses_count = reviewer_response_data.get('count', 0)
+
+    # Pass the counts, waterbodies, and KML files to the template
+    context = {
+        'waterbodies_count': waterbodies_count,
+        'tanks_count': tanks_count,
+        'waterbodies': waterbodies,
+        'kml_files_json': kml_files_json,
+        'total_field_workers_count': total_field_workers_count,
+        'total_reviewer_responses_count': total_reviewer_responses_count,
+    }
+
+    # Render the dashboard analytical template with the context
+    return render(request, 'dashboard_analytical.html', context)
+
+def index(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your message has been sent. Thank you!')
+            return redirect('index')  # Redirect to avoid form resubmission
+    else:
+        form = ContactForm()
+
+    # Fetch all water bodies
+    waterbodies = WaterBody.objects.all()
+
+    # Fetch all KML files and convert their URLs to JSON
+    fs = FileSystemStorage()
+    kml_files = KMLFilesz.objects.all()
+    kml_files_json = json.dumps([
+        {'kml_file_url': fs.url(kml.kml_file.name)}
+        for kml in kml_files
+    ])
+
+    # Render the index template with both waterbodies, KML files, and contact form
+    return render(request, 'index.html', {
+        'waterbodies': waterbodies,
+        'kml_files_json': kml_files_json,
+        'form': form
+    })
 def admin_login(request):
     error_message = None
 
@@ -85,7 +246,7 @@ def admin_login(request):
                 request.session.set_expiry(0)  # Session expires when the browser is closed
 
             # Redirect to the admin dashboard or any other page
-            return redirect('admin-dashboard')
+            return redirect('analytics')
         else:
             error_message = "Invalid username or password."
 
@@ -245,7 +406,7 @@ def volunteers_list(request):
 
 
 
-def register_field_worker(request):
+#def register_field_worker(request):
     if request.method == 'POST':
         form = FieldWorkerForm(request.POST)
         if form.is_valid():
@@ -255,10 +416,10 @@ def register_field_worker(request):
         form = FieldWorkerForm()
     return render(request, 'field_worker_registration.html', {'form': form})
 
-def field_worker_list(request):
-    field_workers = FieldWorker.objects.all()
-    return render(request, 'field_worker_list.html', {'field_workers': field_workers})
-def field_worker_login(request):
+def user_list_view(request):
+    users = CustomUser.objects.all()
+    return render(request, 'user_list.html', {'users': users})
+#def field_worker_login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
         if form.is_valid():
@@ -335,4 +496,292 @@ def waterbody_lists(request):
 
     return render(request, 'waterbody_lists.html', {'water_bodies': water_bodies, 'search_query': search_query})
     
+def custom_login_view(request):
+    if request.method == 'POST':
+        form = CustomLoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=email, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('user_dashboard')  # Redirect to a success page.
+            else:
+                form.add_error(None, 'Invalid email or password')
+    else:
+        form = CustomLoginForm()
+    return render(request, 'field_worker_login.html', {'form': form})
+
+def register_view(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Automatically log in the user after registration
+            username = form.cleaned_data.get('email')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('admin-dashboard')  # Redirect to home or another page after successful registration
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'field_worker_registration.html', {'form': form})
+
+def pond_list(request):
+    ponds = Pond.objects.all()
+    return render(request, 'pond_list.html', {'ponds': ponds})
+
+def fetch_water_spread_data(request):
+    api_url = 'http://waterbody.cloudonweb.in:5000/waterBodyAdmin/waterBodyFieldReviewerResponse'  # Replace with your actual API URL
+    headers = {'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzIyMTQxNjExLCJqdGkiOiIyNjc4MTU5ZjA5NTg0YWY0YmI3MGVkM2U4MmUyYmI2MyIsInVzZXJfaWQiOjF9.-zWVM9HmPgbgPTmdrpiPRWOecW8_V6cjweP9yXdc7tM'}  # Add any required headers
+
+    response = requests.get(api_url, headers=headers)
+
+    if response.status_code == 200:
+        data = response.json()
+        context = {
+            'waterSpreadAreaIssues': data.get('waterSpreadAreaDetails', {}).get('issuesInWaterSpreadArea', '[]'),
+            'waterSpreadInvasiveSpecies': data.get('waterSpreadAreaDetails', {}).get('invasiveSpecies', '[]'),
+            'percentageOfSpread': data.get('waterSpreadAreaDetails', {}).get('percentageOfSpread', '')
+        }
+        context['waterSpreadAreaIssues'] = json.loads(context['waterSpreadAreaIssues'])
+        context['waterSpreadInvasiveSpecies'] = json.loads(context['waterSpreadInvasiveSpecies'])
+        return render(request, 'water_spread_details.html', context)
+    else:
+        return JsonResponse({'error': 'Failed to fetch data'}, status=response.status_code)
+def kml_files_list(request):
+    fs = FileSystemStorage()
+    kml_files = KMLFilesz.objects.all()
     
+    # Prepare the data to be displayed
+    kml_files_data = []
+    for kml in kml_files:
+        kml_files_data.append({
+            'name': kml.name,
+            'file_url': fs.url(kml.kml_file.name)
+        })
+
+    return render(request, 'kml_files_list.html', {'kml_files_data': kml_files_data})
+
+def upload_kml(request):
+    if request.method == 'POST' and request.FILES.get('kmz_file'):
+        kmz_file = request.FILES['kmz_file']
+        fs = FileSystemStorage()
+
+        # Save the KMZ file temporarily
+        kmz_temp_path = fs.save(kmz_file.name, kmz_file)
+        kmz_full_path = fs.path(kmz_temp_path)
+
+        # Extract the KML file from the KMZ
+        with zipfile.ZipFile(kmz_full_path, 'r') as kmz:
+            kml_files = [f for f in kmz.namelist() if f.endswith('.kml')]
+            if kml_files:
+                kml_data = kmz.read(kml_files[0])
+
+                # Save the KML file to the media directory
+                kml_filename = os.path.splitext(kmz_file.name)[0] + '.kml'
+                kml_path = fs.save(os.path.join('kml_files', kml_filename), ContentFile(kml_data))
+                
+                # Save the KML file information to the database
+                KMLFilesz.objects.create(name=kml_filename, kml_file=kml_path)
+
+        # Delete the temporary KMZ file
+        fs.delete(kmz_temp_path)
+
+        return redirect('map_view')
+
+    return render(request, 'upload_kml.html')
+def map_view(request):
+    fs = FileSystemStorage()
+    kml_files = KMLFilesz.objects.all()
+    kml_files_json = json.dumps([
+        {'kml_file_url': fs.url(kml.kml_file.name)}
+        for kml in kml_files
+    ])
+    return render(request, 'map_view.html', {'kml_files_json': kml_files_json})
+def metadata_view(request):
+    fs = FileSystemStorage()
+    kml_files = KMLFilesz.objects.all()
+    metadata = []
+
+    for kml in kml_files:
+        kml_path = fs.path(kml.kml_file.name)
+        
+        with open(kml_path, 'r') as f:
+            kml_data = f.read()
+
+        # Parse KML to extract metadata
+        kml_root = ET.fromstring(kml_data)
+        namespace = {'kml': 'http://www.opengis.net/kml/2.2'}
+
+        name = kml_root.find('.//kml:name', namespace).text if kml_root.find('.//kml:name', namespace) is not None else 'Unnamed'
+        description = kml_root.find('.//kml:description', namespace).text if kml_root.find('.//kml:description', namespace) is not None else 'No description'
+        coordinates = kml_root.find('.//kml:coordinates', namespace).text if kml_root.find('.//kml:coordinates', namespace) is not None else 'No coordinates'
+
+        metadata.append({
+            'file_name': kml.name,
+            'name': name,
+            'description': description,
+            'coordinates': coordinates
+        })
+
+    return render(request, 'metadata_view.html', {'metadata': metadata})
+def fetch_api_data(request):
+    # Step 1: Authenticate and obtain JWT token
+    auth_url = 'http://waterbody.cloudonweb.in:5000/auth/jwt/create'
+    credentials = {
+        'username': 'superadmin',  # Replace with your actual username
+        'password': '09fghAsd'   # Replace with your actual password
+    }
+    auth_response = requests.post(auth_url, data=credentials)
+    
+    if auth_response.status_code == 200:
+        token = auth_response.json().get('access_token')
+    else:
+        token = None
+
+    # Step 2: Use the token to access the protected API
+    if token:
+        api_url = 'http://waterbody.cloudonweb.in:5000/waterBodyAdmin/waterbodytempletanktypes/'
+        headers = {
+            'Authorization': f'Bearer {token}'
+        }
+        response = requests.get(api_url, headers=headers)
+        
+        if response.status_code == 200:
+            data = response.json()
+            results = data.get('results', [])
+        else:
+            results = []
+            print("Failed to fetch data. Response content:", response.content)
+    else:
+        results = []
+        print("Failed to obtain JWT token.")
+
+    # Step 3: Render the data in a template
+    return render(request, 'api1.html', {'results': results})
+def get_jwt_token():
+    auth_url = "http://waterbody.cloudonweb.in:5000/auth/jwt/create"  # Replace with the actual auth URL
+    credentials = {
+        "username": "superadmin",  # Replace with your username
+        "password": "09fghAsd"   # Replace with your password
+    }
+
+    response = requests.post(auth_url, data=credentials)
+    
+    if response.status_code == 200:
+        return response.json().get('access')  # Assuming the token is returned under 'access' key
+    else:
+        raise Exception("Failed to obtain JWT token. Check your credentials.")
+def waterbody_reviewer_response(request):
+    base_url = "http://waterbody.cloudonweb.in:5000/waterBodyAdmin/waterBodyFieldReviewerResponse/"
+    
+    # Get a fresh token
+    token = get_jwt_token()
+
+    headers = {
+        "Authorization": f"JWT {token}"
+    }
+
+    # Get the offset parameter from the URL (default to 0 if not provided)
+    offset = int(request.GET.get('offset', 340))
+    limit = 10  # Number of items per page
+
+    # Construct the URL with the current offset
+    url = f"{base_url}?offset={offset}&limit={limit}"
+
+    response = requests.get(url, headers=headers)
+    
+    # Handle token expiration by checking the status code
+    if response.status_code == 401:  # Unauthorized
+        token = get_jwt_token()
+        headers["Authorization"] = f"JWT {token}"
+        response = requests.get(url, headers=headers)
+    
+    data = response.json()
+
+    # Determine next and previous offsets
+    next_offset = offset + limit if data.get('next') else None
+    previous_offset = offset - limit if offset - limit >= 0 else None
+
+    return render(request, 'waterbody_reviewer_response.html', {
+        'data': data['results'],
+        'next_offset': next_offset,
+        'previous_offset': previous_offset,
+        'current_offset': offset,
+    })
+    
+def powaterbodies_list(request):
+    # Fetch all records from the PoOwaterbody model
+    waterbodies = PoOwaterbody.objects.all()
+    
+    # Get the count of the records
+    waterbodies_count = waterbodies.count()
+
+    # Pass the records and the count to the template
+    context = {
+        'waterbodies': waterbodies,
+        'waterbodies_count': waterbodies_count
+    }
+
+    return render(request, 'powaterbodies_list.html', context)
+
+def waterbodies_tank_list(request):
+    # Fetch all tanks and apply pagination
+    tank_list = WaterbodiesTank.objects.all()
+    paginator = Paginator(tank_list, 10)  # Show 10 tanks per page
+
+    # Get the current page number from the request
+    page_number = request.GET.get('page')
+
+    try:
+        tanks = paginator.page(page_number)
+    except PageNotAnInteger:
+        # If the page is not an integer, deliver the first page
+        tanks = paginator.page(1)
+    except EmptyPage:
+        # If the page is out of range, deliver the last page of results
+        tanks = paginator.page(paginator.num_pages)
+
+    # Render the template with the paginated tank list
+    return render(request, 'waterbodies_tank_list.html', {'tanks': tanks})
+
+def field_workers(request):
+    base_url = "http://waterbody.cloudonweb.in:5000/waterBodyAdmin/allusers/"
+    
+    # Get a fresh token
+    token = get_jwt_token()
+
+    headers = {
+        "Authorization": f"JWT {token}"
+    }
+
+    # Get the offset parameter from the URL (default to 0 if not provided)
+    offset = int(request.GET.get('offset', 0))
+    limit = 10  # Number of items per page
+
+    # Construct the URL with the current offset
+    url = f"{base_url}?offset={offset}&limit={limit}"
+
+    response = requests.get(url, headers=headers)
+    
+    # Handle token expiration by checking the status code
+    if response.status_code == 401:  # Unauthorized
+        token = get_jwt_token()
+        headers["Authorization"] = f"JWT {token}"
+        response = requests.get(url, headers=headers)
+    
+    data = response.json()
+    field_workers_count = data.get('count', 0)
+
+    # Determine next and previous offsets
+    next_offset = offset + limit if data.get('next') else None
+    previous_offset = offset - limit if offset - limit >= 0 else None
+
+    return render(request, 'waterbody_fieldworker.html', {
+        'data': data['results'],
+        'next_offset': next_offset,
+        'previous_offset': previous_offset,
+        'current_offset': offset,
+        'field_workers_count':field_workers_count
+    })

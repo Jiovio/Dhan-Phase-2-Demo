@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Kodikulam small.kml</name>
+	<Style id="PolyStyle00">
+		<LabelStyle>
+			<color>00000000</color>
+			<scale>0</scale>
+		</LabelStyle>
+		<LineStyle>
+			<color>ffeb6540</color>
+			<width>0.4</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>fff2db97</color>
+		</PolyStyle>
+	</Style>
+	<Placemark id="ID_01225">
+		<name>Kodikulam small</name>
+		<Snippet maxLines="0"></Snippet>
+		<description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+
+<head>
+
+<META http-equiv="Content-Type" content="text/html">
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+</head>
+
+<body style="margin:0px 0px 0px 0px;overflow:auto;background:#FFFFFF;">
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100%;border-collapse:collapse;padding:3px 3px 3px 3px">
+
+<tr style="text-align:center;font-weight:bold;background:#9CBCE2">
+
+<td>Kodikulam small</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100%;border-spacing:0px; padding:3px 3px 3px 3px">
+
+<tr>
+
+<td>FID</td>
+
+<td>1225</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>CLUSTER</td>
+
+<td></td>
+
+</tr>
+
+<tr>
+
+<td>TANK_NUM</td>
+
+<td>100</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Unique_id</td>
+
+<td>TNGU-02-T0033</td>
+
+</tr>
+
+<tr>
+
+<td>Tank_Name</td>
+
+<td>Kodikulam small</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Latitude</td>
+
+<td>9.926019</td>
+
+</tr>
+
+<tr>
+
+<td>Longitude</td>
+
+<td>77.922245</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Village</td>
+
+<td>Kodikulam</td>
+
+</tr>
+
+<tr>
+
+<td>Block</td>
+
+<td>Chellampatti</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Taluk</td>
+
+<td>Usilampatti</td>
+
+</tr>
+
+<tr>
+
+<td>District</td>
+
+<td>Madurai</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Subbasin</td>
+
+<td>Therkar</td>
+
+</tr>
+
+<tr>
+
+<td>Basin</td>
+
+<td>Gundar</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Section</td>
+
+<td>Irrigation Section.I</td>
+
+</tr>
+
+<tr>
+
+<td>Sub_Dn</td>
+
+<td>Periyar Vaigai Basin Sub Dn-II, Madurai</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Division</td>
+
+<td>Periyar Vaigai Basin Division, Madurai</td>
+
+</tr>
+
+<tr>
+
+<td>Circle</td>
+
+<td></td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Region</td>
+
+<td>Madurai</td>
+
+</tr>
+
+<tr>
+
+<td>Tank_Type</td>
+
+<td>System</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Cap_MCM</td>
+
+<td>0.339</td>
+
+</tr>
+
+<tr>
+
+<td>FTL_m</td>
+
+<td>166.6</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>MWL_m</td>
+
+<td>167.2</td>
+
+</tr>
+
+<tr>
+
+<td>TBL_m</td>
+
+<td>168.2</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Sto_Dep_m</td>
+
+<td>2.72</td>
+
+</tr>
+
+<tr>
+
+<td>Ayacut_ha</td>
+
+<td>38</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Catch_sqkm</td>
+
+<td>44.69</td>
+
+</tr>
+
+<tr>
+
+<td>Wat_Spr_ha</td>
+
+<td>373.7</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>No_of_Weir</td>
+
+<td>2</td>
+
+</tr>
+
+<tr>
+
+<td>Weir_Len_m</td>
+
+<td>0</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>No_Sluice</td>
+
+<td>1</td>
+
+</tr>
+
+<tr>
+
+<td>Low_Sil_m</td>
+
+<td>163.88</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>Bund_Len_m</td>
+
+<td>1650</td>
+
+</tr>
+
+<tr>
+
+<td>Dis_cusec</td>
+
+<td>3437</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+</body>
+
+</html>]]></description>
+		<styleUrl>#PolyStyle00</styleUrl>
+		<gx:balloonVisibility>1</gx:balloonVisibility>
+		<MultiGeometry>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							77.92751866883616,9.925444976452246,0 77.92798086428218,9.925907172572048,0 77.92795653832849,9.926150432687157,0 77.92738487498102,9.926332878093223,0 77.92659427750083,9.926369366899682,0 77.92587665776141,9.926600464916257,0 77.92543878855204,9.926892378597886,0 77.92526850623777,9.927208616761407,0 77.92496442972016,9.927877585217736,0 77.92457521262997,9.928339780538295,0 77.92391840811862,9.928412758643587,0 77.92372379863465,9.928242475978834,0 77.9225926360124,9.927634324299968,0 77.92168040782688,9.927305921802066,0 77.92110874527751,9.92725726956373,0 77.92039112549008,9.927184291713957,0 77.91966134314825,9.927111312984989,0 77.91911400551481,9.927062660617477,0 77.91838422328362,9.926758584471193,0 77.91780039764144,9.92645450900172,0 77.91738685367604,9.926053128541964,0 77.91711926696854,9.925639585124108,0 77.9167908652251,9.92521387834706,0 77.91679086510138,9.925055759066298,0 77.91688816922068,9.924970617131841,0 77.91735036525158,9.924605726635498,0 77.91823826606291,9.924204345332869,0 77.91941808168698,9.924301650693724,0 77.91989244058317,9.924447607068112,0 77.92092629968779,9.924800335225711,0 77.92188718053019,9.925140900585577,0 77.92292103786798,9.925153063006965,0 77.92362649475643,9.92493412796979,0 77.92458737543996,9.924690867748209,0 77.92554825509083,9.924678705087864,0 77.92622938549418,9.924739519275366,0 77.92672807106719,9.924861149800106,0 77.92706863563599,9.925055758833311,0 77.92751866883616,9.925444976452246,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</MultiGeometry>
+	</Placemark>
+</Document>
+</kml>

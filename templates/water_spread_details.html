@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Water Spread Area Details</title>
+    <!-- Add your CSS and JavaScript here -->
+</head>
+<body>
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Water Spread Area Details
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="divBodyContainer">
+            <div class="row">
+                <ng-container>
+                    <div class="col">
+                        <div><strong>Issues in Water Spread Area:</strong></div>
+                        <div>
+                            <ul>
+                                {% for issue in waterSpreadAreaIssues %}
+                                    <li>{{ issue }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div><strong>Invasive species:</strong></div>
+                        <div>
+                            <ul>
+                                {% for specie in waterSpreadInvasiveSpecies %}
+                                    <li>{{ specie }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div><strong>Percentage of Spread:</strong></div>
+                        <div>
+                            {{ percentageOfSpread }}
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </mat-expansion-panel>
+</body>
+</html>

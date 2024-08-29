@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet with KML Details</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-omnivore/leaflet-omnivore.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+        #map {
+            flex: 1;
+            height: 100vh;
+            position: relative;
+        }
+        #details {
+            width: 30%;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 10px;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            background-color: #f9f9f9;
+        }
+        .details-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .details-content {
+            padding: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .details-value {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="details">
+        <div class="details-header">Details</div>
+        <div id="details-content" class="details-content"></div>
+    </div>
+    <script>
+        var map = L.map('map').setView([9.917, 78.119], 10);
+
+        // Add a base layer (optional)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Load existing KML files from the database
+        var kmlFiles = JSON.parse('{{ kml_files_json|escapejs }}');
+        kmlFiles.forEach(function(kml) {
+            var kmlUrl = kml.kml_file_url;
+            var kmlLayer = omnivore.kml(kmlUrl);
+
+            kmlLayer.on('ready', function() {
+                var bounds = kmlLayer.getBounds();
+                if (bounds.isValid()) {
+                    kmlLayer.addTo(map);
+                    map.fitBounds(bounds);
+                    
+                    kmlLayer.eachLayer(function(layer) {
+                        if (layer.feature && layer.feature.properties) {
+                            layer.on('click', function() {
+                                var props = layer.feature.properties;
+                                var detailsContent = document.getElementById('details-content');
+                                detailsContent.innerHTML = ''; // Clear existing details
+
+                                var table = document.createElement('table');
+                                var excludedKeys = ['styleUrl', 'hash', 'description', 'name', 'styleHash'];
+                                for (var key in props) {
+                                    if (props.hasOwnProperty(key) && !excludedKeys.includes(key)) {
+                                        var row = document.createElement('tr');
+                                        var cellKey = document.createElement('th');
+                                        cellKey.textContent = key;
+                                        var cellValue = document.createElement('td');
+                                        cellValue.textContent = props[key];
+                                        row.appendChild(cellKey);
+                                        row.appendChild(cellValue);
+                                        table.appendChild(row);
+                                    }
+                                }
+
+                                detailsContent.appendChild(table);
+
+                                // Handle description as HTML
+                                if (props.description) {
+                                    var descriptionContainer = document.createElement('div');
+                                    descriptionContainer.innerHTML = props.description;
+                                    detailsContent.appendChild(descriptionContainer);
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    console.error('Invalid bounds for KML layer:', kmlUrl);
+                }
+            });
+
+            kmlLayer.on('error', function() {
+                console.error('Error loading KML layer:', kmlUrl);
+            });
+        });
+    </script>
+</body>
+</html>

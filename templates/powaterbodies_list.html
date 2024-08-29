@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Bodies List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Water Bodies List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Unique ID</th>
+                <th>Ponds/Oo</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Taluk</th>
+                <th>Block</th>
+                <th>Panchayat</th>
+                <th>Village</th>
+                <th>Pond Type</th>
+                <th>Cap MCM</th>
+                <th>FPL m</th>
+                <th>MWL m</th>
+                <th>PBL m</th>
+                <th>Sto Dep m</th>
+                <th>Catchment</th>
+                <th>Wat Spr Ar</th>
+                <th>Bund Len m</th>
+                <th>Dis cusecs</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for waterbody in waterbodies %}
+            <tr>
+                <td>{{ waterbody.unique_id }}</td>
+                <td>{{ waterbody.ponds_oo }}</td>
+                <td>{{ waterbody.latitude }}</td>
+                <td>{{ waterbody.longitude }}</td>
+                <td>{{ waterbody.taluk }}</td>
+                <td>{{ waterbody.block }}</td>
+                <td>{{ waterbody.panchayat }}</td>
+                <td>{{ waterbody.village }}</t
+                    d>
+                <td>{{ waterbody.pond_type }}</td>
+                <td>{{ waterbody.cap_mcm }}</td>
+                <td>{{ waterbody.fpl_m }}</td>
+                <td>{{ waterbody.mwl_m }}</td>
+                <td>{{ waterbody.pbl_m }}</td>
+                <td>{{ waterbody.sto_dep_m }}</td>
+                <td>{{ waterbody.catchment }}</td>
+                <td>{{ waterbody.wat_spr_ar }}</td>
+                <td>{{ waterbody.bund_len_m }}</td>
+                <td>{{ waterbody.dis_cusecs }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

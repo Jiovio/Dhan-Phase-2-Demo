@@ -208,3 +208,53 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.name
+    
+class District(models.Model):
+    code = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+    
+class Jurisdiction(models.Model):
+    code = models.CharField(max_length=50, unique=True)
+    createdBy = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.code
+    
+class Taluk(models.Model):
+    code = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=100)
+    district_id = models.CharField(max_length=10)  # Keeping district_id as a CharField or IntegerField
+
+    def __str__(self):
+        return self.name
+    
+class FenceType(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+    
+class Habitation(models.Model):
+    district_code = models.CharField(max_length=10)
+    district = models.CharField(max_length=100)
+    block_code = models.CharField(max_length=10)
+    block = models.CharField(max_length=100)
+    village_code = models.CharField(max_length=10)
+    village = models.CharField(max_length=100)
+    habitation_code = models.CharField(max_length=10)
+    habitation = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.habitation
+class UrbanLocalBodies(models.Model):
+    type_code = models.CharField(max_length=50)  # TypeCode
+    type = models.CharField(max_length=100)  # Type
+    name = models.CharField(max_length=100)  # Name
+    ward_code = models.CharField(max_length=50)  # WardCode
+    ward = models.CharField(max_length=100)  # Ward
+
+    def __str__(self):
+        return self.type_code

@@ -51,9 +51,9 @@ data-template="vertical-menu-template-free">
           <div class="app-brand demo">
             <a href="" class="app-brand-link">
               <span class="app-brand-logo demo">
-                <img src="{% static 'assets/img/icons/unicons/lloogo.png' %}" alt="Icon" width="20" />
+                <img src="{% static 'image/waterdams.png' %}" alt="Water DaMS Logo" style="width: 150px; height: auto;">
               </span>
-              <span class="app-brand-text demo menu-text fw-bold ms-2">WaterDaMS</span>
+              
             </a>
 
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -277,7 +277,7 @@ data-template="vertical-menu-template-free">
 
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <!-- Place this tag where you want the button to render. -->
-                <li class="nav-item lh-1 me-3">
+                <!--li class="nav-item lh-1 me-3">
                   <a
                     class="github-button"
                     href="https://github.com/themeselection/sneat-html-admin-template-free"
@@ -287,7 +287,7 @@ data-template="vertical-menu-template-free">
                     aria-label="Star themeselection/sneat-html-admin-template-free on GitHub"
                     >Star</a
                   >
-                </li>
+                </li-->
 
                 <!-- User -->
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -415,24 +415,34 @@ data-template="vertical-menu-template-free">
             
                 <!-- Pagination Controls -->
                 <div class="pagination">
-                    <span class="step-links">
-                        {% if waterbodies.has_previous %}
-                            <a href="?page=1">&laquo; First</a>
-                            <a href="?page={{ waterbodies.previous_page_number }}">Previous</a>
-                        {% endif %}
-            
-                        <span class="current">
-                            Page {{ waterbodies.number }} of {{ waterbodies.paginator.num_pages }}
-                        </span>
-            
-                        {% if waterbodies.has_next %}
-                            <a href="?page={{ waterbodies.next_page_number }}">Next</a>
-                            <a href="?page={{ waterbodies.paginator.num_pages }}">Last &raquo;</a>
-                        {% endif %}
-                    </span>
-                </div>
-            </div>
-            
+                  <span class="step-links">
+                      {% if waterbodies.has_previous %}
+                          <a href="?page=1">&laquo; First</a>
+                          <a href="?page={{ waterbodies.previous_page_number }}">Previous</a>
+                      {% else %}
+                          &laquo; First
+                          Previous
+                      {% endif %}
+              
+                      <!-- Displaying individual page numbers -->
+                      {% for num in waterbodies.paginator.page_range %}
+                          {% if waterbodies.number == num %}
+                              <strong>{{ num }}</strong>
+                          {% elif num > waterbodies.number|add:'-5' and num < waterbodies.number|add:'5' %}
+                              <a href="?page={{ num }}">{{ num }}</a>
+                          {% endif %}
+                      {% endfor %}
+              
+                      {% if waterbodies.has_next %}
+                          <a href="?page={{ waterbodies.next_page_number }}">Next</a>
+                          <a href="?page={{ waterbodies.paginator.num_pages }}">Last &raquo;</a>
+                      {% else %}
+                          Next
+                          Last &raquo;
+                      {% endif %}
+                  </span>
+              </div>
+              
             
             <!-- / Content -->
 

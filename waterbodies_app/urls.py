@@ -46,6 +46,10 @@ from waterbodies_app.views import powaterbodies_list
 from .views import metadata_view
 from .views import kml_files_list
 from .views import tabledesign
+from .views import fencetype_list, fencetype_update, fencetype_delete
+from .views import taluk_list, taluk_update, taluk_delete
+from .views import habitation_list, habitation_update, habitation_delete
+
 from waterbodies_app.views import waterbodies_tank_list
 urlpatterns = [
     path('', index, name='index'),
@@ -53,10 +57,10 @@ urlpatterns = [
     path('admin-login/', admin_login, name='admin_login'),
     path('register/', register_view, name='register'),
       path('user-list/', user_list_view, name='user_list'),
-    path('admin-dashboard/', admin_dashboard, name='admin-dashboard'),
+    #path('admin-dashboard/', admin_dashboard, name='admin-dashboard'),
     path('logout/', views.Logoutview, name='logout'), 
-    path('water-bodies/', water_body_list, name='waterbody-list'),
-    path('add-water-body/', add_water_body, name='add-water-body'),
+    #path('water-bodies/', water_body_list, name='waterbody-list'),
+    #path('add-water-body/', add_water_body, name='add-water-body'),
     path('api/get-water-body-data/', get_water_body_data, name='get-water-body-data'),
     
     path('delete-water-body-confirmation/<int:waterbody_id>/', delete_water_body_confirmation, name='delete_water_body_confirmation'),
@@ -90,6 +94,35 @@ urlpatterns = [
      path('kml-files/', kml_files_list, name='kml_files_list'),
      path('govwb/', tabledesign, name='govwb'),
      path('waterbodies-tank/', waterbodies_tank_list, name='waterbodies_tank_list'),
+     path('districts/', views.district_list, name='district_list'),
+    path('districts/update/<int:pk>/', views.district_update, name='district_update'),
+    path('districts/delete/<int:pk>/', views.district_delete, name='district_delete'),
+     path('jurisdictions/', views.jurisdiction_list, name='jurisdiction_list'),
+     path('details/', views.details_view, name='details'),
+     path('hydrologicaldetails/',views.hydrological_details, name='hydrologicaldetails'),
+     path('sourcedetails/',views.source_details, name='sourcedetails'),
+      path('watersadetails/',views.watersa_details, name='watersadetails'),
+      path('inletdetails/',views.inlet_details, name='inletdetails'),
+      path('rwpdetails/',views.rwp_details, name='rwpdetails'),
+      path('outletdetails/',views.outlet_details, name='outletdetails'),
+       path('fencingdetails/', views.fencing_details, name='fencingdetails'),
+       path('functionaldetails/', views.functional_details, name='functionaldetails'),
+       path('uniqunessdetails/', views.uniqueness_details, name='uniquenessdetails'),
+      path('embankmentdetails/',views.embankment_details, name='embankmentdetails'),
+      path('legalissues/',views.legal_issues, name='legalissues'),
+      path('encroachment/',views.encroachment, name='encroachment'),
+    path('jurisdictions/update/<int:pk>/', views.jurisdiction_update, name='jurisdiction_update'),
+    path('jurisdictions/delete/<int:pk>/', views.jurisdiction_delete, name='jurisdiction_delete'),
+     path('taluks/', taluk_list, name='taluk_list'),
+    path('taluks/update/<int:pk>/', taluk_update, name='taluk_update'),
+    path('taluks/delete/<int:pk>/', taluk_delete, name='taluk_delete'),
+     path('fencetypes/', fencetype_list, name='fencetype_list'),
+    path('fencetypes/update/<int:pk>/', fencetype_update, name='fencetype_update'),
+    path('fencetypes/delete/<int:pk>/', fencetype_delete, name='fencetype_delete'),
+    
+     path('habitations/', habitation_list, name='habitation_list'),
+    path('habitations/update/<int:pk>/', habitation_update, name='habitation_update'),
+    path('habitations/delete/<int:pk>/', habitation_delete, name='habitation_delete'),
     # Add more URL patterns for your app...
 ]
 if settings.DEBUG:

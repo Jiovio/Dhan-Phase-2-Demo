@@ -141,3 +141,10 @@
   text-align: center;
   margin-top: 1rem;
 }
+.extra-small-text {
+  font-size: 0.55rem; /* Adjust this value as needed */
+}
+.nav {
+  max-height: 400px; /* Adjust this value as needed */
+  overflow-y: auto; /* Enables vertical scrolling */
+}

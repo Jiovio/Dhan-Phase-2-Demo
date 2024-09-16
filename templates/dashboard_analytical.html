@@ -51,9 +51,9 @@ data-template="vertical-menu-template-free">
           <div class="app-brand demo">
             <a href="" class="app-brand-link">
               <span class="app-brand-logo demo">
-                <img src="{% static 'assets/img/icons/unicons/lloogo.png' %}" alt="Icon" width="20" />
+                <img src="{% static 'image/waterdams.png' %}" alt="Water DaMS Logo" style="width: 150px; height: auto;">
               </span>
-              <span class="app-brand-text demo menu-text fw-bold ms-2">WaterDaMS</span>
+              
             </a>
     
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -77,12 +77,12 @@ data-template="vertical-menu-template-free">
                     <div data-i18n="CRM">Location Master</div>
                   </a>
                   <ul class="menu-sub">
-                    <li class="submenu-item"><a href="#" class="submenu-link">District</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Block</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Taluk</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">District</a></li>
+                    <li class="submenu-item"><a href="" class="submenu-link">Block</a></li>
+                    <li class="submenu-item"><a href="{% url 'taluk_list' %}" class="submenu-link">Taluk</a></li>
                     <li class="submenu-item"><a href="#" class="submenu-link">Panchayat</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Jurisdiction</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Habitation</a></li>
+                    <li class="submenu-item"><a href="{% url 'jurisdiction_list' %}" class="submenu-link">Jurisdiction</a></li>
+                    <li class="submenu-item"><a href="{% url 'habitation_list' %}" class="submenu-link">Habitation</a></li>
                     <li class="submenu-item"><a href="#" class="submenu-link">Urban Local Bodies</a></li>
                   </ul>
                 </li>
@@ -109,7 +109,7 @@ data-template="vertical-menu-template-free">
                     <li class="submenu-item"><a href="#" class="submenu-link">Family Nature</a></li>
                     <li class="submenu-item"><a href="#" class="submenu-link">Field Channel Type</a></li>
                     <li class="submenu-item"><a href="#" class="submenu-link">Fence Condition</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Fence Type</a></li>
+                    <li class="submenu-item"><a href="{% url 'fencetype_list' %}" class="submenu-link">Fence Type</a></li>
                     <li class="submenu-item"><a href="#" class="submenu-link">Ghat Condition</a></li>
                     <li class="submenu-item"><a href="#" class="submenu-link">
                       Inlet Type</a></li>
@@ -348,7 +348,7 @@ data-template="vertical-menu-template-free">
                         <div class="card-body">
                           <div class="card-title d-flex align-items-start justify-content-between">
                             <div class="avatar flex-shrink-0">
-                              <i class="bi bi-water" style="color: #3C91FF; font-size: 30px;"></i>
+                              <i class="bi bi-droplet-fill" style="color: #3C91FF; font-size: 30px;"></i>
 
                             </div>
                           </div>
@@ -367,7 +367,7 @@ data-template="vertical-menu-template-free">
                         <div class="card-body">
                           <div class="card-title d-flex align-items-start justify-content-between">
                             <div class="avatar flex-shrink-0">
-                              <i class="bi bi-droplet-fill" style="color: #3C91FF; font-size: 30px;"></i>
+                              <i class="bi bi-water" style="color: blue; font-size: 30px;"></i>
 
                             </div>
                           </div>
@@ -386,7 +386,7 @@ data-template="vertical-menu-template-free">
                         <div class="card-body">
                           <div class="card-title d-flex align-items-start justify-content-between">
                             <div class="avatar flex-shrink-0">
-                              <i class="bi bi-file-text-fill rounded" style="color: #3C91FF; font-size: 30px;"></i>
+                              <i class="bi bi-file-text-fill rounded" style="color: orange; font-size: 30px;"> </i>
 
                             </div>
                           </div>
@@ -405,7 +405,7 @@ data-template="vertical-menu-template-free">
                         <div class="card-body">
                           <div class="card-title d-flex align-items-start justify-content-between">
                             <div class="avatar flex-shrink-0">
-                              <i class="bi bi-person-fill rounded" style="color: #3C91FF; font-size: 30px;"></i>
+                              <i class="bi bi-person-fill rounded" style="color: green; font-size: 30px;"></i>
 
 
 

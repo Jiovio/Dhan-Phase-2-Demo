@@ -17996,3 +17996,8 @@ html:not(.layout-footer-fixed) .content-wrapper {
 .footer.bg-light hr {
   border-color: rgba(105, 122, 141, 0.0783835294);
 }
+
+.nav {
+  max-height: 600px; /* Adjust this value as needed */
+  overflow-y: auto; /* Enables vertical scrolling */
+}

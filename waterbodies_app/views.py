@@ -57,15 +57,20 @@ from django.contrib.auth.forms import AuthenticationForm
 from .forms import FieldWorkerLoginForm
 from .forms import CustomLoginForm
 from .forms import CustomUserCreationForm
+from .models import FenceType
 from django.core.files.storage import FileSystemStorage
 from .forms import CustomUserCreationForm
 from .models import CustomUser
 from .models import KMLFilesz
+from waterbodies_app.models import District
 from django.http import JsonResponse
 from xml.etree import ElementTree as ET
 from .models import Pond
 from .models import Contact
 from .forms import ContactForm
+from .models import Taluk
+from .models import Habitation
+from waterbodies_app.models import Jurisdiction
 logger = logging.getLogger(__name__)
 def water_body_details(request, water_body_id):
     try:
@@ -96,7 +101,7 @@ def tabledesign(request):
 
     return render(request, 'govwbtable.html', context)
 
-
+@login_required(login_url='admin_login')
 def dashboardanalytics(request):
     # Get the count of records in the PoOwaterbody model
     waterbodies_count = PoOwaterbody.objects.count()
@@ -785,3 +790,176 @@ def field_workers(request):
         'current_offset': offset,
         'field_workers_count':field_workers_count
     })
+    
+def district_list(request):
+    districts = District.objects.all()
+    return render(request, 'district_list.html', {'districts': districts})
+
+def district_update(request, pk):
+    district = get_object_or_404(District, pk=pk)
+    if request.method == 'POST':
+        district.code = request.POST.get('code')
+        district.name = request.POST.get('name')
+        district.save()
+        return redirect('district_list')
+    return render(request, 'district_update.html', {'district': district})
+
+def district_delete(request, pk):
+    district = get_object_or_404(District, pk=pk)
+    if request.method == 'POST':
+        district.delete()
+        return redirect('district_list')
+    return render(request, 'district_delete.html', {'district': district})
+
+
+def jurisdiction_list(request):
+    jurisdictions = Jurisdiction.objects.all()
+    return render(request, 'jurisdiction_list.html', {'jurisdictions': jurisdictions})
+
+def jurisdiction_update(request, pk):
+    jurisdiction = get_object_or_404(Jurisdiction, pk=pk)
+    if request.method == 'POST':
+        jurisdiction.code = request.POST.get('code')
+        jurisdiction.createdBy = request.POST.get('createdBy')
+        jurisdiction.save()
+        return redirect('jurisdiction_list')
+    return render(request, 'jurisdiction_update.html', {'jurisdiction': jurisdiction})
+
+def jurisdiction_delete(request, pk):
+    jurisdiction = get_object_or_404(Jurisdiction, pk=pk)
+    if request.method == 'POST':
+        jurisdiction.delete()
+        return redirect('jurisdiction_list')
+    return render(request, 'jurisdiction_delete.html', {'jurisdiction': jurisdiction})
+
+def taluk_list(request):
+    taluks = Taluk.objects.all()
+    return render(request, 'taluk_list.html', {'taluks': taluks})
+
+# View to update a Taluk
+def taluk_update(request, pk):
+    taluk = get_object_or_404(Taluk, pk=pk)
+    if request.method == 'POST':
+        taluk.code = request.POST.get('code')
+        taluk.name = request.POST.get('name')
+        taluk.district_id = request.POST.get('district_id')
+        taluk.save()
+        return redirect('taluk_list')
+    return render(request, 'taluk_update.html', {'taluk': taluk})
+
+# View to delete a Taluk
+def taluk_delete(request, pk):
+    taluk = get_object_or_404(Taluk, pk=pk)
+    if request.method == 'POST':
+        taluk.delete()
+        return redirect('taluk_list')
+    return render(request, 'taluk_delete.html', {'taluk': taluk})
+
+# View to list all FenceTypes
+def fencetype_list(request):
+    fencetypes = FenceType.objects.all()
+    return render(request, 'fencetype_list.html', {'fencetypes': fencetypes})
+
+# View to update a FenceType
+def fencetype_update(request, pk):
+    fencetype = get_object_or_404(FenceType, pk=pk)
+    if request.method == 'POST':
+        fencetype.name = request.POST.get('name')
+        fencetype.save()
+        return redirect('fencetype_list')
+    return render(request, 'fencetype_update.html', {'fencetype': fencetype})
+
+# View to delete a FenceType
+def fencetype_delete(request, pk):
+    fencetype = get_object_or_404(FenceType, pk=pk)
+    if request.method == 'POST':
+        fencetype.delete()
+        return redirect('fencetype_list')
+    return render(request, 'fencetype_delete.html', {'fencetype': fencetype})
+
+def habitation_list(request):
+    habitations = Habitation.objects.all()
+    paginator = Paginator(habitations, 10)  # Show 10 habitations per page.
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'habitation_list.html', {'page_obj': page_obj})
+
+def habitation_update(request, pk):
+    habitation = get_object_or_404(Habitation, pk=pk)
+    if request.method == 'POST':
+        habitation.district_code = request.POST.get('district_code')
+        habitation.district = request.POST.get('district')
+        habitation.block_code = request.POST.get('block_code')
+        habitation.block = request.POST.get('block')
+        habitation.village_code = request.POST.get('village_code')
+        habitation.village = request.POST.get('village')
+        habitation.habitation_code = request.POST.get('habitation_code')
+        habitation.habitation = request.POST.get('habitation')
+        habitation.save()
+        return redirect('habitation_list')
+    return render(request, 'habitation_update.html', {'habitation': habitation})
+
+def habitation_delete(request, pk):
+    habitation = get_object_or_404(Habitation, pk=pk)
+    if request.method == 'POST':
+        habitation.delete()
+        return redirect('habitation_list')
+    return render(request, 'habitation_delete.html', {'habitation': habitation})
+def details_view(request):  
+    # You can pass context data to the template if needed
+    context = {}
+    return render(request, 'details.html', context)
+
+def hydrological_details(request):  
+    # You can pass context data to the template if needed
+    context = {}
+    return render(request, 'hydrologicaldetail.html', context)
+def source_details(request):  
+    # You can pass context data to the template if needed
+    context = {}
+    return render(request, 'sourcedetails.html', context)
+def watersa_details(request):  
+    # You can pass context data to the template if needed
+    context = {}
+    return render(request, 'watersadetails.html', context)
+def embankment_details(request):  
+    # You can pass context data to the template if needed
+    context = {}
+    return render(request, 'embankmentdetails.html', context)
+
+def inlet_details(request):  
+    # You can pass context data to the template if needed
+    context = {}
+    return render(request, 'inletdetails.html', context)
+
+def outlet_details(request):  
+    # You can pass context data to the template if needed
+    context = {}
+    return render(request, 'outletdetails.html', context)
+def rwp_details(request):  
+    # You can pass context data to the template if needed
+    context = {}
+    return render(request, 'rwpdetails.html', context)
+def fencing_details(request):
+    # You can pass context data to the template if needed
+    context = {}
+    return render(request, 'fencingdetails.html', context)
+def functional_details(request):
+    # You can pass context data to the template if needed
+    context = {}
+    return render(request, 'functionalparameter.html', context)
+def uniqueness_details(request):
+    # You can pass context data to the template if needed
+    context = {}
+    return render(request, 'uniquenessparameter.html', context)
+def legal_issues(request):
+    # You can pass context data to the template if needed
+    context = {}
+    return render(request, 'legalissues.html', context)
+
+def encroachment(request):
+    # You can pass context data to the template if needed
+    context = {}
+    return render(request, 'encroachment.html', context)

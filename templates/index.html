@@ -16,7 +16,7 @@
   
     <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js" defer></script>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>{% block title %}WaterDMS{% endblock %}</title>
+      <title>{% block title %}Water DaMS{% endblock %}</title>
       <meta name="description" content="{% block description %}{% endblock %}">
       <meta name="keywords" content="{% block keywords %}{% endblock %}">
       
@@ -58,7 +58,12 @@
         <!--mg class="logo1" src="{% static 'Image/logoT.png' %}" -->
       <div class="logo">
         
-        <h1><a href="index.html"><span>WaterDMS</span></a></h1>
+        <h1>
+          <a href="{% url 'index' %}">
+              <img src="{% static 'image/waterdams.png' %}" alt="Water DaMS Logo" style="width: 150px; height: auto;">
+          </a>
+      </h1>
+      
         <!-- Uncomment below if you prefer to use an image logo -->
         <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
       </div>
@@ -105,7 +110,7 @@
       <div class="row justify-content-between">
         <div class="col-lg-7 pt-5 pt-lg-0 order-2 order-lg-1 d-flex align-items-center">
           <div data-aos="zoom-out">
-            <h1>Track your WaterBody Management System using <span>WaterDMS</span></h1>
+            <h1>Track your WaterBody Management System using <span>Water DaMS</span></h1>
             <h2>To create Decision Support System for the efficient management and analysis of waterbodies within the district.</h2>
             <a href="{% url 'volunteer_form' %}" >
             <button class="volunteer-btn">
@@ -119,7 +124,7 @@
           </div>
         </div>
         <div class="col-lg-4 order-1 order-lg-2 hero-img" data-aos="zoom-out" data-aos-delay="300">
-          <img src="{% static 'Image/cover2.png' %}" class="img-fluid animated" style="width: 750px;" alt="">
+          <img src="{% static 'image/cover2.png' %}" class="img-fluid animated" style="width: 750px;" alt="">
         </div>
       </div>
     </div>
@@ -405,64 +410,64 @@
 
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
-              <a href="{%static 'Image/wb1.jpg'%}" class="gallery-lightbox">
-                <img src="{%static 'Image/wb1.jpg'%}" alt="" class="img-fluid">
+              <a href="{%static 'image/wb1.jpg'%}" class="gallery-lightbox">
+                <img src="{%static 'image/wb1.jpg'%}" alt="" class="img-fluid">
               </a>
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="150">
-              <a href="{%static 'Image/wb2.jpg'%}"  class="gallery-lightbox">
-                <img src="{%static 'Image/wb2.jpg'%}"  alt="" class="img-fluid">
+              <a href="{%static 'image/wb2.jpg'%}"  class="gallery-lightbox">
+                <img src="{%static 'image/wb2.jpg'%}"  alt="" class="img-fluid">
               </a>
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
-              <a href="{%static 'Image/vd.jpg'%}" class="gallery-lightbox">
-                <img src="{%static 'Image/vd.jpg'%}"  alt="" class="img-fluid">
+              <a href="{%static 'image/vd.jpg'%}" class="gallery-lightbox">
+                <img src="{%static 'image/vd.jpg'%}"  alt="" class="img-fluid">
               </a>
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="250">
-              <a href="{%static 'Image/wb1.jpg'%}" class="gallery-lightbox">
-                <img src="{%static 'Image/wb1.jpg'%}" alt="" class="img-fluid">
+              <a href="{%static 'image/wb1.jpg'%}" class="gallery-lightbox">
+                <img src="{%static 'image/wb1.jpg'%}" alt="" class="img-fluid">
               </a>
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
-              <a href="{%static 'Image/wb9.jpg'%}" class="gallery-lightbox">
-                <img src="{%static 'Image/wb9.jpg'%}"  alt="" class="img-fluid">
+              <a href="{%static 'image/wb9.jpg'%}" class="gallery-lightbox">
+                <img src="{%static 'image/wb9.jpg'%}"  alt="" class="img-fluid">
               </a>
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="350">
-              <a href="{%static 'Image/slide4.jpg'%}" class="gallery-lightbox">
-                <img src="{%static 'Image/slide4.jpg'%}"  alt="" class="img-fluid">
+              <a href="{%static 'image/slide4.jpg'%}" class="gallery-lightbox">
+                <img src="{%static 'image/slide4.jpg'%}"  alt="" class="img-fluid">
               </a>
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="400">
-              <a href="{%static 'Image/wb8.jpg'%}" class="gallery-lightbox">
-                <img src="{%static 'Image/wb8.jpg'%}" alt="" class="img-fluid">
+              <a href="{%static 'image/wb8.jpg'%}" class="gallery-lightbox">
+                <img src="{%static 'image/wb8.jpg'%}" alt="" class="img-fluid">
               </a>
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="450">
-                <a href="{%static 'Image/slide4.jpg'%}" class="gallery-lightbox">
-                    <img src="{%static 'Image/slide4.jpg'%}"  alt="" class="img-fluid">
+                <a href="{%static 'image/slide4.jpg'%}" class="gallery-lightbox">
+                    <img src="{%static 'image/slide4.jpg'%}"  alt="" class="img-fluid">
               </a>
             </div>
           </div>

@@ -217,20 +217,20 @@ button.list-group-item-primary.active {
 
 .btn-primary {
   color: #fff;
-  background-color: #696cff;
-  border-color: #696cff;
+  background-color: #3C91FF;
+  border-color: #3C91FF;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
 }
 .btn-primary:hover {
   color: #fff !important;
-  background-color: #5f61e6 !important;
-  border-color: #5f61e6 !important;
+  background-color: #3C91FF !important;
+  border-color: #3C91FF !important;
   transform: translateY(-1px) !important;
 }
 .btn-check:focus + .btn-primary, .btn-primary:focus, .btn-primary.focus {
   color: #fff;
-  background-color: #5f61e6;
-  border-color: #5f61e6;
+  background-color: #3C91FF;
+  border-color: #3C91FF;
   transform: translateY(0);
   box-shadow: none;
 }
@@ -577,10 +577,10 @@ html[dir=rtl] .border-primary {
 }
 
 a {
-  color: #696cff;
+  color: grey;
 }
 a:hover {
-  color: #787bff;
+  color: grey;
 }
 
 .fill-primary {

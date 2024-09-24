@@ -22,6 +22,8 @@ data-template="vertical-menu-template-free">
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <link rel="stylesheet" href="{% static 'assets/vendor/fonts/boxicons.css' %}"/>
 
@@ -357,141 +359,304 @@ data-template="vertical-menu-template-free">
 
           <!-- Content wrapper -->
           <div class="content-wrapper">
-            <!-- Content -->
-
             <div class="container-xxl flex-grow-1 container-p-y">
               <h4 class="py-3 mb-4"><span class="text-muted fw-light">Table /</span> Tanks</h4>
+              
+              <!-- Filter Form -->
+              <!-- Filter Form -->
+<form method="GET" action="{% url 'tank_list' %}">
+  <div class="row">
+    <div class="col-md-3">
+      <label for="villageFilter" class="form-label">Village</label>
+      <input type="text" name="village" id="villageFilter" class="form-control" placeholder="Filter by Village" value="{{ request.GET.village }}">
+    </div>
+    <div class="col-md-3">
+      <label for="blockFilter" class="form-label">Block</label>
+      <input type="text" name="block" id="blockFilter" class="form-control" placeholder="Filter by Block" value="{{ request.GET.block }}">
+    </div>
+    <div class="col-md-3">
+      <label for="panchayatFilter" class="form-label">Panchayat</label>
+      <input type="text" name="panchayat" id="panchayatFilter" class="form-control" placeholder="Filter by Panchayat" value="{{ request.GET.panchayat }}">
+    </div>
+    <!--div class="col-md-3">
+      <label  class="form-label">UniqueID</label>
+      <input type="text" name="unique_id"  class="form-control" placeholder="Filter by Unique ID" value="{{ request.GET.unique_id }}">
+    </div-->
+    <div class="col-md-3 d-flex align-items-end">
+      <button type="submit" class="btn btn-primary">Filter</button>
+    </div>
+  </div>
+</form>
+
+              <!--form method="GET" class="mb-4">
+                <div class="input-group">
+                  <input type="text" name="unique_id" class="form-control" placeholder="Filter by Unique ID" value="{{ request.GET.unique_id }}" />
+                  <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+              </form-->
+          
               <div class="card">
                 <h5 class="card-header">Tanks</h5>
                 <div class="table-responsive text-nowrap">
-                    <table class="table">
-                        <thead>
-                            <tr class="text-nowrap">
+                  <table class="table">
+                    <thead>
+                      <tr class="text-nowrap">
+                        <th>District</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Block</th>
+                        <th>Panchayat</th>
+                        <th>Village</th>
+                        <th>Tank Name</th>
+                        <th>Tank Type</th>
+                        <th>Ayacut (ha)</th>
+                        <th>Wat Spr Ar</th>
+                        <th>Cap MCM</th>
+                        <th>No of Sluices</th>
+                        <th>Sluices Type</th>
+                        <th>Bund Length (m)</th>
+                        <th>TBL (m)</th>
+                        <th>MWL (m)</th>
+                        <th>FTL (m)</th>
+                        <th>Unique ID</th>
+                        <th>Sto Depth (m)</th>
+                        <th>Catchment</th>
+                        <th>No of Weirs</th>
+                        <th>Weir Length (m)</th>
+                        <th>Low Sill (m)</th>
+                        <th>Dis Cusecs</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                      {% for tank in tanks %}
+                      <tr>
+                        <td>{{ tank.district }}</td>
+                        <td>{{ tank.latitude }}</td>
+                        <td>{{ tank.longitude }}</td>
+                        <td>{{ tank.block }}</td>
+                        <td>{{ tank.panchayat }}</td>
+                        <td>{{ tank.village }}</td>
+                        <td>{{ tank.tank_name }}</td>
+                        <td>{{ tank.tank_type }}</td>
+                        <td>{{ tank.ayacut_ha }}</td>
+                        <td>{{ tank.wat_spr_ar }}</td>
+                        <td>{{ tank.cap_mcm }}</td>
+                        <td>{{ tank.no_of_sluices }}</td>
+                        <td>{{ tank.sluices_type }}</td>
+                        <td>{{ tank.bund_len_m }}</td>
+                        <td>{{ tank.tbl_m }}</td>
+                        <td>{{ tank.mwl_m }}</td>
+                        <td>{{ tank.ftl_m }}</td>
+                        <td>{{ tank.unique_id }}</td>
+                        <td>{{ tank.sto_depth_m }}</td>
+                        <td>{{ tank.catchment }}</td>
+                        <td>{{ tank.no_of_weirs }}</td>
+                        <td>{{ tank.weir_length_m }}</td>
+                        <td>{{ tank.low_sill_m }}</td>
+                        <td>{{ tank.dis_cusecs }}</td>
+                        <td>
+                          <a href="#" data-bs-toggle="modal" data-bs-target="#updateTankModal{{ tank.id }}">
+                            <i class="fas fa-edit"></i> <!-- Update Icon -->
+                        </a>
+                        <a href="#"  data-bs-toggle="modal" data-bs-target="#deleteTankModal{{ tank.id }}">
+                            <i class="fas fa-trash-alt"></i> <!-- Delete Icon -->
+                        </a>
+                        
+                        </td>
+                      </tr>
+          
+                      <!-- Update Modal -->
+                      <div class="modal fade" id="updateTankModal{{ tank.id }}" tabindex="-1" aria-labelledby="updateTankModalLabel{{ tank.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Update Tank</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <form method="post" action="{% url 'update_tank' tank.id %}">
+                                {% csrf_token %}
                                 
-                                    <th>District</th>
-                                    <th>Latitude</th>
-                                    <th>Longitude</th>
-                                    <th>Block</th>
-                                    <th>Panchayat</th>
-                                    <th>Village</th>
-                                    <th>Tank Name</th>
-                                    <th>Tank Type</th>
-                                    <th>Ayacut (ha)</th>
-                                    <th>Wat Spr Ar</th>
-                                    <th>Cap MCM</th>
-                                    <th>No of Sluices</th>
-                                    <th>Sluices Type</th>
-                                    <th>Bund Length (m)</th>
-                                    <th>TBL (m)</th>
-                                    <th>MWL (m)</th>
-                                    <th>FTL (m)</th>
-                                    <th>Unique ID</th>
-                                    <th>Sto Depth (m)</th>
-                                    <th>Catchment</th>
-                                    <th>No of Weirs</th>
-                                    <th>Weir Length (m)</th>
-                                    <th>Low Sill (m)</th>
-                                    <th>Dis Cusecs</th>
-                                
-                            </tr>
-                        </thead>
-                        <tbody class="table-border-bottom-0">
-                            {% for tank in tanks %}
-                            <tr>
-                                <td>{{ tank.district }}</td>
-                                <td>{{ tank.latitude }}</td>
-                                <td>{{ tank.longitude }}</td>
-                                <td>{{ tank.block }}</td>
-                                <td>{{ tank.panchayat }}</td>
-                                <td>{{ tank.village }}</td>
-                                <td>{{ tank.tank_name }}</td>
-                                <td>{{ tank.tank_type }}</td>
-                                <td>{{ tank.ayacut_ha }}</td>
-                                <td>{{ tank.wat_spr_ar }}</td>
-                                <td>{{ tank.cap_mcm }}</td>
-                                <td>{{ tank.no_of_sluices }}</td>
-                                <td>{{ tank.sluices_type }}</td>
-                                <td>{{ tank.bund_len_m }}</td>
-                                <td>{{ tank.tbl_m }}</td>
-                                <td>{{ tank.mwl_m }}</td>
-                                <td>{{ tank.ftl_m }}</td>
-                                <td>{{ tank.unique_id }}</td>
-                                <td>{{ tank.sto_depth_m }}</td>
-                                <td>{{ tank.catchment }}</td>
-                                <td>{{ tank.no_of_weirs }}</td>
-                                <td>{{ tank.weir_length_m }}</td>
-                                <td>{{ tank.low_sill_m }}</td>
-                                <td>{{ tank.dis_cusecs }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateDistrict{{ tank.id }}">District</label>
+                                  <input type="text" name="district" class="form-control" id="updateDistrict{{ tank.id }}" value="{{ tank.district }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateLatitude{{ tank.id }}">Latitude</label>
+                                  <input type="text" name="latitude" class="form-control" id="updateLatitude{{ tank.id }}" value="{{ tank.latitude }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateLongitude{{ tank.id }}">Longitude</label>
+                                  <input type="text" name="longitude" class="form-control" id="updateLongitude{{ tank.id }}" value="{{ tank.longitude }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateBlock{{ tank.id }}">Block</label>
+                                  <input type="text" name="block" class="form-control" id="updateBlock{{ tank.id }}" value="{{ tank.block }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updatePanchayat{{ tank.id }}">Panchayat</label>
+                                  <input type="text" name="panchayat" class="form-control" id="updatePanchayat{{ tank.id }}" value="{{ tank.panchayat }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateVillage{{ tank.id }}">Village</label>
+                                  <input type="text" name="village" class="form-control" id="updateVillage{{ tank.id }}" value="{{ tank.village }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateTankName{{ tank.id }}">Tank Name</label>
+                                  <input type="text" name="tank_name" class="form-control" id="updateTankName{{ tank.id }}" value="{{ tank.tank_name }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateTankType{{ tank.id }}">Tank Type</label>
+                                  <input type="text" name="tank_type" class="form-control" id="updateTankType{{ tank.id }}" value="{{ tank.tank_type }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateAyacut{{ tank.id }}">Ayacut (ha)</label>
+                                  <input type="text" name="ayacut_ha" class="form-control" id="updateAyacut{{ tank.id }}" value="{{ tank.ayacut_ha }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateWatSprAr{{ tank.id }}">Wat Spr Ar</label>
+                                  <input type="text" name="wat_spr_ar" class="form-control" id="updateWatSprAr{{ tank.id }}" value="{{ tank.wat_spr_ar }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateCapMCM{{ tank.id }}">Cap MCM</label>
+                                  <input type="text" name="cap_mcm" class="form-control" id="updateCapMCM{{ tank.id }}" value="{{ tank.cap_mcm }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateSluices{{ tank.id }}">No of Sluices</label>
+                                  <input type="text" name="no_of_sluices" class="form-control" id="updateSluices{{ tank.id }}" value="{{ tank.no_of_sluices }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateSluicesType{{ tank.id }}">Sluices Type</label>
+                                  <input type="text" name="sluices_type" class="form-control" id="updateSluicesType{{ tank.id }}" value="{{ tank.sluices_type }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateBundLen{{ tank.id }}">Bund Length (m)</label>
+                                  <input type="text" name="bund_len_m" class="form-control" id="updateBundLen{{ tank.id }}" value="{{ tank.bund_len_m }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateTBL{{ tank.id }}">TBL (m)</label>
+                                  <input type="text" name="tbl_m" class="form-control" id="updateTBL{{ tank.id }}" value="{{ tank.tbl_m }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateMWL{{ tank.id }}">MWL (m)</label>
+                                  <input type="text" name="mwl_m" class="form-control" id="updateMWL{{ tank.id }}" value="{{ tank.mwl_m }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateFTL{{ tank.id }}">FTL (m)</label>
+                                  <input type="text" name="ftl_m" class="form-control" id="updateFTL{{ tank.id }}" value="{{ tank.ftl_m }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateUniqueID{{ tank.id }}">Unique ID</label>
+                                  <input type="text" name="unique_id" class="form-control" id="updateUniqueID{{ tank.id }}" value="{{ tank.unique_id }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateStoDepth{{ tank.id }}">Sto Depth (m)</label>
+                                  <input type="text" name="sto_depth_m" class="form-control" id="updateStoDepth{{ tank.id }}" value="{{ tank.sto_depth_m }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateCatchment{{ tank.id }}">Catchment</label>
+                                  <input type="text" name="catchment" class="form-control" id="updateCatchment{{ tank.id }}" value="{{ tank.catchment }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateWeirs{{ tank.id }}">No of Weirs</label>
+                                  <input type="text" name="no_of_weirs" class="form-control" id="updateWeirs{{ tank.id }}" value="{{ tank.no_of_weirs }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateWeirLength{{ tank.id }}">Weir Length (m)</label>
+                                  <input type="text" name="weir_length_m" class="form-control" id="updateWeirLength{{ tank.id }}" value="{{ tank.weir_length_m }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateLowSill{{ tank.id }}">Low Sill (m)</label>
+                                  <input type="text" name="low_sill_m" class="form-control" id="updateLowSill{{ tank.id }}" value="{{ tank.low_sill_m }}" />
+                                </div>
+                      
+                                <div class="mb-3">
+                                  <label class="form-label" for="updateDisCusecs{{ tank.id }}">Dis Cusecs</label>
+                                  <input type="text" name="dis_cusecs" class="form-control" id="updateDisCusecs{{ tank.id }}" value="{{ tank.dis_cusecs }}" />
+                                </div>
+                      
+                                <button type="submit" class="btn btn-primary">Update</button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+          
+                      <!-- Delete Modal -->
+                      <div class="modal fade" id="deleteTankModal{{ tank.id }}" tabindex="-1" aria-labelledby="deleteTankModalLabel{{ tank.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Delete Tank</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <p>Are you sure you want to delete {{ tank.tank_name }}?</p>
+                            </div>
+                            <div class="modal-footer">
+                              <form method="post" action="{% url 'delete_tank' tank.id %}">
+                                {% csrf_token %}
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+          
+                      {% endfor %}
+                    </tbody>
+                  </table>
                 </div>
-            
+          
                 <!-- Pagination Controls -->
                 <div class="pagination">
-                    <span class="step-links">
-                        {% if tanks.has_previous %}
-                            <a href="?page=1">&laquo; first</a>
-                            <a href="?page={{ tanks.previous_page_number }}">previous</a>
-                        {% endif %}
-            
-                        <span class="current">
-                            Page {{ tanks.number }} of {{ tanks.paginator.num_pages }}.
-                        </span>
-            
-                        {% if tanks.has_next %}
-                            <a href="?page={{ tanks.next_page_number }}">next</a>
-                            <a href="?page={{ tanks.paginator.num_pages }}">last &raquo;</a>
-                        {% endif %}
+                  <span class="step-links">
+                    {% if tanks.has_previous %}
+                      <a href="?page=1&unique_id={{ request.GET.unique_id }}">&laquo; First</a>
+                      <a href="?page={{ tanks.previous_page_number }}&unique_id={{ request.GET.unique_id }}">Previous</a>
+                    {% endif %}
+                    
+                    <span class="current">
+                      Page {{ tanks.number }} of {{ tanks.paginator.num_pages }}.
                     </span>
-                </div>
-            
-            <!-- / Content -->
-
-            <!-- Footer >
-            <footer class="content-footer footer bg-footer-theme">
-              <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-                <div class="mb-2 mb-md-0">
-                  ©
-                  <script>
-                    document.write(new Date().getFullYear());
-                  </script>
-                  , made with ❤️ by
-                  <a href="https://themeselection.com" target="_blank" class="footer-link fw-medium">ThemeSelection</a>
-                </div>
-                <div class="d-none d-lg-inline-block">
-                  <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
-                  <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
-
-                  <a
-                    href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/documentation/"
-                    target="_blank"
-                    class="footer-link me-4"
-                    >Documentation</a
-                  >
-
-                  <a
-                    href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
-                    target="_blank"
-                    class="footer-link"
-                    >Support</a
-                  >
+                    
+                    {% if tanks.has_next %}
+                      <a href="?page={{ tanks.next_page_number }}&unique_id={{ request.GET.unique_id }}">Next</a>
+                      <a href="?page={{ tanks.paginator.num_pages }}&unique_id={{ request.GET.unique_id }}">Last &raquo;</a>
+                    {% endif %}
+                  </span>
                 </div>
               </div>
-            </footer>
-            <!-- / Footer -->
-
-            <div class="content-backdrop fade"></div>
+          
+              <div class="content-backdrop fade"></div>
+            </div>
           </div>
-          <!-- Content wrapper -->
-        </div>
-        <!-- / Layout page -->
-      </div>
-
-      <!-- Overlay -->
-      <div class="layout-overlay layout-menu-toggle"></div>
-    </div>
+          
     <!-- / Layout wrapper -->
 
     <!--div class="buy-now">

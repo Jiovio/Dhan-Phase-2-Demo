@@ -10,6 +10,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from .forms import WaterbodyFilterForm, PoOwaterbodyForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import WaterBody
 import requests
@@ -94,13 +95,36 @@ def tabledesign(request):
     page_number = request.GET.get('page')
     waterbodies = paginator.get_page(page_number)
 
-    # Pass the paginated records to the template
+    # Create a form for each waterbody for the update modal
+    forms = {waterbody.id: PoOwaterbodyForm(instance=waterbody) for waterbody in waterbodies}
+
+    # Pass the paginated records and forms to the template
     context = {
-        'waterbodies': waterbodies
+        'waterbodies': waterbodies,
+        'forms': forms,
     }
 
     return render(request, 'govwbtable.html', context)
 
+# Update waterbody view (AJAX-based)
+def update_waterbody(request, pk):
+    waterbody = get_object_or_404(PoOwaterbody, pk=pk)
+    if request.method == 'POST':
+        form = PoOwaterbodyForm(request.POST, instance=waterbody)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True, 'message': 'Waterbody updated successfully!'})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+# Delete waterbody view (AJAX-based)
+def delete_waterbody(request, pk):
+    waterbody = get_object_or_404(PoOwaterbody, pk=pk)
+    if request.method == 'POST':
+        waterbody.delete()
+        return JsonResponse({'success': True, 'message': 'Waterbody deleted successfully!'})
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 @login_required(login_url='admin_login')
 def dashboardanalytics(request):
     # Get the count of records in the PoOwaterbody model
@@ -731,25 +755,54 @@ def powaterbodies_list(request):
 
     return render(request, 'powaterbodies_list.html', context)
 
-def waterbodies_tank_list(request):
-    # Fetch all tanks and apply pagination
-    tank_list = WaterbodiesTank.objects.all()
-    paginator = Paginator(tank_list, 10)  # Show 10 tanks per page
 
-    # Get the current page number from the request
+def waterbodies_tank_list(request):
+    # Fetch all tanks
+    tank_list = WaterbodiesTank.objects.all()
+
+    # Apply filters if any
+    village = request.GET.get('village')
+    block = request.GET.get('block')
+    panchayat = request.GET.get('panchayat')
+
+    if village:
+        tank_list = tank_list.filter(village__icontains=village)
+    if block:
+        tank_list = tank_list.filter(block__icontains=block)
+    if panchayat:
+        tank_list = tank_list.filter(panchayat__icontains=panchayat)
+
+    # Apply pagination
+    paginator = Paginator(tank_list, 10)  # Show 10 tanks per page
     page_number = request.GET.get('page')
 
     try:
         tanks = paginator.page(page_number)
     except PageNotAnInteger:
-        # If the page is not an integer, deliver the first page
         tanks = paginator.page(1)
     except EmptyPage:
-        # If the page is out of range, deliver the last page of results
         tanks = paginator.page(paginator.num_pages)
 
-    # Render the template with the paginated tank list
+    # Render the template with the paginated and filtered tank list
     return render(request, 'waterbodies_tank_list.html', {'tanks': tanks})
+
+
+def update_tank(request, tank_id):
+    tank = get_object_or_404(WaterbodiesTank, id=tank_id)
+    if request.method == 'POST':
+        # Update tank fields based on the form submission
+        tank.tank_name = request.POST.get('tank_name')
+        # Update other fields as necessary
+        tank.save()
+        return redirect('waterbodies_tank_list')  # Redirect after update
+    return render(request, 'update_tank_form.html', {'tank': tank})  # Render form if needed
+
+def delete_tank(request, tank_id):
+    tank = get_object_or_404(WaterbodiesTank, id=tank_id)
+    if request.method == 'POST':
+        tank.delete()
+        return redirect('waterbodies_tank_list')  # Redirect after delete
+    return render(request, 'confirm_delete.html', {'tank': tank})  # Render confirmation if needed
 
 def field_workers(request):
     base_url = "http://waterbody.cloudonweb.in:5000/waterBodyAdmin/allusers/"
@@ -963,3 +1016,28 @@ def encroachment(request):
     # You can pass context data to the template if needed
     context = {}
     return render(request, 'encroachment.html', context)
+def roles_table(request):
+    # You can pass context data to the template if needed
+    context = {}
+    return render(request, 'roles.html', context)
+def select_roles(request):
+    # You can pass context data to the template if needed
+    context = {}
+    return render(request, 'selectrole.html', context)
+def save_permission(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            role = data['role']
+            resource = data['resource']
+            permission = data['permission']
+            assigned = data['assigned']
+            
+            # Logic to save the permission in the database (simplified example)
+            # Example: update or create a Permission object in the database
+            # Permission.objects.update_or_create(role=role, resource=resource, permission=permission, defaults={'assigned': assigned})
+
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False})

@@ -17,6 +17,7 @@ data-template="vertical-menu-template-free">
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon/favicon.ico' %}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -35,6 +36,7 @@ data-template="vertical-menu-template-free">
 
     <!-- Page CSS -->
     <link rel="stylesheet" href="{% static 'assets/vendor/css/pages/page-auth.css' %}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
     <!-- Helpers -->
     <script src="{% static 'assets/vendor/js/helpers.js' %}"></script>
@@ -357,63 +359,137 @@ data-template="vertical-menu-template-free">
           <!-- Content wrapper -->
           <div class="content-wrapper">
             <!-- Content -->
-
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="py-3 mb-4"><span class="text-muted fw-light">Table /</span> Ponds & Ooranis</h4>
-              <div class="card">
-                <h5 class="card-header">Ponds & Ooranis</h5>
-                <div class="table-responsive text-nowrap">
-                    <table class="table">
-                        <thead>
-                            <tr class="text-nowrap">
-                                <th>Unique ID</th>
-                                <th>Ponds/Oo</th>
-                                <th>Latitude</th>
-                                <th>Longitude</th>
-                                <th>Taluk</th>
-                                <th>Block</th>
-                                <th>Panchayat</th>
-                                <th>Village</th>
-                                <th>Pond Type</th>
-                                <th>Cap MCM</th>
-                                <th>FPL m</th>
-                                <th>MWL m</th>
-                                <th>PBL m</th>
-                                <th>Sto Dep m</th>
-                                <th>Catchment</th>
-                                <th>Wat Spr Ar</th>
-                                <th>Bund Len m</th>
-                                <th>Dis cusecs</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-border-bottom-0">
-                            {% for waterbody in waterbodies %}
-                            <tr>
-                                <td>{{ waterbody.unique_id }}</td>
-                                <td>{{ waterbody.ponds_oo }}</td>
-                                <td>{{ waterbody.latitude }}</td>
-                                <td>{{ waterbody.longitude }}</td>
-                                <td>{{ waterbody.taluk }}</td>
-                                <td>{{ waterbody.block }}</td>
-                                <td>{{ waterbody.panchayat }}</td>
-                                <td>{{ waterbody.village }}</td>
-                                <td>{{ waterbody.pond_type }}</td>
-                                <td>{{ waterbody.cap_mcm }}</td>
-                                <td>{{ waterbody.fpl_m }}</td>
-                                <td>{{ waterbody.mwl_m }}</td>
-                                <td>{{ waterbody.pbl_m }}</td>
-                                <td>{{ waterbody.sto_dep_m }}</td>
-                                <td>{{ waterbody.catchment }}</td>
-                                <td>{{ waterbody.wat_spr_ar }}</td>
-                                <td>{{ waterbody.bund_len_m }}</td>
-                                <td>{{ waterbody.dis_cusecs }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            
-                <!-- Pagination Controls -->
+                <h4 class="py-3 mb-4"><span class="text-muted fw-light">Table /</span> Ponds & Ooranis</h4>
+        
+                <!-- Filter Form -->
+                <form method="get">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <input type="text" name="taluk" placeholder="Filter by Taluk" value="{{ filter_form.taluk.value }}" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" name="village" placeholder="Filter by Village" value="{{ filter_form.village.value }}" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary">Filter</button>
+                        </div>
+                    </div>
+                </form>
+                <!--form method="GET" class="mb-4">
+                  <div class="input-group">
+                    <input type="text" name="unique_id" class="form-control" placeholder="Filter by Unique ID" value="{{ request.GET.unique_id }}" />
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                  </div>
+                </form-->
+                <!-- Table -->
+                <div class="card">
+                    <h5 class="card-header">Ponds & Ooranis</h5>
+                    <div class="table-responsive text-nowrap">
+                        <table class="table">
+                            <thead>
+                                <tr class="text-nowrap">
+                                    <th>Unique ID</th>
+                                    <th>Ponds/Oo</th>
+                                    <th>Latitude</th>
+                                    <th>Longitude</th>
+                                    <th>Taluk</th>
+                                    <th>Village</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                                {% for waterbody in waterbodies %}
+                                <tr>
+                                    <td>{{ waterbody.unique_id }}</td>
+                                    <td>{{ waterbody.ponds_oo }}</td>
+                                    <td>{{ waterbody.latitude }}</td>
+                                    <td>{{ waterbody.longitude }}</td>
+                                    <td>{{ waterbody.taluk }}</td>
+                                    <td>{{ waterbody.village }}</td>
+                                    <td>
+                                        <!-- Update Button (Popup) -->
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#updateModal{{ waterbody.id }}">
+                                          <i class="fas fa-edit"></i> <!-- Font Awesome edit icon -->
+                                      </a>
+                                      
+                                        <!-- Delete Button (Popup) -->
+                                      <a href="#"  data-bs-toggle="modal" data-bs-target="#deleteModal{{ waterbody.id }}">
+                                          <i class="fas fa-trash-alt"></i>
+                                      </a>
+                                      
+                                    </td>
+                                </tr>
+        
+                              <!-- Update Modal -->
+    <div class="modal fade" id="updateModal{{ waterbody.id }}" tabindex="-1" aria-labelledby="updateModalLabel{{ waterbody.id }}" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="updateModalLabel{{ waterbody.id }}">Update Waterbody</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form method="post" class="update-form" action="{% url 'update_waterbody' waterbody.id %}">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label class="form-label" for="updateUniqueId{{ waterbody.id }}">Unique ID</label>
+                <input type="text" name="unique_id" class="form-control" id="updateUniqueId{{ waterbody.id }}" value="{{ waterbody.unique_id }}" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="updatePondsOo{{ waterbody.id }}">Ponds/Oo</label>
+                <input type="text" name="ponds_oo" class="form-control" id="updatePondsOo{{ waterbody.id }}" value="{{ waterbody.ponds_oo }}" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="updateLatitude{{ waterbody.id }}">Latitude</label>
+                <input type="text" name="latitude" class="form-control" id="updateLatitude{{ waterbody.id }}" value="{{ waterbody.latitude }}" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="updateLongitude{{ waterbody.id }}">Longitude</label>
+                <input type="text" name="longitude" class="form-control" id="updateLongitude{{ waterbody.id }}" value="{{ waterbody.longitude }}" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="updateTaluk{{ waterbody.id }}">Taluk</label>
+                <input type="text" name="taluk" class="form-control" id="updateTaluk{{ waterbody.id }}" value="{{ waterbody.taluk }}" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="updateVillage{{ waterbody.id }}">Village</label>
+                <input type="text" name="village" class="form-control" id="updateVillage{{ waterbody.id }}" value="{{ waterbody.village }}" />
+              </div>
+              <!-- Add more fields as necessary -->
+              <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+                                <!-- Delete Modal -->
+<div class="modal fade" id="deleteModal{{ waterbody.id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title">Delete Waterbody</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <p>Are you sure you want to delete this waterbody?</p>
+              <form class="delete-form" action="{% url 'delete_waterbody' waterbody.id %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+
+        
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+        
+                    <!-- Pagination Controls -->
+                            <!-- Pagination Controls -->
                 <div class="pagination">
                   <span class="step-links">
                       {% if waterbodies.has_previous %}
@@ -442,53 +518,10 @@ data-template="vertical-menu-template-free">
                       {% endif %}
                   </span>
               </div>
-              
-            
-            <!-- / Content -->
-
-            <!-- Footer >
-            <footer class="content-footer footer bg-footer-theme">
-              <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-                <div class="mb-2 mb-md-0">
-                  ©
-                  <script>
-                    document.write(new Date().getFullYear());
-                  </script>
-                  , made with ❤️ by
-                  <a href="https://themeselection.com" target="_blank" class="footer-link fw-medium">ThemeSelection</a>
                 </div>
-                <div class="d-none d-lg-inline-block">
-                  <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
-                  <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
-
-                  <a
-                    href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/documentation/"
-                    target="_blank"
-                    class="footer-link me-4"
-                    >Documentation</a
-                  >
-
-                  <a
-                    href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
-                    target="_blank"
-                    class="footer-link"
-                    >Support</a
-                  >
-                </div>
-              </div>
-            </footer>
-            <!-- / Footer -->
-
-            <div class="content-backdrop fade"></div>
-          </div>
-          <!-- Content wrapper -->
+            </div>
         </div>
-        <!-- / Layout page -->
-      </div>
-
-      <!-- Overlay -->
-      <div class="layout-overlay layout-menu-toggle"></div>
-    </div>
+        
     <!-- / Layout wrapper -->
 
     <!--div class="buy-now">
@@ -512,7 +545,54 @@ data-template="vertical-menu-template-free">
     <script src="{% static "assets/js/dashboards-analytics.js" %}"></script>
     <script src="{% static "assets/vendor/libs/apex-charts/apexcharts.js" %}"></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        // AJAX for update form submission
+        $(document).on('submit', '.update-form', function(e) {
+            e.preventDefault();
+            var form = $(this);
+            var formData = form.serialize();
+            var actionUrl = form.attr('action');
+            
+            $.ajax({
+                url: actionUrl,
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message);
+                        location.reload();  // Reload the page to reflect changes
+                    } else {
+                        alert('Error: ' + response.errors);
+                    }
+                }
+            });
+        });
+    
+        // AJAX for delete form submission
+        $(document).on('submit', '.delete-form', function(e) {
+            e.preventDefault();
+            var form = $(this);
+            var actionUrl = form.attr('action');
+            
+            if (confirm("Are you sure you want to delete this waterbody?")) {
+                $.ajax({
+                    url: actionUrl,
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                            location.reload();  // Reload the page to reflect changes
+                        } else {
+                            alert('Error: ' + response.message);
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+    
     <!-- endbuild -->
 
     <!-- Vendors JS -->

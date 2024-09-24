@@ -218,3 +218,117 @@
   overflow-y: auto; /* Enable vertical scrolling */
    
 }
+.tag {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 0.875rem;
+  border-radius: 12px;
+  color: #fff;
+  text-align: center;
+}
+
+.block-officer {
+  background-color: #9376e0;
+}
+
+.district-admin {
+  background-color: #6abef5;
+}
+
+.field-reviewer {
+  background-color: #65d987;
+}
+
+.state-officer {
+  background-color: #f99595;
+}
+
+.super-admin {
+  background-color: #f8c86f;
+}
+
+/*label {
+  font-size: 10px;
+  font-weight: bold;
+  margin-right: 10px;
+}*/
+
+/* Styling the select dropdown */
+select {
+  width: 220px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 2px solid #6a1b9a; /* Purple border */
+  background-color: #f0f0f0;
+  color: #444;
+  appearance: none; /* Remove default arrow */
+  cursor: pointer;
+  outline: none;
+}
+
+/* Add custom arrow using background */
+select {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="purple" d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+
+/* Hover effect */
+select:hover {
+  border-color: blue; /* Lighter purple on hover */
+}
+
+/* Focus effect */
+select:focus {
+  border-color: blue;
+}
+
+/* Styling each option */
+option {
+  padding: 10px;
+  margin-bottom: 5px; /* Adding gap between options */
+}
+
+/* Style for larger gaps between options */
+select option:not(:last-child) {
+  margin-bottom: 10px;
+}
+.container {
+  margin: 20px;
+}
+
+label {
+  font-size: 15px;
+ 
+}
+
+select {
+  width: 200px;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+.checkbox {
+  text-align: center;
+}

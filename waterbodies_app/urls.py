@@ -116,11 +116,17 @@ urlpatterns = [
      path('taluks/', taluk_list, name='taluk_list'),
     path('taluks/update/<int:pk>/', taluk_update, name='taluk_update'),
     path('taluks/delete/<int:pk>/', taluk_delete, name='taluk_delete'),
+    path('update-waterbody/<int:pk>/', views.update_waterbody, name='update_waterbody'),  # AJAX-based update
+    path('delete-waterbody/<int:pk>/', views.delete_waterbody, name='delete_waterbody'),  # AJAX-based del
+    path('roles/', views.roles_table, name='roles_table'),
+    path('selectroles/', views.select_roles, name='selectroles'),
      path('fencetypes/', fencetype_list, name='fencetype_list'),
     path('fencetypes/update/<int:pk>/', fencetype_update, name='fencetype_update'),
     path('fencetypes/delete/<int:pk>/', fencetype_delete, name='fencetype_delete'),
-    
-     path('habitations/', habitation_list, name='habitation_list'),
+    path('tanks/update/<int:tank_id>/', views.update_tank, name='update_tank'),  # View for updating a tank
+    path('tanks/delete/<int:tank_id>/', views.delete_tank, name='delete_tank'),  # View for deleting a tank
+    path('tanks/', views.waterbodies_tank_list, name='tank_list'), 
+    path('habitations/', habitation_list, name='habitation_list'),
     path('habitations/update/<int:pk>/', habitation_update, name='habitation_update'),
     path('habitations/delete/<int:pk>/', habitation_delete, name='habitation_delete'),
     # Add more URL patterns for your app...

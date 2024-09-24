@@ -9,6 +9,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 from .models import KMLFilesz
 from .models import Contact
+from .models import PoOwaterbody
 
 class ContactForm(forms.ModelForm):
     class Meta:
@@ -62,4 +63,12 @@ class FieldWorkerForm(forms.ModelForm):
         widgets = {
             'password': forms.PasswordInput(),  # Render password field as password input
         }
-       
+class WaterbodyFilterForm(forms.Form):
+    taluk = forms.CharField(max_length=100, required=False)
+    village = forms.CharField(max_length=100, required=False)
+
+# Form for update (reusing the model form)
+class PoOwaterbodyForm(forms.ModelForm):
+    class Meta:
+        model = PoOwaterbody
+        fields = '__all__'

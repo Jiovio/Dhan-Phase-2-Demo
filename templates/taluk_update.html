@@ -290,7 +290,7 @@ data-template="vertical-menu-template-free">
                   >
                 </li-->
 
-                <!-- User -->
+                <!-- User >
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
@@ -375,15 +375,15 @@ data-template="vertical-menu-template-free">
                             {% csrf_token %}
                             <div class="mb-3">
                             <label class="form-label" for="basic-default-fullname">Code</label>
-                            <input type="text"  id="code" name="code" value="{{ taluk.code }}" class="form-control" id="basic-default-fullname" placeholder="John Doe" />
+                            <input type="text"  id="code" name="code" value="{{ taluk.code }}" class="form-control" id="basic-default-fullname"  />
                             </div>
                             <div class="mb-3">
                             <label class="form-label" for="basic-default-fullname">Name</label>
-                            <input type="text" id="name" name="name" value="{{ taluk.name }}" class="form-control" id="basic-default-fullname" placeholder="John Doe" />
+                            <input type="text" id="name" name="name" value="{{ taluk.name }}" class="form-control" id="basic-default-fullname"  />
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="basic-default-fullname">Distict_id</label>
-                                <input type="text" id="district_id" name="district_id" value="{{ taluk.district_id }} class="form-control" id="basic-default-fullname" placeholder="John Doe" />
+                                <input type="text" id="district_id" name="district_id" value="{{ taluk.district_id }} class="form-control" id="basic-default-fullname"  />
                                 </div>
                             
                             <button type="submit" class="btn btn-primary">Update</button>

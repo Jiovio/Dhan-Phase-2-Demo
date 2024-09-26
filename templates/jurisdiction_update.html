@@ -290,7 +290,7 @@ data-template="vertical-menu-template-free">
                   >
                 </li-->
 
-                <!-- User -->
+                <!-- User >
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
@@ -375,11 +375,11 @@ data-template="vertical-menu-template-free">
                             {% csrf_token %}
                             <div class="mb-3">
                             <label class="form-label" for="basic-default-fullname">Code</label>
-                            <input type="text" name="code" value="{{ jurisdiction.code }}" class="form-control" id="basic-default-fullname" placeholder="John Doe" />
+                            <input type="text" name="code" value="{{ jurisdiction.code }}" class="form-control" id="basic-default-fullname"  />
                             </div>
                             <div class="mb-3">
                             <label class="form-label" for="basic-default-fullname">CreatedBy</label>
-                            <input type="text" name="createdBy" value="{{ jurisdiction.createdBy }}" class="form-control" id="basic-default-fullname" placeholder="John Doe" />
+                            <input type="text" name="createdBy" value="{{ jurisdiction.createdBy }}" class="form-control" id="basic-default-fullname"  />
                             </div>
                             
                             <button type="submit" class="btn btn-primary">Update</button>

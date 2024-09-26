@@ -87,8 +87,18 @@ def water_body_details(request, water_body_id):
 def tableau_visualization(request):
     return render(request, 'map.html')
 def tabledesign(request):
-    # Fetch all records from the PoOwaterbody model
+    # Get filter values from the request
+    taluk_filter = request.GET.get('taluk', '')
+    village_filter = request.GET.get('village', '')
+
+    # Fetch all records from the PoOwaterbody model, applying filters
     waterbodies_list = PoOwaterbody.objects.all()
+
+    # Apply filters if they exist
+    if taluk_filter:
+        waterbodies_list = waterbodies_list.filter(taluk__icontains=taluk_filter)  # Case-insensitive search
+    if village_filter:
+        waterbodies_list = waterbodies_list.filter(village__icontains=village_filter)  # Case-insensitive search
 
     # Paginate the records
     paginator = Paginator(waterbodies_list, 10)  # Show 10 records per page
@@ -102,6 +112,7 @@ def tabledesign(request):
     context = {
         'waterbodies': waterbodies,
         'forms': forms,
+        'filter_form': request.GET,  # Include the filter values in the context
     }
 
     return render(request, 'govwbtable.html', context)
@@ -229,12 +240,13 @@ def dashboardanalytics(request):
     return render(request, 'dashboard_analytical.html', context)
 
 def index(request):
+    # Handle POST request for the contact form submission
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Your message has been sent. Thank you!')
-            return redirect('index')  # Redirect to avoid form resubmission
+            return redirect('index')  # Redirect to avoid resubmission on page refresh
     else:
         form = ContactForm()
 
@@ -249,7 +261,7 @@ def index(request):
         for kml in kml_files
     ])
 
-    # Render the index template with both waterbodies, KML files, and contact form
+    # Pass water bodies, KML files, and the contact form to the template
     return render(request, 'index.html', {
         'waterbodies': waterbodies,
         'kml_files_json': kml_files_json,
@@ -712,13 +724,27 @@ def waterbody_reviewer_response(request):
         "Authorization": f"JWT {token}"
     }
 
-    # Get the offset parameter from the URL (default to 0 if not provided)
+    # Get the offset parameter from the URL (default to 340 if not provided)
     offset = int(request.GET.get('offset', 340))
     limit = 10  # Number of items per page
 
-    # Construct the URL with the current offset
-    url = f"{base_url}?offset={offset}&limit={limit}"
+    # Get filter parameters from the request
+    survey_number = request.GET.get('surveyNumber', '')
+    waterbody_id = request.GET.get('waterbodyId', '')
+    waterbody_type = request.GET.get('waterbodyType', '')
 
+    # Construct the URL with the current offset and any filters
+    url = f"{base_url}?offset={offset}&limit={limit}"
+    
+    # Add filter parameters to the URL if they are provided
+    if survey_number:
+        url += f"&surveyNumber={survey_number}"
+    if waterbody_id:
+        url += f"&waterbodyId={waterbody_id}"
+    if waterbody_type:
+        url += f"&waterbodyType={waterbody_type}"
+
+    # Make the API request
     response = requests.get(url, headers=headers)
     
     # Handle token expiration by checking the status code
@@ -734,11 +760,14 @@ def waterbody_reviewer_response(request):
     previous_offset = offset - limit if offset - limit >= 0 else None
 
     return render(request, 'waterbody_reviewer_response.html', {
-        'data': data['results'],
+        'data': data.get('results', []),  # Pass the results to the template
         'next_offset': next_offset,
         'previous_offset': previous_offset,
         'current_offset': offset,
+        'filter_form': request.GET  # Pass the filter values to the template
     })
+
+
     
 def powaterbodies_list(request):
     # Fetch all records from the PoOwaterbody model
@@ -814,12 +843,18 @@ def field_workers(request):
         "Authorization": f"JWT {token}"
     }
 
-    # Get the offset parameter from the URL (default to 0 if not provided)
+    # Get the offset parameter from the URL
     offset = int(request.GET.get('offset', 0))
     limit = 10  # Number of items per page
 
-    # Construct the URL with the current offset
+    # Get the username filter parameter
+    username_filter = request.GET.get('username', '')
+
+    # Construct the URL with the current offset and filter
     url = f"{base_url}?offset={offset}&limit={limit}"
+
+    if username_filter:  # Add the username filter to the URL if provided
+        url += f"&username={username_filter}"
 
     response = requests.get(url, headers=headers)
     
@@ -837,13 +872,17 @@ def field_workers(request):
     previous_offset = offset - limit if offset - limit >= 0 else None
 
     return render(request, 'waterbody_fieldworker.html', {
-        'data': data['results'],
+        'data': data.get('results', []),  # Ensure results are empty if not found
         'next_offset': next_offset,
         'previous_offset': previous_offset,
         'current_offset': offset,
-        'field_workers_count':field_workers_count
+        'field_workers_count': field_workers_count,
+        'filter_form': request.GET  # Pass the filter values to the template
     })
-    
+
+
+
+
 def district_list(request):
     districts = District.objects.all()
     return render(request, 'district_list.html', {'districts': districts})

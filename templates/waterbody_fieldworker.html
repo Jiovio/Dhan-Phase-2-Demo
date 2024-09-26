@@ -308,7 +308,7 @@ data-template="vertical-menu-template-free">
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <span class="fw-medium d-block">John Doe</span>
+                            <span class="fw-medium d-block">Super admin</span>
                             <small class="text-muted">Admin</small>
                           </div>
                         </div>
@@ -329,15 +329,7 @@ data-template="vertical-menu-template-free">
                         <span class="align-middle">Settings</span>
                       </a>
                     </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <span class="d-flex align-items-center align-middle">
-                          <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                          <span class="flex-grow-1 align-middle ms-1">Billing</span>
-                          <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-                        </span>
-                      </a>
-                    </li>
+                    
                     <li>
                       <div class="dropdown-divider"></div>
                     </li>
@@ -362,8 +354,20 @@ data-template="vertical-menu-template-free">
 
             <div class="container-xxl flex-grow-1 container-p-y">
               <h4 class="py-3 mb-4"><span class="text-muted fw-light">Table /</span> Users</h4>
+              <form method="get">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <input type="text" name="username" placeholder="Filter by Username" value="{{ filter_form.username }}" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </div>
+                </div>
+            </form>
               <div class="card">
+                
                 <h5 class="card-header">Users</h5>
+                
                 <div class="table-responsive text-nowrap">
                     <table class="table">
                         <thead>
@@ -401,18 +405,35 @@ data-template="vertical-menu-template-free">
             
                 <!-- Pagination Controls -->
                 <div class="pagination">
-        {% if previous_offset is not None %}
-            <a href="?offset={{ previous_offset }}">Previous</a>
-        {% else %}
-            <a class="disabled">Previous</a>
-        {% endif %}
-
-        {% if next_offset is not None %}
-            <a href="?offset={{ next_offset }}">Next</a>
-        {% else %}
-            <a class="disabled">Next</a>
-        {% endif %}
-    </div>
+                  <ul class="pagination"> <!-- Use ul for Bootstrap pagination -->
+                      <!-- Previous Link -->
+                      {% if previous_offset is not None %}
+                          <li class="page-item">
+                              <a class="page-link" href="?offset={{ previous_offset }}" aria-label="Previous">
+                                  <span aria-hidden="true">&laquo; Previous</span>
+                              </a>
+                          </li>
+                      {% else %}
+                          <li class="page-item disabled">
+                              <span class="page-link">&laquo; Previous</span>
+                          </li>
+                      {% endif %}
+              
+                      <!-- Next Link -->
+                      {% if next_offset is not None %}
+                          <li class="page-item">
+                              <a class="page-link" href="?offset={{ next_offset }}" aria-label="Next">
+                                  <span aria-hidden="true">Next &raquo;</span>
+                              </a>
+                          </li>
+                      {% else %}
+                          <li class="page-item disabled">
+                              <span class="page-link">Next &raquo;</span>
+                          </li>
+                      {% endif %}
+                  </ul>
+              </div>
+              
             
             <!-- / Content -->
 

@@ -8,13 +8,17 @@
     <title>Volunteer Form</title>
 </head>
 <style>
+body {
+        font-family: 'Roboto', sans-serif;
+    }
     /* Container for the layout */
 .contact-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    padding: 20px;
-    background-color: #B2D8ED;
+    padding: 40px;
+    
+    background: linear-gradient(to top right, #0060D9, #2AC5A7);
 }
 
 /* Left content styling */
@@ -26,13 +30,13 @@
 
 .left-content h2 {
     font-size: 24px;
-    color: #333;
+    color: white;
     margin-bottom: 10px;
 }
 
 .left-content p {
     font-size: 16px;
-    color: #666;
+    color: white;
     margin-bottom: 20px;
 }
 
@@ -115,6 +119,7 @@
 <body>
     <div class="contact-container">
         <div class="left-content">
+            <img src="{% static 'image/white.png' %}" alt="Water DaMS Logo" style="width: 150px; height: auto;">
             <h2>Volunteer Registration</h2>
             <p>Join us in making a difference! Fill out the form to volunteer and be a part of our initiatives.</p>
             <div class="contact-details">

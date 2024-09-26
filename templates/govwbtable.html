@@ -364,18 +364,18 @@ data-template="vertical-menu-template-free">
         
                 <!-- Filter Form -->
                 <form method="get">
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <input type="text" name="taluk" placeholder="Filter by Taluk" value="{{ filter_form.taluk.value }}" class="form-control">
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" name="village" placeholder="Filter by Village" value="{{ filter_form.village.value }}" class="form-control">
-                        </div>
-                        <div class="col-md-4">
-                            <button type="submit" class="btn btn-primary">Filter</button>
-                        </div>
-                    </div>
-                </form>
+                  <div class="row mb-3">
+                      <div class="col-md-4">
+                          <input type="text" name="taluk" placeholder="Filter by Taluk" value="{{ filter_form.taluk }}" class="form-control">
+                      </div>
+                      <div class="col-md-4">
+                          <input type="text" name="village" placeholder="Filter by Village" value="{{ filter_form.village }}" class="form-control">
+                      </div>
+                      <div class="col-md-4">
+                          <button type="submit" class="btn btn-primary">Filter</button>
+                      </div>
+                  </div>
+              </form>
                 <!--form method="GET" class="mb-4">
                   <div class="input-group">
                     <input type="text" name="unique_id" class="form-control" placeholder="Filter by Unique ID" value="{{ request.GET.unique_id }}" />
@@ -490,34 +490,61 @@ data-template="vertical-menu-template-free">
         
                     <!-- Pagination Controls -->
                             <!-- Pagination Controls -->
-                <div class="pagination">
-                  <span class="step-links">
-                      {% if waterbodies.has_previous %}
-                          <a href="?page=1">&laquo; First</a>
-                          <a href="?page={{ waterbodies.previous_page_number }}">Previous</a>
-                      {% else %}
-                          &laquo; First
-                          Previous
-                      {% endif %}
-              
-                      <!-- Displaying individual page numbers -->
-                      {% for num in waterbodies.paginator.page_range %}
-                          {% if waterbodies.number == num %}
-                              <strong>{{ num }}</strong>
-                          {% elif num > waterbodies.number|add:'-5' and num < waterbodies.number|add:'5' %}
-                              <a href="?page={{ num }}">{{ num }}</a>
-                          {% endif %}
-                      {% endfor %}
-              
-                      {% if waterbodies.has_next %}
-                          <a href="?page={{ waterbodies.next_page_number }}">Next</a>
-                          <a href="?page={{ waterbodies.paginator.num_pages }}">Last &raquo;</a>
-                      {% else %}
-                          Next
-                          Last &raquo;
-                      {% endif %}
-                  </span>
-              </div>
+                            <div class="pagination">
+                              <ul class="pagination"> <!-- Use ul for better Bootstrap compatibility -->
+                                  <!-- First and Previous Links -->
+                                  {% if waterbodies.has_previous %}
+                                      <li class="page-item">
+                                          <a class="page-link" href="?page=1" aria-label="First">
+                                              <span aria-hidden="true">&laquo;&laquo;</span> <!-- First page symbol -->
+                                          </a>
+                                      </li>
+                                      <li class="page-item">
+                                          <a class="page-link" href="?page={{ waterbodies.previous_page_number }}" aria-label="Previous">
+                                              <span aria-hidden="true">&laquo;</span> <!-- Previous page symbol -->
+                                          </a>
+                                      </li>
+                                  {% else %}
+                                      <li class="page-item disabled">
+                                          <span class="page-link">&laquo;&laquo;</span>
+                                      </li>
+                                      <li class="page-item disabled">
+                                          <span class="page-link">&laquo;</span>
+                                      </li>
+                                  {% endif %}
+                          
+                                  <!-- Page Numbers -->
+                                  {% for num in waterbodies.paginator.page_range %}
+                                      {% if waterbodies.number == num %}
+                                          <li class="page-item active"><span class="page-link">{{ num }}</span></li> <!-- Active page -->
+                                      {% elif num > waterbodies.number|add:'-5' and num < waterbodies.number|add:'5' %}
+                                          <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                      {% endif %}
+                                  {% endfor %}
+                          
+                                  <!-- Next and Last Links -->
+                                  {% if waterbodies.has_next %}
+                                      <li class="page-item">
+                                          <a class="page-link" href="?page={{ waterbodies.next_page_number }}" aria-label="Next">
+                                              <span aria-hidden="true">&raquo;</span> <!-- Next page symbol -->
+                                          </a>
+                                      </li>
+                                      <li class="page-item">
+                                          <a class="page-link" href="?page={{ waterbodies.paginator.num_pages }}" aria-label="Last">
+                                              <span aria-hidden="true">&raquo;&raquo;</span> <!-- Last page symbol -->
+                                          </a>
+                                      </li>
+                                  {% else %}
+                                      <li class="page-item disabled">
+                                          <span class="page-link">&raquo;</span>
+                                      </li>
+                                      <li class="page-item disabled">
+                                          <span class="page-link">&raquo;&raquo;</span>
+                                      </li>
+                                  {% endif %}
+                              </ul>
+                          </div>
+                          
                 </div>
             </div>
         </div>

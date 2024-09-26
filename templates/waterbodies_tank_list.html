@@ -635,22 +635,60 @@ data-template="vertical-menu-template-free">
           
                 <!-- Pagination Controls -->
                 <div class="pagination">
-                  <span class="step-links">
-                    {% if tanks.has_previous %}
-                      <a href="?page=1&unique_id={{ request.GET.unique_id }}">&laquo; First</a>
-                      <a href="?page={{ tanks.previous_page_number }}&unique_id={{ request.GET.unique_id }}">Previous</a>
-                    {% endif %}
-                    
-                    <span class="current">
-                      Page {{ tanks.number }} of {{ tanks.paginator.num_pages }}.
-                    </span>
-                    
-                    {% if tanks.has_next %}
-                      <a href="?page={{ tanks.next_page_number }}&unique_id={{ request.GET.unique_id }}">Next</a>
-                      <a href="?page={{ tanks.paginator.num_pages }}&unique_id={{ request.GET.unique_id }}">Last &raquo;</a>
-                    {% endif %}
-                  </span>
-                </div>
+                  <ul class="pagination"> <!-- Use ul for better Bootstrap compatibility -->
+                      <!-- First and Previous Links -->
+                      {% if tanks.has_previous %}
+                          <li class="page-item">
+                              <a class="page-link" href="?page=1&unique_id={{ request.GET.unique_id }}" aria-label="First">
+                                  <span aria-hidden="true">&laquo;&laquo;</span> <!-- First page symbol -->
+                              </a>
+                          </li>
+                          <li class="page-item">
+                              <a class="page-link" href="?page={{ tanks.previous_page_number }}&unique_id={{ request.GET.unique_id }}" aria-label="Previous">
+                                  <span aria-hidden="true">&laquo;</span> <!-- Previous page symbol -->
+                              </a>
+                          </li>
+                      {% else %}
+                          <li class="page-item disabled">
+                              <span class="page-link">&laquo;&laquo;</span>
+                          </li>
+                          <li class="page-item disabled">
+                              <span class="page-link">&laquo;</span>
+                          </li>
+                      {% endif %}
+              
+                      <!-- Page Numbers -->
+                      {% for num in tanks.paginator.page_range %}
+                          {% if tanks.number == num %}
+                              <li class="page-item active"><span class="page-link">{{ num }}</span></li> <!-- Active page -->
+                          {% elif num > tanks.number|add:'-5' and num < tanks.number|add:'5' %}
+                              <li class="page-item"><a class="page-link" href="?page={{ num }}&unique_id={{ request.GET.unique_id }}">{{ num }}</a></li>
+                          {% endif %}
+                      {% endfor %}
+              
+                      <!-- Next and Last Links -->
+                      {% if tanks.has_next %}
+                          <li class="page-item">
+                              <a class="page-link" href="?page={{ tanks.next_page_number }}&unique_id={{ request.GET.unique_id }}" aria-label="Next">
+                                  <span aria-hidden="true">&raquo;</span> <!-- Next page symbol -->
+                              </a>
+                          </li>
+                          <li class="page-item">
+                              <a class="page-link" href="?page={{ tanks.paginator.num_pages }}&unique_id={{ request.GET.unique_id }}" aria-label="Last">
+                                  <span aria-hidden="true">&raquo;&raquo;</span> <!-- Last page symbol -->
+                              </a>
+                          </li>
+                      {% else %}
+                          <li class="page-item disabled">
+                              <span class="page-link">&raquo;</span>
+                          </li>
+                          <li class="page-item disabled">
+                              <span class="page-link">&raquo;&raquo;</span>
+                          </li>
+                      {% endif %}
+                  </ul>
+              </div>
+              
               </div>
           
               <div class="content-backdrop fade"></div>

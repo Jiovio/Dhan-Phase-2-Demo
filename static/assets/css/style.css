@@ -10,7 +10,7 @@
 # General
 --------------------------------------------------------------*/
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: "HCLTech Roobert",sans-serif;
   color: #444444;
 }
 
@@ -30,7 +30,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Montserrat", sans-serif;
+  font-family: "HCLTech Roobert",sans-serif;
 }
 
 /*--------------------------------------------------------------
@@ -116,7 +116,7 @@ h6 {
 # Header
 --------------------------------------------------------------*/
 #header {
-  height: 68px;
+  height: 75px;
   transition: all 0.5s;
   z-index: 999;
   transition: all 0.5s;
@@ -183,7 +183,7 @@ h6 {
   padding: 10px 0 10px 30px;
   font-size: 15px;
   font-weight: 500;
-  font-family: "Poppins", sans-serif;
+  font-family: "HCLTech Roobert",sans-serif;
   color: black;
   white-space: nowrap;
   transition: 0.3s;
@@ -478,7 +478,7 @@ h6 {
 }
 
 #hero .btn-get-started {
-  font-family: "Montserrat", sans-serif;
+  font-family: "HCLTech Roobert",sans-serif;
   font-weight: 500;
   font-size: 16px;
   letter-spacing: 1px;
@@ -629,7 +629,7 @@ section {
   letter-spacing: 2px;
   text-transform: uppercase;
   color: #aaaaaa;
-  font-family: "Poppins", sans-serif;
+  font-family: "HCLTech Roobert",sans-serif;
 }
 
 .section-title h2::after {
@@ -646,9 +646,9 @@ section {
   margin: 0;
   font-size: 36px;
   font-weight: 700;
-  text-transform: uppercase;
-  font-family: "Poppins", sans-serif;
-  color: #3C91FF;
+  
+  font-family: "HCLTech Roobert",sans-serif;
+  color: #0F5FDC;
 }
 
 /*--------------------------------------------------------------
@@ -946,7 +946,7 @@ section {
 .counts .count-box p {
   padding: 0;
   margin: 0;
-  font-family: "Montserrat", sans-serif;
+  font-family: "HCLTech Roobert",sans-serif;
   font-size: 14px;
 }
 
@@ -960,7 +960,7 @@ section {
 .details .content h3 {
   font-weight: 600;
   font-size: 26px;
-  color: #3C91FF;
+  color: #0F5FDC;
 }
 
 .details .content ul {
@@ -1216,7 +1216,7 @@ section {
   font-size: 36px;
   color: #1acc8d;
   font-weight: 600;
-  font-family: "Poppins", sans-serif;
+  font-family: "HCLTech Roobert",sans-serif;
   margin-bottom: 20px;
 }
 
@@ -1272,7 +1272,7 @@ section {
   transition: none;
   font-size: 14px;
   font-weight: 400;
-  font-family: "Montserrat", sans-serif;
+  font-family: "HCLTech Roobert",sans-serif;
   font-weight: 600;
   transition: 0.3s;
 }
@@ -1325,7 +1325,7 @@ section {
 .faq .faq-list a {
   display: block;
   position: relative;
-  font-family: "Poppins", sans-serif;
+  font-family: "HCLTech Roobert",sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 500;
@@ -1511,6 +1511,8 @@ section {
   background: #34e5a6;
 }
 
+
+
 @keyframes animate-loading {
   0% {
     transform: rotate(0deg);
@@ -1556,7 +1558,7 @@ section {
   font-size: 14px;
   line-height: 24px;
   margin-bottom: 0;
-  font-family: "Montserrat", sans-serif;
+  font-family: "HCLTech Roobert",sans-serif;
 }
 
 #footer .footer-top .social-links a {
@@ -1725,4 +1727,63 @@ th {
 }
 .details-value {
   color: #333;
+}
+
+.custom-footer {
+  padding: 40px 0;
+  background-color: #14142b!important;
+  color: white;
+  font-size: 16px;
+}
+
+.custom-footer a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px; /* Increased font size */
+}
+
+.custom-footer a:hover {
+  text-decoration: underline;
+}
+
+.custom-footer h5 {
+  font-weight: bold;
+  color: #fff;
+  font-size: 20px; /* Increased heading font size */
+}
+
+.custom-footer i {
+  margin-right: 10px;
+  color: #fff;
+}
+
+.custom-footer .custom-col {
+  margin-bottom: 30px;
+}
+
+/* Add vertical line */
+.custom-footer .divider {
+  border-right: 1px solid #fff;
+  height: 100%;
+}
+
+.custom-footer .social-icons {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #fff;
+  text-align: center;
+}
+
+.custom-footer .social-icons a {
+  margin: 0 15px;
+  font-size: 36px; /* Increased font size for bigger icons */
+  color: #fff;
+}
+
+.custom-footer .social-icons a:hover {
+  color: #ddd;
+}
+
+.custom-footer .social-icons a i {
+  font-size: 42px; /* Increase the size of the icons */
 }

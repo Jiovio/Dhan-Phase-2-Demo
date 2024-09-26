@@ -11,6 +11,7 @@
     <!-- Include Leaflet.markercluster CSS files -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Include Leaflet and Leaflet.markercluster JS files -->
   
@@ -60,7 +61,9 @@
         
         <h1>
           <a href="{% url 'index' %}">
-              <img src="{% static 'image/waterdams.png' %}" alt="Water DaMS Logo" style="width: 150px; height: auto;">
+            <img src="{% static 'image/waterdams.png' %}" alt="Water DaMS Logo" style="height: 75px; width: 140px;">
+
+
           </a>
       </h1>
       
@@ -160,7 +163,7 @@
           <div class="col-xl-7 col-lg-6 icon-boxes d-flex flex-column align-items-stretch justify-content-center py-5 px-lg-5" data-aos="fade-left">
             <h3>About Water DaMS</h3>
             <p> 
-              The goal of this project isto construct a digital platform that enables district officials to identify and
+              The goal of this project is to construct a digital platform that enables district officials to identify and
 manage waterbodies while facilitating informed decision-making </p>
 
             <div class="icon-box" data-aos="zoom-in" data-aos-delay="100">
@@ -193,7 +196,7 @@ manage waterbodies while facilitating informed decision-making </p>
     
         <div class="row content">
           <div class="col-md-12 pt-2" data-aos="fade-up">
-            <h3>HCL Foundation</h3>
+            <h3>HCLFoundation</h3>
             <p>
               "HCLFoundation (HCLF) was established in 2011 as the corporate social responsibility arm of HCLTech in India. It is a value-driven, not-for-profit organization that thrives in contributing toward national and international development goals, impacting the lives of people and communities through long-term sustainable programs. The foundation aims to alleviate poverty and achieve inclusive growth and development through a life cycle-based integrated community development approach, with thematic focus on education, health, livelihoods & skilling,  environment and disaster risk reduction & response. Child protective strategies, inclusion, and gender transformative approaches remain central in all initiatives of the HCLFoundation, thus ensuring comprehensive development."
             </p>
@@ -537,7 +540,7 @@ manage waterbodies while facilitating informed decision-making </p>
                 </span>
                 <span>+</span> <!-- The + symbol stays inline with the counter -->
               </span>
-              <p>Field Workers</p>
+              <p>Users</p>
             </div>
           </div>
 
@@ -740,31 +743,31 @@ manage waterbodies while facilitating informed decision-making </p>
             </li>
 
             <li data-aos="fade-up" data-aos-delay="200">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-3" class="collapsed">How can I access waterbody data? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-3" class="collapsed">About the WaterDaMS Project <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
               <div id="faq-list-3" class="collapse" data-bs-parent=".faq-list">
                 <p>
-                  ........
+                  The goal of this project is to construct a digital platform that enables district officials to identify and manage waterbodies while facilitating informed decision-making
                 </p>
               </div>
             </li>
 
             <li data-aos="fade-up" data-aos-delay="300">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-4" class="collapsed">Can I contribute data to the portal? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-4" class="collapsed">What about the Waterbodies map section? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
               <div id="faq-list-4" class="collapse" data-bs-parent=".faq-list">
                 <p>
-                 .......
+                  The waterbodies map displays the water bodies in Madurai. When you click on a specific waterbody, it will show the associated metadata.
                 </p>
               </div>
             </li>
 
-            <li data-aos="fade-up" data-aos-delay="400">
+            <!--li data-aos="fade-up" data-aos-delay="400">
               <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-5" class="collapsed">Where can I see the Summary Reports of temple tank? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
               <div id="faq-list-5" class="collapse" data-bs-parent=".faq-list">
                 <p>
                   .....
                 </p>
               </div>
-            </li>
+            </li-->
 
           </ul>
         </div>
@@ -775,71 +778,151 @@ manage waterbodies while facilitating informed decision-making </p>
     <!-- ======= Contact Section ======= -->
     <section id="contact" class="contact">
       <div class="container">
-
-        <div class="section-title" data-aos="fade-up">
-          
-          <center>
-            <h3 style="color: white;">Contact Us</h3>
-          </center>
+          <div class="section-title" data-aos="fade-up">
+              <center>
+                  <h3 style="color: white;">Contact Us</h3>
+              </center>
+          </div>
+  
+          <div class="row">
+              <div class="col-lg-4" data-aos="fade-right" data-aos-delay="100">
+                  <div class="info">
+                      <br><br>
+                      <div class="address">
+                          <i class="bi bi-geo-alt"></i>
+                          <h4>Location:</h4>
+                          <p>Corporate Tower, HCL Technologies Ltd. | Technology Hub, SEZ Plot No. 3A, Sector 126 | Noida – 201304, India</p>
+                      </div>
+                      <div class="email">
+                          <i class="bi bi-envelope"></i>
+                          <h4>Email:</h4>
+                          <p>hclfoundation@hcl.com</p>
+                      </div>
+                  </div>
+              </div>
+  
+              <div class="col-lg-8 mt-5 mt-lg-0" data-aos="fade-left" data-aos-delay="200">
+               <form method="post" class="php-email-form" action="{% url 'index' %}">
+    {% csrf_token %}
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="name">Name</label>
+            <input type="text" name="name" class="form-control" id="name" required>
         </div>
-
-        <div class="row">
-
-          <div class="col-lg-4" data-aos="fade-right" data-aos-delay="100">
-            <div class="info">
-              <div class="address">
-                <i class="bi bi-geo-alt"></i>
-                <h4>Location:</h4>
-                <p>Corporate Tower, HCL Technologies Ltd. | Technology Hub, SEZPlot No. 3A, Sector 126 | Noida – 201304, India</p>
-              </div>
-
-              <div class="email">
-                <i class="bi bi-envelope"></i>
-                <h4>Email:</h4>
-                <p>hclfoundtion@hcl.com</p>
-              </div>
+        <div class="col-md-6">
+            <label for="email">Email</label>
+            <input type="email" name="email" class="form-control" id="email" required>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <label for="subject">Subject</label>
+            <input type="text" name="subject" class="form-control" id="subject" required>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <label for="message">Message</label>
+            <textarea name="message" class="form-control" id="message" rows="4" required></textarea>
+        </div>
+    </div>
+    <div class="my-3">
+        <div class="loading">Loading</div>
+        <div class="error-message"></div>
+        <div class="sent-message">Your message has been sent. Thank you!</div>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary">Send Message</button>
+    </div>
+</form>
 
               
+              
+                  {% if success %}
+                      <p class="text-success">Your message has been sent. Thank you!</p>
+                  {% endif %}
+              </div>
+          </div>
+      </div>
+  </section>
+  <!-- End Contact Section -->
 
+  <!-- End #main -->
+  <footer class="custom-footer">
+    
+    <div class="container">
+      <img src="https://www.hclfoundation.org/themes/custom/hclf_revamp/images/hclf-white-logo.svg" alt="Water DaMS Logo" style="height: 30px; width: auto;">
+
+      <br>  <br><br>
+      <div class="row">
+            <!-- Left Section with Divider -->
+            <div class="col-md-4 custom-col border-end pe-4">
+
+              
+              <h5>Sitemap</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#">Our Initiatives</a></li>
+                    <li><a href="#">Annual Reports</a></li>
+                    <li><a href="#">Publications</a></li>
+                </ul>
             </div>
 
-          </div>
+            <!-- Center Section -->
+            <div class="col-md-4 custom-col">
+                <h5>Contact</h5>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-envelope"></i> <a href="mailto:hclfoundation@hcl.com">hclfoundation@hcl.com</a></li>
+                    <li><i class="bi bi-geo-alt"></i> Corporate Tower, HCL Technologies Ltd. <br> Technology Hub, SEZ Plot No. 3A, Sector 126 <br> Noida - 201304, India</li>
+                    <br>
+                    <li><a href="#">View on Map</a></li>
+                </ul>
+                <a href="#">Click Here for HCL Foundation Partner Management System</a>
+            </div>
 
-          <div class="col-lg-8 mt-5 mt-lg-0" data-aos="fade-left" data-aos-delay="200">
-
-            <form method="post" role="form" class="php-email-form">
-              <div class="row">
-                <div class="col-md-6 form-group">
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+            <!-- Right Section with Flagship Programs and Special Initiatives -->
+            <div class="col-md-4 custom-col">
+                <div class="row">
+                    <!-- Flagship Programs -->
+                    <div class="col-md-6">
+                        <h5>Flagship Programs</h5>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-chevron-right"></i> Samuday</li>
+                            <li><i class="bi bi-chevron-right"></i> HCLTech Grant</li>
+                            <li><i class="bi bi-chevron-right"></i> Uday</li>
+                            <li><i class="bi bi-chevron-right"></i> My Clean City</li>
+                            <li><i class="bi bi-chevron-right"></i> Harit</li>
+                        </ul>
+                    </div>
+                    <!-- Special Initiatives -->
+                    <div class="col-md-6">
+                        <h5>Special Initiatives</h5>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-chevron-right"></i> Academy</li>
+                            <li><i class="bi bi-chevron-right"></i> My E-Haat</li>
+                            <li><i class="bi bi-chevron-right"></i> Power of one</li>
+                            <li><i class="bi bi-chevron-right"></i> Sports for Change </li>
+                          
+                        </ul>
+                    </div>
                 </div>
-                <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
-                </div>
-              </div>
-              <div class="form-group mt-3">
-                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
-              </div>
-              <div class="form-group mt-3">
-                <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
-              </div>
-              <div class="my-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
-              </div>
-              <div class="text-center"><button type="submit">Send Message</button></div>
-            </form>
-
-          </div>
-
+            </div>
         </div>
 
-      </div>
-    </section><!-- End Contact Section -->
-
-  </main><!-- End #main -->
-
-  <!-- ======= Footer ======= -->
+        <!-- Horizontal Line and Social Media Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="social-icons">
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                    <a href="#"><i class="bi bi-linkedin"></i></a>
+                    <a href="#"><i class="bi bi-x"></i></a> <!-- Example placeholder icon -->
+                    <a href="#"><i class="bi bi-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+</main>  <!-- ======= Footer ======= -->
   <!--footer id="footer">
     <div class="footer-top">
       <div class="container">
@@ -916,7 +999,9 @@ manage waterbodies while facilitating informed decision-making </p>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
   <div id="preloader"></div>
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Vendor JS Files -->
   <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
   <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>

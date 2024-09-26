@@ -308,7 +308,7 @@ data-template="vertical-menu-template-free">
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <span class="fw-medium d-block">John Doe</span>
+                            <span class="fw-medium d-block">Super Admin</span>
                             <small class="text-muted">Admin</small>
                           </div>
                         </div>
@@ -362,7 +362,26 @@ data-template="vertical-menu-template-free">
 
             <div class="container-xxl flex-grow-1 container-p-y">
               <h4 class="py-3 mb-4"><span class="text-muted fw-light">Table /</span> Response Summary</h4>
+              <form method="get">
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <input type="text" name="surveyNumber" placeholder="Filter by Survey Number" value="{{ filter_form.surveyNumber }}" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="waterbodyId" placeholder="Filter by Waterbody ID" value="{{ filter_form.waterbodyId }}" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="waterbodyType" placeholder="Filter by Waterbody Type" value="{{ filter_form.waterbodyType }}" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </div>
+                </div>
+            </form>
               <div class="card">
+
+                
+              
                 <h5 class="card-header">Response Summary</h5>
                 <div class="table-responsive text-nowrap">
                     <table class="table">
@@ -412,19 +431,42 @@ data-template="vertical-menu-template-free">
             
                 <!-- Pagination Controls -->
                 <div class="pagination">
-        {% if previous_offset is not None %}
-            <a href="?offset={{ previous_offset }}">Previous</a>
-        {% else %}
-            <a class="disabled">Previous</a>
-        {% endif %}
-
-        {% if next_offset is not None %}
-            <a href="?offset={{ next_offset }}">Next</a>
-        {% else %}
-            <a class="disabled">Next</a>
-        {% endif %}
-    </div>
-            
+                  {% if previous_offset is not None %}
+                      <li class="page-item">
+                          <a class="page-link" href="?offset={{ previous_offset }}" aria-label="Previous">
+                              <span aria-hidden="true">&laquo;</span>
+                          </a>
+                      </li>
+                  {% else %}
+                      <li class="page-item disabled">
+                          <span class="page-link">&laquo;</span>
+                      </li>
+                  {% endif %}
+              
+                  {% for offset in offset_range %}
+                      {% if current_offset == offset %}
+                          <li class="page-item active"><span class="page-link">{{ offset }}</span></li>
+                      {% elif offset > current_offset|add:'-5' and offset < current_offset|add:'5' %}
+                          <li class="page-item">
+                              <a class="page-link" href="?offset={{ offset }}">{{ offset }}</a>
+                          </li>
+                      {% endif %}
+                  {% endfor %}
+              
+                  {% if next_offset is not None %}
+                      <li class="page-item">
+                          <a class="page-link" href="?offset={{ next_offset }}" aria-label="Next">
+                              <span aria-hidden="true">&raquo;</span>
+                          </a>
+                      </li>
+                  {% else %}
+                      <li class="page-item disabled">
+                          <span class="page-link">&raquo;</span>
+                      </li>
+                  {% endif %}
+              </div>
+              
+              
             <!-- / Content -->
 
             <!-- Footer >

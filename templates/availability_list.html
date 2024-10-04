@@ -12,7 +12,7 @@ data-template="vertical-menu-template-free">
     {% load static %}
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
-    <title>Taluk</title>
+    <title>Availability</title>
     <meta name="description" content=""/>
 
     <!-- Favicon -->
@@ -54,7 +54,7 @@ data-template="vertical-menu-template-free">
               <span class="app-brand-logo demo">
                 <img src="{% static 'image/waterdams.png' %}" alt="Water DaMS Logo" style="width: 150px; height: auto;">
               </span>
-              
+             
             </a>
 
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -360,90 +360,42 @@ data-template="vertical-menu-template-free">
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="py-3 mb-4"><span class="text-muted fw-light">Table /</span> Taluk</h4>
+              <h4 class="py-3 mb-4"><span class="text-muted fw-light">Table /</span> Availability</h4>
               <div class="card">
-                <h5 class="card-header">Taluk</h5>
+                <h5 class="card-header">Availability</h5>
                 <div class="table-responsive text-nowrap">
                     <table class="table">
                         <thead>
                             <tr class="text-nowrap">
-                                <th>Code</th>
-                                <th>Name</th>
-                                <!--th>District ID</th-->
-                                <th>Actions</th>
+                                
+                                    <th>Name</th>
+                                    <th>Actions</th>
+                                
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                            {% for taluk in taluks %}
-                            <tr>
-                                <td>{{ taluk.code }}</td>
-                                <td>{{ taluk.name }}</td>
-                                <!--td>{{ taluk.district_id }}</td-->
-                                <td>
-                                  <a href="javascript:void(0)" class="edit-taluk" data-id="{{ taluk.id }}" data-code="{{ taluk.code }}" data-name="{{ taluk.name }}" data-district_id="{{ taluk.district_id }}">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <!-- Delete Action with Icon -->
-                                <a href="javascript:void(0)" class="delete-taluk" data-id="{{ taluk.id }}" data-name="{{ taluk.name }}">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
+                            {% for availability in availabilities %}
+                <tr>
+                    <td>{{ availability.name }}</td>
+                    <td>
+                        <!-- Button to trigger update modal -->
+                        <a href="javascript:void(0)" class="edit-availability" data-id="{{ availability.id }}" 
+                        data-name="{{ availability.name }}">
+                         <i class="fas fa-edit"></i> 
+                     </a> 
+     
+                     <!-- Delete Button -->
+                     <a href="javascript:void(0)" class="delete-availability" data-id="{{ availability.id }}" 
+                        data-name="{{ availability.name }}">
+                         <i class="fas fa-trash-alt"></i> 
+                     </a>
                                 </td>
                             </tr>
-                            
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-                <div class="modal fade" id="updateTalukModal" tabindex="-1" aria-labelledby="updateTalukModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="updateTalukModalLabel">Update Taluk</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        <form method="post" id="updateTalukForm">
-                          {% csrf_token %}
-                          <div class="mb-3">
-                            <label class="form-label" for="updateCode">Code</label>
-                            <input type="text" name="code" class="form-control" id="updateCode" />
-                          </div>
-                          <div class="mb-3">
-                            <label class="form-label" for="updateName">Name</label>
-                            <input type="text" name="name" class="form-control" id="updateName" />
-                          </div>
-                          <div class="mb-3">
-                            <label class="form-label" for="updateDistrictId">District ID</label>
-                            <input type="text" name="district_id" class="form-control" id="updateDistrictId" />
-                          </div>
-                          <button type="submit" class="btn btn-primary">Update</button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Delete Confirmation Modal -->
-                <div class="modal fade" id="deleteTalukModal" tabindex="-1" aria-labelledby="deleteTalukModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="deleteTalukModalLabel">Delete Taluk</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        <p>Are you sure you want to delete the taluk "<span id="deleteTalukName"></span>"?</p>
-                      </div>
-                      <div class="modal-footer">
-                        <form method="post" id="deleteTalukForm">
-                          {% csrf_token %}
-                          <button type="submit" class="btn btn-danger">Confirm Delete</button>
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            
                 <!-- Pagination Controls -->
                 <!--div class="pagination">
                     <span class="step-links">
@@ -499,7 +451,50 @@ data-template="vertical-menu-template-free">
               </div>
             </footer>
             <!-- / Footer -->
-
+            <div class="modal fade" id="updateAvailabilityModal" tabindex="-1" aria-labelledby="updateAvailabilityModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateAvailabilityModalLabel">Update Availability</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" id="updateAvailabilityForm" action="{% url 'availability_update' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" id="availabilityId" />
+                                <div class="mb-3">
+                                    <label class="form-label" for="updateName">Name</label>
+                                    <input type="text" name="name" class="form-control" id="updateName" required />
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Delete Availability Modal -->
+            <div class="modal fade" id="deleteAvailabilityModal" tabindex="-1" aria-labelledby="deleteAvailabilityModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteAvailabilityModalLabel">Delete Availability</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete the availability "<span id="deleteAvailabilityName"></span>"?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form method="post" id="deleteAvailabilityForm" action="{% url 'availability_delete' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" id="deleteAvailabilityId" />
+                                <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="content-backdrop fade"></div>
           </div>
           <!-- Content wrapper -->
@@ -523,40 +518,42 @@ data-template="vertical-menu-template-free">
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
-    <script>
-      // Handle the update modal population
-      document.querySelectorAll('.edit-taluk').forEach(button => {
-        button.addEventListener('click', function() {
-          const id = this.getAttribute('data-id');
-          const code = this.getAttribute('data-code');
-          const name = this.getAttribute('data-name');
-          const districtId = this.getAttribute('data-district_id');
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle Edit Button Click
+        const editButtons = document.querySelectorAll('.edit-availability');
+        editButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.dataset.id;
+                const name = this.dataset.name;
     
-          document.getElementById('updateCode').value = code;
-          document.getElementById('updateName').value = name;
-          document.getElementById('updateDistrictId').value = districtId;
-          document.getElementById('updateTalukForm').action = `/taluks/update/${id}/`;
+                document.getElementById('availabilityId').value = id;
+                document.getElementById('updateName').value = name;
     
-          new bootstrap.Modal(document.getElementById('updateTalukModal')).show();
+                const updateModal = new bootstrap.Modal(document.getElementById('updateAvailabilityModal'));
+                updateModal.show();
+            });
         });
-      });
     
-      // Handle the delete modal
-      document.querySelectorAll('.delete-taluk').forEach(button => {
-        button.addEventListener('click', function() {
-          const id = this.getAttribute('data-id');
-          const name = this.getAttribute('data-name');
+        // Handle Delete Button Click
+        const deleteButtons = document.querySelectorAll('.delete-availability');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.dataset.id;
+                const name = this.dataset.name;
     
-          document.getElementById('deleteTalukName').innerText = name;
-          document.getElementById('deleteTalukForm').action = `/taluks/delete/${id}/`;
+                document.getElementById('deleteAvailabilityId').value = id;
+                document.getElementById('deleteAvailabilityName').textContent = name;
     
-          new bootstrap.Modal(document.getElementById('deleteTalukModal')).show();
+                const deleteModal = new bootstrap.Modal(document.getElementById('deleteAvailabilityModal'));
+                deleteModal.show();
+            });
         });
-      });
-    </script>
+    });
     
+</script>
     <script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
-    <script src="{% static 'assets/vendor/libs/popper/popper.js' %}"></script>
+    <script src="{% static 'assets/vendora/libs/popper/popper.js' %}"></script>
     <script src="{% static 'assets/vendor/js/bootstrap.js' %}"></script>
     <script src="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
     <script src="{% static 'assets/vendor/js/menu.js' %}"></script>

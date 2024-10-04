@@ -12,7 +12,7 @@ data-template="vertical-menu-template-free">
     {% load static %}
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
-    <title>Taluk</title>
+    <title>Boundarydroppoints</title>
     <meta name="description" content=""/>
 
     <!-- Favicon -->
@@ -54,7 +54,7 @@ data-template="vertical-menu-template-free">
               <span class="app-brand-logo demo">
                 <img src="{% static 'image/waterdams.png' %}" alt="Water DaMS Logo" style="width: 150px; height: auto;">
               </span>
-              
+             
             </a>
 
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -360,90 +360,35 @@ data-template="vertical-menu-template-free">
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="py-3 mb-4"><span class="text-muted fw-light">Table /</span> Taluk</h4>
+              <h4 class="py-3 mb-4"><span class="text-muted fw-light">Table /</span> Boundarydroppoints</h4>
               <div class="card">
-                <h5 class="card-header">Taluk</h5>
+                <h5 class="card-header">Boundarydroppoints</h5>
                 <div class="table-responsive text-nowrap">
                     <table class="table">
                         <thead>
                             <tr class="text-nowrap">
-                                <th>Code</th>
                                 <th>Name</th>
-                                <!--th>District ID</th-->
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                            {% for taluk in taluks %}
-                            <tr>
-                                <td>{{ taluk.code }}</td>
-                                <td>{{ taluk.name }}</td>
-                                <!--td>{{ taluk.district_id }}</td-->
-                                <td>
-                                  <a href="javascript:void(0)" class="edit-taluk" data-id="{{ taluk.id }}" data-code="{{ taluk.code }}" data-name="{{ taluk.name }}" data-district_id="{{ taluk.district_id }}">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <!-- Delete Action with Icon -->
-                                <a href="javascript:void(0)" class="delete-taluk" data-id="{{ taluk.id }}" data-name="{{ taluk.name }}">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
-                                </td>
-                            </tr>
-                            
+                            {% for point in boundary_points %}
+                                <tr>
+                                    <td>{{ point.name }}</td>
+                                    <td>
+                                        <a href="javascript:void(0)" class="edit-boundary" data-id="{{ point.id }}" data-name="{{ point.name }}">
+                                            <i class="fas fa-edit"></i> 
+                                        </a>
+                                        <a href="javascript:void(0)" class="delete-boundary" data-id="{{ point.id }}" data-name="{{ point.name }}">
+                                            <i class="fas fa-trash-alt"></i> 
+                                        </a>
+                                    </td>
+                                </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-                <div class="modal fade" id="updateTalukModal" tabindex="-1" aria-labelledby="updateTalukModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="updateTalukModalLabel">Update Taluk</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        <form method="post" id="updateTalukForm">
-                          {% csrf_token %}
-                          <div class="mb-3">
-                            <label class="form-label" for="updateCode">Code</label>
-                            <input type="text" name="code" class="form-control" id="updateCode" />
-                          </div>
-                          <div class="mb-3">
-                            <label class="form-label" for="updateName">Name</label>
-                            <input type="text" name="name" class="form-control" id="updateName" />
-                          </div>
-                          <div class="mb-3">
-                            <label class="form-label" for="updateDistrictId">District ID</label>
-                            <input type="text" name="district_id" class="form-control" id="updateDistrictId" />
-                          </div>
-                          <button type="submit" class="btn btn-primary">Update</button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Delete Confirmation Modal -->
-                <div class="modal fade" id="deleteTalukModal" tabindex="-1" aria-labelledby="deleteTalukModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="deleteTalukModalLabel">Delete Taluk</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        <p>Are you sure you want to delete the taluk "<span id="deleteTalukName"></span>"?</p>
-                      </div>
-                      <div class="modal-footer">
-                        <form method="post" id="deleteTalukForm">
-                          {% csrf_token %}
-                          <button type="submit" class="btn btn-danger">Confirm Delete</button>
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            
                 <!-- Pagination Controls -->
                 <!--div class="pagination">
                     <span class="step-links">
@@ -499,7 +444,51 @@ data-template="vertical-menu-template-free">
               </div>
             </footer>
             <!-- / Footer -->
-
+            <!-- Update Modal -->
+            <div class="modal fade" id="updateBoundaryModal" tabindex="-1" aria-labelledby="updateBoundaryModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateBoundaryModalLabel">Update Boundary Drop Point</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" id="updateBoundaryForm" action="{% url 'boundary_drop_points_update' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" id="boundaryId" />
+                                <div class="mb-3">
+                                    <label class="form-label" for="updateName">Name</label>
+                                    <input type="text" name="name" class="form-control" id="updateName" required />
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Delete Boundary Drop Point Modal -->
+            <div class="modal fade" id="deleteBoundaryModal" tabindex="-1" aria-labelledby="deleteBoundaryModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteBoundaryModalLabel">Delete Boundary Drop Point</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete the boundary drop point "<span id="deleteBoundaryName"></span>"?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form method="post" id="deleteBoundaryForm" action="{% url 'boundary_drop_points_delete' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" id="deleteBoundaryId" />
+                                <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="content-backdrop fade"></div>
           </div>
           <!-- Content wrapper -->
@@ -524,37 +513,38 @@ data-template="vertical-menu-template-free">
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
     <script>
-      // Handle the update modal population
-      document.querySelectorAll('.edit-taluk').forEach(button => {
-        button.addEventListener('click', function() {
-          const id = this.getAttribute('data-id');
-          const code = this.getAttribute('data-code');
-          const name = this.getAttribute('data-name');
-          const districtId = this.getAttribute('data-district_id');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle Edit Button Click
+            const editButtons = document.querySelectorAll('.edit-boundary');
+            editButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    const name = this.dataset.name;
     
-          document.getElementById('updateCode').value = code;
-          document.getElementById('updateName').value = name;
-          document.getElementById('updateDistrictId').value = districtId;
-          document.getElementById('updateTalukForm').action = `/taluks/update/${id}/`;
+                    document.getElementById('boundaryId').value = id;
+                    document.getElementById('updateName').value = name;
     
-          new bootstrap.Modal(document.getElementById('updateTalukModal')).show();
+                    const updateModal = new bootstrap.Modal(document.getElementById('updateBoundaryModal'));
+                    updateModal.show();
+                });
+            });
+    
+            // Handle Delete Button Click
+            const deleteButtons = document.querySelectorAll('.delete-boundary');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    const name = this.dataset.name;
+    
+                    document.getElementById('deleteBoundaryId').value = id;
+                    document.getElementById('deleteBoundaryName').textContent = name;
+    
+                    const deleteModal = new bootstrap.Modal(document.getElementById('deleteBoundaryModal'));
+                    deleteModal.show();
+                });
+            });
         });
-      });
-    
-      // Handle the delete modal
-      document.querySelectorAll('.delete-taluk').forEach(button => {
-        button.addEventListener('click', function() {
-          const id = this.getAttribute('data-id');
-          const name = this.getAttribute('data-name');
-    
-          document.getElementById('deleteTalukName').innerText = name;
-          document.getElementById('deleteTalukForm').action = `/taluks/delete/${id}/`;
-    
-          new bootstrap.Modal(document.getElementById('deleteTalukModal')).show();
-        });
-      });
     </script>
-    
     <script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
     <script src="{% static 'assets/vendor/libs/popper/popper.js' %}"></script>
     <script src="{% static 'assets/vendor/js/bootstrap.js' %}"></script>

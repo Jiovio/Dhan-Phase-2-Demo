@@ -12,7 +12,7 @@ data-template="vertical-menu-template-free">
     {% load static %}
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
-    <title>Ponds & Ooranis</title>
+    <title>Jurisdiction</title>
     <meta name="description" content=""/>
 
     <!-- Favicon -->
@@ -360,9 +360,9 @@ data-template="vertical-menu-template-free">
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="py-3 mb-4"><span class="text-muted fw-light">Table /</span> Districts</h4>
+              <h4 class="py-3 mb-4"><span class="text-muted fw-light">Table /</span> Jurisdiction</h4>
               <div class="card">
-                <h5 class="card-header">Districts</h5>
+                <h5 class="card-header">Jurisdiction</h5>
                 <div class="table-responsive text-nowrap">
                     <table class="table">
                         <thead>
@@ -380,19 +380,70 @@ data-template="vertical-menu-template-free">
                                 <td>{{ jurisdiction.code }}</td>
                                 <td>{{ jurisdiction.createdBy }}</td>
                                 <td>
-                                    <a href="{% url 'jurisdiction_update' jurisdiction.id %}">
-                                        <i class="fas fa-edit"></i> 
-                                    </a> |
-                                    <a href="{% url 'jurisdiction_delete' jurisdiction.id %}">
-                                        <i class="fas fa-trash-alt"></i> 
-                                    </a>
+                                  <a href="#" class="edit-jurisdiction" data-id="{{ jurisdiction.id }}" data-code="{{ jurisdiction.code }}" data-createdby="{{ jurisdiction.createdBy }}">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                |
+                                <!-- Delete Action with Modal Trigger -->
+                                <a href="#" class="delete-jurisdiction" data-id="{{ jurisdiction.id }}" data-name="{{ jurisdiction.code }}">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
                                 </td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-            
+            <!-- Update Jurisdiction Modal -->
+<div class="modal fade" id="updateJurisdictionModal" tabindex="-1" aria-labelledby="updateJurisdictionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="updateJurisdictionModalLabel">Update Jurisdiction</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form method="post" id="updateJurisdictionForm" action="{% url 'jurisdiction_update' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="id" id="jurisdictionId" />
+                  <div class="mb-3">
+                      <label class="form-label" for="updateCode">Code</label>
+                      <input type="text" name="code" class="form-control" id="updateCode" required />
+                  </div>
+                  <div class="mb-3">
+                      <label class="form-label" for="updateCreatedBy">Created By</label>
+                      <input type="text" name="createdBy" class="form-control" id="updateCreatedBy" required />
+                  </div>
+                  <button type="submit" class="btn btn-primary">Update</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteJurisdictionModal" tabindex="-1" aria-labelledby="deleteJurisdictionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteJurisdictionModalLabel">Delete Jurisdiction</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete the jurisdiction "<span id="deleteJurisdictionName"></span>"?</p>
+      </div>
+      <div class="modal-footer">
+        <form method="post" id="deleteJurisdictionForm">
+          {% csrf_token %}
+          <input type="hidden" name="id" id="jurisdictionDeleteId" />
+          <button type="submit" class="btn btn-danger">Confirm Delete</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
                 <!-- Pagination Controls -->
                 <!--div class="pagination">
                     <span class="step-links">
@@ -472,7 +523,44 @@ data-template="vertical-menu-template-free">
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
-
+    <script>
+      // JavaScript to handle modal population and form submission
+      document.addEventListener('DOMContentLoaded', function() {
+          // Handle edit jurisdiction modal
+          const editButtons = document.querySelectorAll('.edit-jurisdiction');
+          editButtons.forEach(button => {
+              button.addEventListener('click', function() {
+                  const id = this.dataset.id;
+                  const code = this.dataset.code;
+                  const createdBy = this.dataset.createdby;
+      
+                  document.getElementById('jurisdictionId').value = id;
+                  document.getElementById('updateCode').value = code;
+                  document.getElementById('updateCreatedBy').value = createdBy;
+      
+                  // Show the modal
+                  const updateModal = new bootstrap.Modal(document.getElementById('updateJurisdictionModal'));
+                  updateModal.show();
+              });
+          });
+      
+          // Handle delete jurisdiction modal
+          const deleteButtons = document.querySelectorAll('.delete-jurisdiction');
+          deleteButtons.forEach(button => {
+              button.addEventListener('click', function() {
+                  const id = this.dataset.id;
+                  const name = this.dataset.name;
+      
+                  document.getElementById('jurisdictionDeleteId').value = id;
+                  document.getElementById('deleteJurisdictionName').textContent = name;
+      
+                  // Show the modal
+                  const deleteModal = new bootstrap.Modal(document.getElementById('deleteJurisdictionModal'));
+                  deleteModal.show();
+              });
+          });
+      });
+      </script>
     <script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
     <script src="{% static 'assets/vendor/libs/popper/popper.js' %}"></script>
     <script src="{% static 'assets/vendor/js/bootstrap.js' %}"></script>

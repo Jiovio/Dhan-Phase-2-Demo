@@ -49,6 +49,7 @@ from .views import tabledesign
 from .views import fencetype_list, fencetype_update, fencetype_delete
 from .views import taluk_list, taluk_update, taluk_delete
 from .views import habitation_list, habitation_update, habitation_delete
+from .views import taluk_list, taluk_update, taluk_delete
 
 from waterbodies_app.views import waterbodies_tank_list
 urlpatterns = [
@@ -97,7 +98,7 @@ urlpatterns = [
      path('districts/', views.district_list, name='district_list'),
     path('districts/update/<int:pk>/', views.district_update, name='district_update'),
     path('districts/delete/<int:pk>/', views.district_delete, name='district_delete'),
-     path('jurisdictions/', views.jurisdiction_list, name='jurisdiction_list'),
+     
      path('details/', views.details_view, name='details'),
      path('hydrologicaldetails/',views.hydrological_details, name='hydrologicaldetails'),
      path('sourcedetails/',views.source_details, name='sourcedetails'),
@@ -111,9 +112,10 @@ urlpatterns = [
       path('embankmentdetails/',views.embankment_details, name='embankmentdetails'),
       path('legalissues/',views.legal_issues, name='legalissues'),
       path('encroachment/',views.encroachment, name='encroachment'),
-    path('jurisdictions/update/<int:pk>/', views.jurisdiction_update, name='jurisdiction_update'),
-    path('jurisdictions/delete/<int:pk>/', views.jurisdiction_delete, name='jurisdiction_delete'),
-     path('taluks/', taluk_list, name='taluk_list'),
+   path('jurisdictions/', views.jurisdiction_list, name='jurisdiction_list'),
+    path('jurisdictions/update/', views.jurisdiction_update, name='jurisdiction_update'),
+    path('jurisdictions/delete/', views.jurisdiction_delete, name='jurisdiction_delete'),
+      path('taluks/', taluk_list, name='taluk_list'),
     path('taluks/update/<int:pk>/', taluk_update, name='taluk_update'),
     path('taluks/delete/<int:pk>/', taluk_delete, name='taluk_delete'),
     path('update-waterbody/<int:pk>/', views.update_waterbody, name='update_waterbody'),  # AJAX-based update
@@ -126,10 +128,33 @@ urlpatterns = [
     path('tanks/update/<int:tank_id>/', views.update_tank, name='update_tank'),  # View for updating a tank
     path('tanks/delete/<int:tank_id>/', views.delete_tank, name='delete_tank'),  # View for deleting a tank
     path('tanks/', views.waterbodies_tank_list, name='tank_list'), 
-    path('habitations/', habitation_list, name='habitation_list'),
-    path('habitations/update/<int:pk>/', habitation_update, name='habitation_update'),
-    path('habitations/delete/<int:pk>/', habitation_delete, name='habitation_delete'),
-    # Add more URL patterns for your app...
+     path('habitations/', views.habitation_list, name='habitation_list'),
+    path('habitations/update/', views.habitation_update, name='habitation_update'),
+    path('habitations/delete/', views.habitation_delete, name='habitation_delete'),
+    path('waterbody-details/', water_body_details, name='water_body_details'),
+     path('availabilities/', views.availability_list, name='availability_list'),
+    path('availabilities/update/', views.availability_update, name='availability_update'),
+    path('availabilities/delete/', views.availability_delete, name='availability_delete'),
+    path('ayacut-non-cultivation/', views.ayacut_non_cultivation_list, name='ayacut_non_cultivation_list'),
+    path('ayacut-non-cultivation/update/', views.ayacut_non_cultivation_update, name='ayacut_non_cultivation_update'),
+    path('ayacut-non-cultivation/delete/', views.ayacut_non_cultivation_delete, name='ayacut_non_cultivation_delete'),
+    path('boundary/', views.boundary_drop_points_list, name='boundary_drop_points_list'),
+    path('boundary/update/', views.boundary_drop_points_update, name='boundary_drop_points_update'),
+    path('boundary/delete/', views.boundary_drop_points_delete, name='boundary_drop_points_delete'),
+    path('bund-issues/', views.bund_issues_list, name='bund_issues_list'),
+    path('bund-issues/update/', views.bund_issues_update, name='bund_issues_update'),
+    path('bund-issues/delete/', views.bund_issues_delete, name='bund_issues_delete'),
+    path('barrel-types/', views.barrel_type_list, name='barrel_type_list'),
+    path('barrel-types/update/', views.barrel_type_update, name='barrel_type_update'),
+    path('barrel-types/delete/', views.barrel_type_delete, name='barrel_type_delete'),
+    path('bund-functionalities/', views.bund_functionality_list, name='bund_functionality_list'),
+    path('bund-functionalities/update/', views.bund_functionality_update, name='bund_functionality_update'),
+    path('bund-functionalities/delete/', views.bund_functionality_delete, name='bund_functionality_delete'),
+     path('conditions/', views.conditions_list, name='conditions_list'),
+    path('conditions/update/', views.conditions_update, name='conditions_update'),
+    path('conditions/delete/', views.conditions_delete, name='conditions_delete'),
 ]
+    # Add more URL patterns for your app...
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

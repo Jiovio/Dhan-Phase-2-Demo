@@ -6,6 +6,7 @@ import os
 from django.core.files.base import ContentFile
 from django.shortcuts import render, get_object_or_404
 from .models import WaterBody
+from waterbodies_app.models import Availability
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -47,12 +48,15 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from .serializers import WaterBodySerializer
 from rest_framework import permissions
+from .models import BarrelType
 import logging
 from waterbodies_app.models import PoOwaterbody
 from .forms import VolunteerForm
 from .models import Volunteer
 from .forms import FieldWorkerForm
 from .models import FieldWorker
+from .models import Conditions
+from waterbodies_app.forms import AyacutNonCultivationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import FieldWorkerLoginForm
@@ -62,6 +66,7 @@ from .models import FenceType
 from django.core.files.storage import FileSystemStorage
 from .forms import CustomUserCreationForm
 from .models import CustomUser
+from .models import AyacutNonCultivation
 from .models import KMLFilesz
 from waterbodies_app.models import District
 from django.http import JsonResponse
@@ -70,7 +75,11 @@ from .models import Pond
 from .models import Contact
 from .forms import ContactForm
 from .models import Taluk
+from .models import BundFunctionalities
 from .models import Habitation
+from .models import BoundaryDropPoints
+from .forms import BoundaryDropPointsForm
+from .models import BundIssues
 from waterbodies_app.models import Jurisdiction
 logger = logging.getLogger(__name__)
 def water_body_details(request, water_body_id):
@@ -908,27 +917,30 @@ def jurisdiction_list(request):
     jurisdictions = Jurisdiction.objects.all()
     return render(request, 'jurisdiction_list.html', {'jurisdictions': jurisdictions})
 
-def jurisdiction_update(request, pk):
-    jurisdiction = get_object_or_404(Jurisdiction, pk=pk)
+def jurisdiction_update(request):
     if request.method == 'POST':
+        jurisdiction_id = request.POST.get('id')
+        jurisdiction = get_object_or_404(Jurisdiction, pk=jurisdiction_id)
         jurisdiction.code = request.POST.get('code')
         jurisdiction.createdBy = request.POST.get('createdBy')
         jurisdiction.save()
         return redirect('jurisdiction_list')
-    return render(request, 'jurisdiction_update.html', {'jurisdiction': jurisdiction})
-
-def jurisdiction_delete(request, pk):
-    jurisdiction = get_object_or_404(Jurisdiction, pk=pk)
+    return redirect('jurisdiction_list')  # Redirect if not a POST request
+def jurisdiction_delete(request):
     if request.method == 'POST':
+        jurisdiction_id = request.POST.get('id')
+        jurisdiction = get_object_or_404(Jurisdiction, pk=jurisdiction_id)
         jurisdiction.delete()
         return redirect('jurisdiction_list')
-    return render(request, 'jurisdiction_delete.html', {'jurisdiction': jurisdiction})
+    return redirect('jurisdiction_list')  # Handle invalid request by redirecting
 
 def taluk_list(request):
     taluks = Taluk.objects.all()
     return render(request, 'taluk_list.html', {'taluks': taluks})
 
 # View to update a Taluk
+
+
 def taluk_update(request, pk):
     taluk = get_object_or_404(Taluk, pk=pk)
     if request.method == 'POST':
@@ -936,16 +948,16 @@ def taluk_update(request, pk):
         taluk.name = request.POST.get('name')
         taluk.district_id = request.POST.get('district_id')
         taluk.save()
-        return redirect('taluk_list')
-    return render(request, 'taluk_update.html', {'taluk': taluk})
+        return redirect('taluk_list')  # Redirect to the list page after update
+    return redirect('taluk_list')  # Handle the case of invalid requests
 
 # View to delete a Taluk
 def taluk_delete(request, pk):
     taluk = get_object_or_404(Taluk, pk=pk)
     if request.method == 'POST':
         taluk.delete()
-        return redirect('taluk_list')
-    return render(request, 'taluk_delete.html', {'taluk': taluk})
+        return redirect('taluk_list')  # Redirect to the list after deletion
+    return redirect('taluk_list')  # Handle the case of an invalid request
 
 # View to list all FenceTypes
 def fencetype_list(request):
@@ -978,9 +990,10 @@ def habitation_list(request):
 
     return render(request, 'habitation_list.html', {'page_obj': page_obj})
 
-def habitation_update(request, pk):
-    habitation = get_object_or_404(Habitation, pk=pk)
+def habitation_update(request):
     if request.method == 'POST':
+        habitation_id = request.POST.get('id')
+        habitation = get_object_or_404(Habitation, pk=habitation_id)
         habitation.district_code = request.POST.get('district_code')
         habitation.district = request.POST.get('district')
         habitation.block_code = request.POST.get('block_code')
@@ -991,14 +1004,156 @@ def habitation_update(request, pk):
         habitation.habitation = request.POST.get('habitation')
         habitation.save()
         return redirect('habitation_list')
-    return render(request, 'habitation_update.html', {'habitation': habitation})
 
-def habitation_delete(request, pk):
-    habitation = get_object_or_404(Habitation, pk=pk)
+# Delete habitation view
+def habitation_delete(request):
     if request.method == 'POST':
+        habitation_id = request.POST.get('id')
+        habitation = get_object_or_404(Habitation, pk=habitation_id)
         habitation.delete()
         return redirect('habitation_list')
-    return render(request, 'habitation_delete.html', {'habitation': habitation})
+    
+def availability_list(request):
+    availabilities = Availability.objects.all()
+    return render(request, 'availability_list.html', {'availabilities': availabilities})
+
+# Update availability view
+def availability_update(request):
+    if request.method == 'POST':
+        availability_id = request.POST.get('id')
+        availability = get_object_or_404(Availability, pk=availability_id)
+        availability.name = request.POST.get('name')
+        availability.save()
+        return redirect('availability_list')
+
+# Delete availability view
+def availability_delete(request):
+    if request.method == 'POST':
+        availability_id = request.POST.get('id')
+        availability = get_object_or_404(Availability, pk=availability_id)
+        availability.delete()
+        return redirect('availability_list')
+    
+def ayacut_non_cultivation_list(request):
+    items = AyacutNonCultivation.objects.all()
+    return render(request, 'ayacut_non_cultivation_list.html', {'items': items})
+
+def ayacut_non_cultivation_update(request):
+    if request.method == 'POST':
+        item_id = request.POST.get('id')
+        item = get_object_or_404(AyacutNonCultivation, pk=item_id)
+        item.name = request.POST.get('name')
+        item.save()
+        return redirect('ayacut_non_cultivation_list')
+
+def ayacut_non_cultivation_delete(request):
+    if request.method == 'POST':
+        item_id = request.POST.get('id')
+        item = get_object_or_404(AyacutNonCultivation, pk=item_id)
+        item.delete()
+        return redirect('ayacut_non_cultivation_list')
+def boundary_drop_points_list(request):
+    boundary_points = BoundaryDropPoints.objects.all()
+    return render(request, 'boundarydroppointslist.html', {'boundary_points': boundary_points})
+
+def boundary_drop_points_update(request):
+    if request.method == 'POST':
+        boundary_point_id = request.POST.get('id')
+        boundary_point = get_object_or_404(BoundaryDropPoints, pk=boundary_point_id)
+        boundary_point.name = request.POST.get('name')
+        boundary_point.save()
+        return redirect('boundary_drop_points_list')
+
+def boundary_drop_points_delete(request):
+    if request.method == 'POST':
+        boundary_point_id = request.POST.get('id')
+        boundary_point = get_object_or_404(BoundaryDropPoints, pk=boundary_point_id)
+        boundary_point.delete()
+        return redirect('boundary_drop_points_list')
+    
+def bund_issues_list(request):
+    bund_issues = BundIssues.objects.all()
+    return render(request, 'bund_issues_list.html', {'bund_issues': bund_issues})
+
+# Update bund issue
+def bund_issues_update(request):
+    if request.method == 'POST':
+        bund_issue_id = request.POST.get('id')
+        bund_issue = get_object_or_404(BundIssues, pk=bund_issue_id)
+        bund_issue.name = request.POST.get('name')
+        bund_issue.save()
+        return redirect('bund_issues_list')
+
+# Delete bund issue
+def bund_issues_delete(request):
+    if request.method == 'POST':
+        bund_issue_id = request.POST.get('id')
+        bund_issue = get_object_or_404(BundIssues, pk=bund_issue_id)
+        bund_issue.delete()
+        return redirect('bund_issues_list')
+def barrel_type_list(request):
+    barrel_types = BarrelType.objects.all()
+    return render(request, 'barrel_type_list.html', {'barrel_types': barrel_types})
+
+# Update barrel type
+def barrel_type_update(request):
+    if request.method == 'POST':
+        barrel_type_id = request.POST.get('id')
+        barrel_type = get_object_or_404(BarrelType, pk=barrel_type_id)
+        barrel_type.name = request.POST.get('name')
+        barrel_type.save()
+        return redirect('barrel_type_list')
+
+# Delete barrel type
+def barrel_type_delete(request):
+    if request.method == 'POST':
+        barrel_type_id = request.POST.get('id')
+        barrel_type = get_object_or_404(BarrelType, pk=barrel_type_id)
+        barrel_type.delete()
+        return redirect('barrel_type_list')
+    
+def bund_functionality_list(request):
+    functionalities = BundFunctionalities.objects.all()
+    return render(request, 'bund_functionality_list.html', {'functionalities': functionalities})
+
+# Update bund functionality
+def bund_functionality_update(request):
+    if request.method == 'POST':
+        functionality_id = request.POST.get('id')
+        functionality = get_object_or_404(BundFunctionalities, pk=functionality_id)
+        functionality.name = request.POST.get('name')
+        functionality.save()
+        return redirect('bund_functionality_list')
+
+# Delete bund functionality
+def bund_functionality_delete(request):
+    if request.method == 'POST':
+        functionality_id = request.POST.get('id')
+        functionality = get_object_or_404(BundFunctionalities, pk=functionality_id)
+        functionality.delete()
+        return redirect('bund_functionality_list')
+
+def conditions_list(request):
+    conditions = Conditions.objects.all()
+    return render(request, 'conditions_list.html', {'conditions': conditions})
+
+# Update condition
+def conditions_update(request):
+    if request.method == 'POST':
+        condition_id = request.POST.get('id')
+        condition = get_object_or_404(Conditions, pk=condition_id)
+        condition.name = request.POST.get('name')
+        condition.save()
+        return redirect('conditions_list')
+
+# Delete condition
+def conditions_delete(request):
+    if request.method == 'POST':
+        condition_id = request.POST.get('id')
+        condition = get_object_or_404(Conditions, pk=condition_id)
+        condition.delete()
+        return redirect('conditions_list')
+    
 def details_view(request):  
     # You can pass context data to the template if needed
     context = {}
@@ -1080,3 +1235,35 @@ def save_permission(request):
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
     return JsonResponse({'success': False})
+def water_body_details(request):
+    api_url = "http://waterbody.cloudonweb.in:5000/waterBodyAdmin/waterBodyFieldReviewerResponse/"
+    water_params = {}
+    error_message = None
+
+    try:
+        # Get the JWT token
+        token = get_jwt_token()
+        
+        # Include the JWT token in the Authorization header
+        headers = {
+            'Authorization': f'Bearer {token}'
+        }
+
+        # Fetch data from the API
+        response = requests.get(api_url, headers=headers)
+        response.raise_for_status()  # Raise HTTPError for bad responses (4xx/5xx)
+        
+        # Parse the response
+        data = response.json()
+        water_params = json.loads(data.get('waterParams', '{}'))
+        
+    except requests.exceptions.RequestException as e:
+        error_message = f"Error fetching data from API: {e}"
+    except json.JSONDecodeError as e:
+        error_message = f"Error parsing JSON: {e}"
+    except Exception as e:
+        error_message = f"Error obtaining JWT token: {e}"
+    
+    # Pass the data and error message (if any) to the template
+    return render(request, 'waterparams.html', {'water_params': water_params, 'error_message': error_message})
+

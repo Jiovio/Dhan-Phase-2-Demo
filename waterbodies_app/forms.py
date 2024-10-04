@@ -10,7 +10,18 @@ from .models import CustomUser
 from .models import KMLFilesz
 from .models import Contact
 from .models import PoOwaterbody
+from waterbodies_app.models import AyacutNonCultivation
+from .models import BoundaryDropPoints
 
+class BoundaryDropPointsForm(forms.ModelForm):
+    class Meta:
+        model = BoundaryDropPoints
+        fields = ['name']
+
+class AyacutNonCultivationForm(forms.ModelForm):
+    class Meta:
+        model = AyacutNonCultivation
+        fields = ['name']
 class ContactForm(forms.ModelForm):
     class Meta:
         model = Contact

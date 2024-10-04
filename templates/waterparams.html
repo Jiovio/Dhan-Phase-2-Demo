@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Water Body Details</title>
+</head>
+<body>
+    <h1>Water Body Details</h1>
+
+    {% if error_message %}
+        <div style="color: red;">
+            <strong>Error:</strong> {{ error_message }}
+        </div>
+    {% else %}
+        <h2>Water Parameters</h2>
+        <pre>
+            {{ water_params|json_script:"water_params_data" }}
+        </pre>
+
+        <script>
+            try {
+                const waterParams = JSON.parse(document.getElementById("water_params_data").textContent);
+                console.log(waterParams);  // Log JSON data to the console
+            } catch (error) {
+                console.error("Error parsing JSON data:", error);
+            }
+        </script>
+    {% endif %}
+</body>
+</html>

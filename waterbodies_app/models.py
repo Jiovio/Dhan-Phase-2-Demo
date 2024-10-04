@@ -236,7 +236,11 @@ class FenceType(models.Model):
 
     def __str__(self):
         return self.name
+class Availability(models.Model):
+    name= models.CharField(max_length=100)
     
+    def __str__(self):
+        return self.name    
 class Habitation(models.Model):
     district_code = models.CharField(max_length=10)
     district = models.CharField(max_length=100)
@@ -258,3 +262,46 @@ class UrbanLocalBodies(models.Model):
 
     def __str__(self):
         return self.type_code
+class AyacutNonCultivation(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+    
+class BoundaryDropPoints(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+class BundIssues(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+    
+class BarrelType(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+ 
+class BundFunctionalities(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+class Conditions(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+    
+
+
+class CatchmentType(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name

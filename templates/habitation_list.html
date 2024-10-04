@@ -392,15 +392,101 @@ data-template="vertical-menu-template-free">
                                 <td>{{ habitation.habitation_code }}</td>
                                 <td>{{ habitation.habitation }}</td>
                                 <td>
-                                    <a href="{% url 'habitation_update' habitation.id %}" class="btn btn-primary btn-sm">Update</a>
-                                    <a href="{% url 'habitation_delete' habitation.id %}" class="btn btn-danger btn-sm">Delete</a>
+                                  <a href="javascript:void(0)" class="edit-habitation" data-id="{{ habitation.id }}" 
+                                  data-district_code="{{ habitation.district_code }}" 
+                                  data-district="{{ habitation.district }}" 
+                                  data-block_code="{{ habitation.block_code }}" 
+                                  data-block="{{ habitation.block }}" 
+                                  data-village_code="{{ habitation.village_code }}" 
+                                  data-village="{{ habitation.village }}" 
+                                  data-habitation_code="{{ habitation.habitation_code }}" 
+                                  data-habitation="{{ habitation.habitation }}">
+                                   <i class="fas fa-edit"></i>
+                               </a> 
+               
+                               <!-- Delete Button -->
+                               <a href="javascript:void(0)" class="delete-habitation" data-id="{{ habitation.id }}" 
+                                  data-habitation="{{ habitation.habitation }}">
+                                   <i class="fas fa-trash-alt"></i>
+                               </a>
                                 </td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-            
+                <div class="modal fade" id="updateHabitationModal" tabindex="-1" aria-labelledby="updateHabitationModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <h5 class="modal-title" id="updateHabitationModalLabel">Update Habitation</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                              <form method="post" id="updateHabitationForm" action="{% url 'habitation_update' %}">
+                                  {% csrf_token %}
+                                  <input type="hidden" name="id" id="habitationId" />
+                                  <div class="mb-3">
+                                      <label class="form-label" for="updateDistrictCode">District Code</label>
+                                      <input type="text" name="district_code" class="form-control" id="updateDistrictCode" required />
+                                  </div>
+                                  <div class="mb-3">
+                                      <label class="form-label" for="updateDistrict">District</label>
+                                      <input type="text" name="district" class="form-control" id="updateDistrict" required />
+                                  </div>
+                                  <div class="mb-3">
+                                      <label class="form-label" for="updateBlockCode">Block Code</label>
+                                      <input type="text" name="block_code" class="form-control" id="updateBlockCode" required />
+                                  </div>
+                                  <div class="mb-3">
+                                      <label class="form-label" for="updateBlock">Block</label>
+                                      <input type="text" name="block" class="form-control" id="updateBlock" required />
+                                  </div>
+                                  <div class="mb-3">
+                                      <label class="form-label" for="updateVillageCode">Village Code</label>
+                                      <input type="text" name="village_code" class="form-control" id="updateVillageCode" required />
+                                  </div>
+                                  <div class="mb-3">
+                                      <label class="form-label" for="updateVillage">Village</label>
+                                      <input type="text" name="village" class="form-control" id="updateVillage" required />
+                                  </div>
+                                  <div class="mb-3">
+                                      <label class="form-label" for="updateHabitationCode">Habitation Code</label>
+                                      <input type="text" name="habitation_code" class="form-control" id="updateHabitationCode" required />
+                                  </div>
+                                  <div class="mb-3">
+                                      <label class="form-label" for="updateHabitation">Habitation</label>
+                                      <input type="text" name="habitation" class="form-control" id="updateHabitation" required />
+                                  </div>
+                                  <button type="submit" class="btn btn-primary">Update</button>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              
+              <!-- Delete Habitation Modal -->
+              <div class="modal fade" id="deleteHabitationModal" tabindex="-1" aria-labelledby="deleteHabitationModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <h5 class="modal-title" id="deleteHabitationModalLabel">Delete Habitation</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                              <p>Are you sure you want to delete the habitation "<span id="deleteHabitationName"></span>"?</p>
+                          </div>
+                          <div class="modal-footer">
+                              <form method="post" id="deleteHabitationForm" action="{% url 'habitation_delete' %}">
+                                  {% csrf_token %}
+                                  <input type="hidden" name="id" id="deleteHabitationId" />
+                                  <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+              </div>
                 <!-- Pagination Controls -->
                 <div class="pagination">
                     {% if page_obj.has_previous %}
@@ -521,7 +607,54 @@ data-template="vertical-menu-template-free">
     <script src="{% static "assets/js/dashboards-analytics.js" %}"></script>
     <script src="{% static "assets/vendor/libs/apex-charts/apexcharts.js" %}"></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Handle Edit Button Click
+    const editButtons = document.querySelectorAll('.edit-habitation');
+    editButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const district_code = this.dataset.district_code;
+            const district = this.dataset.district;
+            const block_code = this.dataset.block_code;
+            const block = this.dataset.block;
+            const village_code = this.dataset.village_code;
+            const village = this.dataset.village;
+            const habitation_code = this.dataset.habitation_code;
+            const habitation = this.dataset.habitation;
 
+            document.getElementById('habitationId').value = id;
+            document.getElementById('updateDistrictCode').value = district_code;
+            document.getElementById('updateDistrict').value = district;
+            document.getElementById('updateBlockCode').value = block_code;
+            document.getElementById('updateBlock').value = block;
+            document.getElementById('updateVillageCode').value = village_code;
+            document.getElementById('updateVillage').value = village;
+            document.getElementById('updateHabitationCode').value = habitation_code;
+            document.getElementById('updateHabitation').value = habitation;
+
+            const updateModal = new bootstrap.Modal(document.getElementById('updateHabitationModal'));
+            updateModal.show();
+        });
+    });
+
+    // Handle Delete Button Click
+    const deleteButtons = document.querySelectorAll('.delete-habitation');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const habitation = this.dataset.habitation;
+
+            document.getElementById('deleteHabitationId').value = id;
+            document.getElementById('deleteHabitationName').textContent = habitation;
+
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteHabitationModal'));
+            deleteModal.show();
+        });
+    });
+});
+
+</script>
     <!-- endbuild -->
 
     <!-- Vendors JS -->

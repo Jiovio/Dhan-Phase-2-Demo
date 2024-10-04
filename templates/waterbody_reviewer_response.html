@@ -419,9 +419,14 @@ data-template="vertical-menu-template-free">
                                 <td>{{ item.village }}</td>
                                
                                 <td>
-                                <a href="{% url 'details'%}" class="btn btn-primary">
-                                  <i class="fas fa-eye"></i> 
-                              </a>
+                                  <td>
+                                    <td>
+                                      <a href="{% url 'details'  %}" class="btn btn-primary">
+                                          <i class="fas fa-eye"></i> 
+                                      </a>
+                                  </td>
+                                  
+                                </td>
                             </td>
                             </tr>
                             {% endfor %}

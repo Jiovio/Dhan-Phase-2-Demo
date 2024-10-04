@@ -66,32 +66,44 @@
         <div id="details-content" class="details-content"></div>
     </div>
     <script>
-        var map = L.map('map').setView([9.917, 78.119], 10);
-
+        var map = L.map('map', {
+            scrollWheelZoom: false, // Disable scroll wheel zoom by default
+            tap: false // Disable tap behavior for better mobile interaction
+        }).setView([9.917, 78.119], 10);
+    
         // Add a base layer (optional)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-
+    
+        // Enable scroll wheel zoom only when the map is focused or tapped on mobile
+        map.on('focus', function() {
+            map.scrollWheelZoom.enable();
+        });
+    
+        map.on('blur', function() {
+            map.scrollWheelZoom.disable();
+        });
+    
         // Load existing KML files from the database
         var kmlFiles = JSON.parse('{{ kml_files_json|escapejs }}');
         kmlFiles.forEach(function(kml) {
             var kmlUrl = kml.kml_file_url;
             var kmlLayer = omnivore.kml(kmlUrl);
-
+    
             kmlLayer.on('ready', function() {
                 var bounds = kmlLayer.getBounds();
                 if (bounds.isValid()) {
                     kmlLayer.addTo(map);
                     map.fitBounds(bounds);
-                    
+    
                     kmlLayer.eachLayer(function(layer) {
                         if (layer.feature && layer.feature.properties) {
                             layer.on('click', function() {
                                 var props = layer.feature.properties;
                                 var detailsContent = document.getElementById('details-content');
                                 detailsContent.innerHTML = ''; // Clear existing details
-
+    
                                 var table = document.createElement('table');
                                 var excludedKeys = ['styleUrl', 'hash', 'description', 'name', 'styleHash'];
                                 for (var key in props) {
@@ -106,9 +118,9 @@
                                         table.appendChild(row);
                                     }
                                 }
-
+    
                                 detailsContent.appendChild(table);
-
+    
                                 // Handle description as HTML
                                 if (props.description) {
                                     var descriptionContainer = document.createElement('div');
@@ -122,11 +134,12 @@
                     console.error('Invalid bounds for KML layer:', kmlUrl);
                 }
             });
-
+    
             kmlLayer.on('error', function() {
                 console.error('Error loading KML layer:', kmlUrl);
             });
         });
     </script>
+    
 </body>
 </html>

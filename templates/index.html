@@ -1061,12 +1061,44 @@ manage waterbodies while facilitating informed decision-making </p>
     map.addLayer(markers);
 </script-->
 <script>
-  var map = L.map('map').setView([9.917, 78.119], 10);
+  var map = L.map('map', {
+      scrollWheelZoom: false, // Disable scroll wheel zoom by default
+      tap: false // Disable tap behavior for better mobile interaction
+  }).setView([9.917, 78.119], 10);
 
   // Add a base layer (optional)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
+
+  // Function to disable map interaction (mobile focus on page scrolling)
+  function disableMapInteraction() {
+      if (window.innerWidth <= 768) { // For mobile viewports
+          map.dragging.disable(); // Disable dragging
+          map.scrollWheelZoom.disable(); // Ensure scroll zoom is disabled
+      }
+  }
+
+  // Function to enable map interaction when the user touches the map
+  function enableMapInteraction() {
+      if (window.innerWidth <= 768) { // Enable interaction for mobile
+          map.dragging.enable();
+          map.scrollWheelZoom.enable();
+      }
+  }
+
+  // Enable interactions for larger screens (desktop/laptop)
+  if (window.innerWidth > 768) {
+      map.dragging.enable(); // Allow dragging
+      map.scrollWheelZoom.enable(); // Enable scroll zoom
+  }
+
+  // Handle enabling/disabling map interactions for mobile
+  map.on('focus', enableMapInteraction); // Enable map actions on focus/tap
+  map.on('blur', disableMapInteraction); // Disable on blur (scroll away)
+
+  // Initial setup for mobile to disable map interaction
+  disableMapInteraction();
 
   // Load existing KML files from the database
   var kmlFiles = JSON.parse('{{ kml_files_json|escapejs }}');
@@ -1079,7 +1111,7 @@ manage waterbodies while facilitating informed decision-making </p>
           if (bounds.isValid()) {
               kmlLayer.addTo(map);
               map.fitBounds(bounds);
-              
+
               kmlLayer.eachLayer(function(layer) {
                   if (layer.feature && layer.feature.properties) {
                       layer.on('click', function() {
@@ -1122,7 +1154,18 @@ manage waterbodies while facilitating informed decision-making </p>
           console.error('Error loading KML layer:', kmlUrl);
       });
   });
+
+  // Optional: Re-enable interactions if the window is resized (e.g., switching from mobile to desktop)
+  window.addEventListener('resize', function() {
+      if (window.innerWidth > 768) {
+          map.dragging.enable();
+          map.scrollWheelZoom.enable();
+      } else {
+          disableMapInteraction(); // Re-disable for mobile sizes
+      }
+  });
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/purecounterjs@1.1.5/dist/purecounter_vanilla.js"></script>
 <script>
   // Initialize PureCounter

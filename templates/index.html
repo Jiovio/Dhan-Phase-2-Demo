@@ -61,7 +61,10 @@
         
         <h1>
           <a href="{% url 'index' %}">
-            <img src="{% static 'image/waterdams.png' %}" alt="Water DaMS Logo" style="height: 75px; width: 140px;">
+            <img src="{% static 'image/waterdams.png' %}" alt="Logo" style="height: 80px; width: auto;" />
+
+
+
 
 
           </a>
@@ -119,7 +122,14 @@
             <button class="volunteer-btn">
               Volunteers Registration
               <span class="arrow">→</span>
-            </button></a>
+            </button></a><br>
+            <a href="">
+              <button class="volunteer-btn">
+                Download Now
+                <span class="arrow">→</span> 
+              </button>
+            </a>
+            
             
             <div class="text-center text-lg-start">
               <!--a href="#about" class="btn-get-started scrollto">Get Started</a-->
@@ -128,6 +138,7 @@
         </div>
         <div class="col-lg-4 order-1 order-lg-2 hero-img" data-aos="zoom-out" data-aos-delay="300">
           <img src="{% static 'image/cover2.png' %}" class="img-fluid animated" style="width: 750px;" alt="">
+        
         </div>
       </div>
     </div>
@@ -161,11 +172,11 @@
           </div>
 
           <div class="col-xl-7 col-lg-6 icon-boxes d-flex flex-column align-items-stretch justify-content-center py-5 px-lg-5" data-aos="fade-left">
-            <h3>About Water DaMS</h3>
+            <h3>Water DaMS – Web Portal</h3>
             <p> 
-              The goal of this project is to construct a digital platform that enables district officials to identify and
-manage waterbodies while facilitating informed decision-making </p>
-
+              Water DaMS is a comprehensive web-based water portal, developed to streamline the data-management of waterbodies and its conservation/restoration works as well as to provide real-time status monitoring of rejuvenation activities. This unique digital tool empowers stakeholders / government officials to make informed decisions in managing waterbodies across the district of Madurai. </p>
+              
+  
             <div class="icon-box" data-aos="zoom-in" data-aos-delay="100">
               <div class="icon"><i class="bx bx-arch"></i></div>
               <h4 class="title"><a href="">City of Temples</a></h4>
@@ -191,20 +202,36 @@ manage waterbodies while facilitating informed decision-making </p>
     </section><!-- End About Section -->
     <br><br>
 
-    <section id="details" class="details">
+    <section id="detai" class="detai">
       <div class="container">
-    
-        <div class="row content">
-          <div class="col-md-12 pt-2" data-aos="fade-up">
-            <h3>HCLFoundation</h3>
-            <p>
-              "HCLFoundation (HCLF) was established in 2011 as the corporate social responsibility arm of HCLTech in India. It is a value-driven, not-for-profit organization that thrives in contributing toward national and international development goals, impacting the lives of people and communities through long-term sustainable programs. The foundation aims to alleviate poverty and achieve inclusive growth and development through a life cycle-based integrated community development approach, with thematic focus on education, health, livelihoods & skilling,  environment and disaster risk reduction & response. Child protective strategies, inclusion, and gender transformative approaches remain central in all initiatives of the HCLFoundation, thus ensuring comprehensive development."
-            </p>
+          <div class="row content">
+              <div class="col-md-12">
+                <h3 style="color: #0F5FDC;">HCLFoundation</h3>
+
+                  <p>
+                      HCLFoundation delivers the corporate social responsibility agenda of HCLTech in India through its flagship programmes and special initiatives. With a vision to be the source code for sustainable socio-economic and environmental development, it strives to contribute towards national and international development goals, bringing about positive impact in the lives of people, through long-term sustainable programmes. HCLFoundation aims to alleviate poverty and achieve inclusive growth and development through life cycle based, integrated community development approach that focuses on Education, Health, Skill Development and Livelihood, Environment, and Disaster Risk Reduction and Response. Child protective strategies, inclusion, and gender transformative approaches remain central in all initiatives, thus ensuring comprehensive development. HCLFoundation is present in 21 States, 3 Union Territories, 122 districts and has impacted over 6.5 million lives with 54% being women. HCLFoundation has greened 72,000 acres, harvested over 81 billion litres of water, managed 500,000 tonnes of waste, protected endangered species, and treated over 91,000 animals. The Water DaMS project is being implemented by ‘Harit’ which is the climate action flagship programme of HCLFoundation.
+                  </p>
+              </div>
           </div>
-        </div>
-    
+          <div class="row content">
+              <div class="col-md-12">
+                  <h3 style="color: #0F5FDC;">Dhan Foundation</h3>
+                  <p>
+                      Development of Humane Action (DHAN) Foundation, is a national-level professional development institution, promoted with the mission of “Building People and Sustainable Institutions with Value Driven, Ethics, and Democratic process to enable the poor for Poverty Eradication, Water & nutrition secured; Inclusive and Ecologically Balanced Development”. DHAN Foundation through its water thematic Programme (DHAN Vayalagam Tank Foundation) has facilitated people institutions to restore 4000+ traditional water commons such as minor irrigation tank cascade systems, drinking water ponds, community wells, and Ahar-Pyne systems. In the past 25 years, DHAN Foundation has been working towards documenting, preserving, and revitalizing the indigenous wisdom on water management. It also imparts technological solutions such as remote sensing and GIS in water resources management at the grassroots. In Building Water Portal Madurai Chapter, DHAN Foundation is partnering with HCL Foundation by providing support in technical aspects such as digitization, and development of questionnaires, co-creating applications and portals with the relevant stakeholders, and testing and implementing at the grassroots.
+                  </p>
+              </div>
+          </div>
+          <div class="row content">
+              <div class="col-md-12">
+                  <h3 style="color: #0F5FDC;">Water DaMS - Mobile Application</h3>
+                  <p>
+                      App-based Water DaMS is a mobile application developed to facilitate holistic data collection, ground level validation and assessment of waterbodies. It supports in developing actionable insights for waterbody rejuvenation, including quantified intervention recommendations based on the identified/recorded problems.
+                  </p>
+              </div>
+          </div>
       </div>
-    </section>
+  </section>
+  
     <!--section id="map" class="map">
       <div class="container">
 
@@ -796,7 +823,7 @@ manage waterbodies while facilitating informed decision-making </p>
                       <div class="email">
                           <i class="bi bi-envelope"></i>
                           <h4>Email:</h4>
-                          <p>hclfoundation@hcl.com</p>
+                          <p>hcltech@hcl.com</p>
                       </div>
                   </div>
               </div>
@@ -871,7 +898,7 @@ manage waterbodies while facilitating informed decision-making </p>
             <div class="col-md-4 custom-col">
                 <h5>Contact</h5>
                 <ul class="list-unstyled">
-                    <li><i class="bi bi-envelope"></i> <a href="mailto:hclfoundation@hcl.com">hclfoundation@hcl.com</a></li>
+                    <li><i class="bi bi-envelope"></i> <a href="mailto:hcltech@hcl.com">hcltech@hcl.com</a></li>
                     <li><i class="bi bi-geo-alt"></i> Corporate Tower, HCL Technologies Ltd. <br> Technology Hub, SEZ Plot No. 3A, Sector 126 <br> Noida - 201304, India</li>
                     <br>
                     <li><a href="https://www.google.com/maps/place/HCL+Technologies/@28.5377636,77.339953,17z/data=!4m7!3m6!1s0x390ce67087435c5f:0x7d6bacb498d0e642!8m2!3d28.5374053!4d77.3429158!15sCm1Db3Jwb3JhdGUgVG93ZXIsIEhDTCBUZWNobm9sb2dpZXMgTHRkLiB8IFRlY2hub2xvZ3kgSHViLCBTRVpQbG90IE5vLiAzQSwgU2VjdG9yIDEyNiB8IE5vaWRhIOKAkyAyMDEzMDQsIEluZGlhIgOIAQFaYSJfY29ycG9yYXRlIHRvd2VyIGhjbCB0ZWNobm9sb2dpZXMgbHRkIHRlY2hub2xvZ3kgaHViIHNlenBsb3Qgbm8gM2Egc2VjdG9yIDEyNiBub2lkYSAyMDEzMDQgaW5kaWGSARBzb2Z0d2FyZV9jb21wYW554AEA!16s%2Fg%2F11bw5_cn0w?entry=tts">View on Map</a></li>

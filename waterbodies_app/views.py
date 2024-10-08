@@ -77,6 +77,9 @@ from .forms import ContactForm
 from .models import Taluk
 from .models import BundFunctionalities
 from .models import Habitation
+
+from .models import CatchmentType
+
 from .models import BoundaryDropPoints
 from .forms import BoundaryDropPointsForm
 from .models import BundIssues
@@ -1153,7 +1156,26 @@ def conditions_delete(request):
         condition = get_object_or_404(Conditions, pk=condition_id)
         condition.delete()
         return redirect('conditions_list')
-    
+def catchment_type_list(request):
+    catchment_types = CatchmentType.objects.all()
+    return render(request, 'catchment_type_list.html', {'catchment_types': catchment_types})
+
+# Update catchment type
+def catchment_type_update(request):
+    if request.method == 'POST':
+        catchment_type_id = request.POST.get('id')
+        catchment_type = get_object_or_404(CatchmentType, pk=catchment_type_id)
+        catchment_type.name = request.POST.get('name')
+        catchment_type.save()
+        return redirect('catchment_type_list')
+
+# Delete catchment type
+def catchment_type_delete(request):
+    if request.method == 'POST':
+        catchment_type_id = request.POST.get('id')
+        catchment_type = get_object_or_404(CatchmentType, pk=catchment_type_id)
+        catchment_type.delete()
+        return redirect('catchment_type_list')
 def details_view(request):  
     # You can pass context data to the template if needed
     context = {}

@@ -153,6 +153,9 @@ urlpatterns = [
      path('conditions/', views.conditions_list, name='conditions_list'),
     path('conditions/update/', views.conditions_update, name='conditions_update'),
     path('conditions/delete/', views.conditions_delete, name='conditions_delete'),
+    path('catchment_types/', views.catchment_type_list, name='catchment_type_list'),
+    path('catchment_types/update/', views.catchment_type_update, name='catchment_type_update'),
+    path('catchment_types/delete/', views.catchment_type_delete, name='catchment_type_delete'),
 ]
     # Add more URL patterns for your app...
 

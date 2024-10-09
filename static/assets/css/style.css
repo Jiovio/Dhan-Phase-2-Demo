@@ -1683,9 +1683,9 @@ section {
   height: 100vh;
   position: relative;
 }
-#details {
+#detail {
   width: 100%;
-  height: 150vh;
+  height: 100vh;
   overflow-y: auto;
   padding: 10px;
   box-shadow: -2px 0 5px rgba(0,0,0,0.1);

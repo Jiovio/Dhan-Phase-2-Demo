@@ -1691,11 +1691,112 @@ section {
   box-shadow: -2px 0 5px rgba(0,0,0,0.1);
   background-color: #f9f9f9;
 }
-#detai {
-  
-  
-  background-color: #f9f9f9;
+/* Styling the carousel container */
+/* Ensure the carousel items take full width and height without overlapping */
+/* Ensure the carousel items take full width and height without overlapping */
+/* Carousel item styling */
+.carousel {
+  position: relative;
+  overflow: hidden; /* Hide overflowing items */
+  width: 100%; /* Set a width */
+  height: auto; /* Adjust height as needed */
 }
+
+
+
+
+
+.carousel-item {
+  width: 100%;
+  min-height: 350px; /* Adjust as necessary */
+  display: none; /* Hide inactive slides */
+  background-color: #f8f9fa; /* Light background for the card */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for card effect */
+  padding: 30px;
+  overflow: hidden;
+ 
+  display: none; /* Hide all items by default */
+  opacity: 0; /* Set initial opacity */
+  transition: opacity 0.5s ease-in-out; 
+}
+
+.carousel-item.active {
+   /* Show only active slides */
+  display: block; /* Show the active item */
+  opacity: 1;
+}
+
+.carousel-item h3 {
+  font-size: 2rem;
+  color: #0F5FDC;
+  text-align: center;
+}
+
+.carousel-item p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #333;
+  text-align: justify;
+  margin: 0 auto;
+  max-width: 900px; /* Restrict width for readability */
+}
+
+/* Custom Button Styling */
+.custom-prev-button,
+.custom-next-button {
+  background-color: #0F5FDC;
+  width: 50px; /* Width of the buttons */
+  height: 50px; /* Height of the buttons */
+  border: 2px solid transparent; /* Make border transparent */
+  /* Make background transparent */
+  color: white; /* Text color for the arrow */
+  font-size: 20px; /* Font size for the arrow */
+  border-radius: 50%; /* Rounded buttons */
+  position: absolute; /* Absolute positioning */
+  top: 50%; /* Vertically center the buttons */
+  transform: translateY(-50%); /* Adjust for exact vertical centering */
+  z-index: 2; /* Ensure buttons are above the content */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s, transform 0.3s; /* Transition for hover effect */
+}
+
+/* Position buttons */
+.custom-prev-button {
+  left: 20px; /* Distance from the left edge */
+}
+
+.custom-next-button {
+  right: 20px; /* Distance from the right edge */
+}
+
+/* Button hover effects */
+.custom-prev-button:hover,
+.custom-next-button:hover {
+  background-color: #0F5FDC; /* Background color on hover */
+  color: white; /* Change text color on hover */
+  transform: translateY(-50%) scale(1.1); /* Slightly grow the button */
+}
+
+/* Icon Styling */
+.custom-prev-icon,
+.custom-next-icon {
+  
+  font-size: 25px; /* Increase size of the arrows */
+  line-height: 50px; /* Center the arrow vertically */
+  text-align: center; /* Center the arrow horizontally */
+  display: flex; /* Use flex to center the icon */
+  justify-content: center; /* Center icon horizontally */
+  align-items: center; /* Center icon vertically */
+  height: 100%; /* Full height for proper centering */
+  width: 100%; /* Full width for proper centering */
+}
+
+
+
+
+
+
 .details-header {
   background-color: #3C91FF;
   color: white;
@@ -1781,4 +1882,11 @@ th {
 
 .custom-footer .social-icons a i {
   font-size: 42px; /* Increase the size of the icons */
+}
+
+.caption {
+  text-align: center;
+  margin-top: 5px; /* Space between image and caption */
+  font-size: 14px; /* Adjust font size */
+  color: #555; /* Adjust text color */
 }

@@ -303,7 +303,7 @@ data-template="vertical-menu-template-free">
                       </a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="#">
+                      <a class="dropdown-item" href="{%url 'change_password' %}">
                         <i class="bx bx-cog me-2"></i>
                         <span class="align-middle">Settings</span>
                       </a>
@@ -382,9 +382,9 @@ data-template="vertical-menu-template-free">
 
                             </div>
                           </div>
-                          <span class="fw-semibold d-block mb-1">Reviewer Responses</span>
-                          <h3 class="card-title mb-2">{{ total_reviewer_responses_count }}
-                            <a href="{% url 'waterbody_reviewer_response' %}">
+                          <span class="fw-semibold d-block mb-1">PWD Tanks</span>
+                          <h3 class="card-title mb-2">{{ total_tank_data_count }}
+                            <a href="{% url 'pwdtank_list' %}">
                               <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i></small>
                             </a>
                           </h3>
@@ -403,9 +403,9 @@ data-template="vertical-menu-template-free">
 
                             </div>
                           </div>
-                          <span class="fw-semibold d-block mb-1">Total Users</span>
-                          <h3 class="card-title mb-2">{{ total_field_workers_count}}
-                          <a href="{% url 'fieldworkers' %}">
+                          <span class="fw-semibold d-block mb-1">Reviewer Responses</span>
+                          <h3 class="card-title mb-2">{{ total_reviewer_responses_count}}
+                          <a href="{% url 'waterbody_reviewer_response' %}">
                             <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i></small></a>
                           </h3>
                         </div>
@@ -434,6 +434,7 @@ data-template="vertical-menu-template-free">
                           <div class="d-flex flex-column">
                             <div id="details">
                               <div class="details-header">Details</div>
+                              <p>Click the waterbody to see the metadata</p>
                               <div id="details-content" class="details-content"></div>
                             </div>
                           </div>

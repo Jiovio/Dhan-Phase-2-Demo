@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Include Leaflet and Leaflet.markercluster JS files -->
   
     <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js" defer></script>
@@ -204,33 +205,56 @@
 
     <section id="detai" class="detai">
       <div class="container">
-          <div class="row content">
-              <div class="col-md-12">
-                <h3 style="color: #0F5FDC;">HCLFoundation</h3>
-
+        <div id="foundationCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <!-- HCL Foundation Slide -->
+            <div class="carousel-item active">
+              <div class="row content">
+                <div class="col-md-12">
+                  <h3 style="color: #0F5FDC;">HCL Foundation</h3>
                   <p>
-                      HCLFoundation delivers the corporate social responsibility agenda of HCLTech in India through its flagship programmes and special initiatives. With a vision to be the source code for sustainable socio-economic and environmental development, it strives to contribute towards national and international development goals, bringing about positive impact in the lives of people, through long-term sustainable programmes. HCLFoundation aims to alleviate poverty and achieve inclusive growth and development through life cycle based, integrated community development approach that focuses on Education, Health, Skill Development and Livelihood, Environment, and Disaster Risk Reduction and Response. Child protective strategies, inclusion, and gender transformative approaches remain central in all initiatives, thus ensuring comprehensive development. HCLFoundation is present in 21 States, 3 Union Territories, 122 districts and has impacted over 6.5 million lives with 54% being women. HCLFoundation has greened 72,000 acres, harvested over 81 billion litres of water, managed 500,000 tonnes of waste, protected endangered species, and treated over 91,000 animals. The Water DaMS project is being implemented by ‘Harit’ which is the climate action flagship programme of HCLFoundation.
+                    HCL Foundation delivers the corporate social responsibility agenda of HCLTech in India through its flagship programmes and special initiatives. With a vision to be the source code for sustainable socio-economic and environmental development, it strives to contribute towards national and international development goals, bringing about positive impact in the lives of people, through long-term sustainable programmes. HCL Foundation aims to alleviate poverty and achieve inclusive growth and development through life cycle based, integrated community development approach that focuses on Education, Health, Skill Development and Livelihood, Environment, and Disaster Risk Reduction and Response. Child protective strategies, inclusion, and gender transformative approaches remain central in all initiatives, thus ensuring comprehensive development. HCL Foundation is present in 21 States, 3 Union Territories, 122 districts and has impacted over 6.5 million lives with 54% being women. HCL Foundation has greened 72,000 acres, harvested over 81 billion litres of water, managed 500,000 tonnes of waste, protected endangered species, and treated over 91,000 animals. The Water DaMS project is being implemented by ‘Harit’ which is the climate action flagship programme of HCL Foundation.
                   </p>
+                </div>
               </div>
-          </div>
-          <div class="row content">
-              <div class="col-md-12">
+            </div>
+    
+            <!-- Dhan Foundation Slide -->
+            <div class="carousel-item">
+              <div class="row content">
+                <div class="col-md-12">
                   <h3 style="color: #0F5FDC;">Dhan Foundation</h3>
                   <p>
-                      Development of Humane Action (DHAN) Foundation, is a national-level professional development institution, promoted with the mission of “Building People and Sustainable Institutions with Value Driven, Ethics, and Democratic process to enable the poor for Poverty Eradication, Water & nutrition secured; Inclusive and Ecologically Balanced Development”. DHAN Foundation through its water thematic Programme (DHAN Vayalagam Tank Foundation) has facilitated people institutions to restore 4000+ traditional water commons such as minor irrigation tank cascade systems, drinking water ponds, community wells, and Ahar-Pyne systems. In the past 25 years, DHAN Foundation has been working towards documenting, preserving, and revitalizing the indigenous wisdom on water management. It also imparts technological solutions such as remote sensing and GIS in water resources management at the grassroots. In Building Water Portal Madurai Chapter, DHAN Foundation is partnering with HCL Foundation by providing support in technical aspects such as digitization, and development of questionnaires, co-creating applications and portals with the relevant stakeholders, and testing and implementing at the grassroots.
+                    Development of Humane Action (DHAN) Foundation, is a national-level professional development institution, promoted with the mission of “Building People and Sustainable Institutions with Value Driven, Ethics, and Democratic process to enable the poor for Poverty Eradication, Water & nutrition secured; Inclusive and Ecologically Balanced Development”. DHAN Foundation through its water thematic Programme (DHAN Vayalagam Tank Foundation) has facilitated people institutions to restore 4000+ traditional water commons such as minor irrigation tank cascade systems, drinking water ponds, community wells, and Ahar-Pyne systems. In the past 25 years, DHAN Foundation has been working towards documenting, preserving, and revitalizing the indigenous wisdom on water management. It also imparts technological solutions such as remote sensing and GIS in water resources management at the grassroots. In Building Water Portal Madurai Chapter, DHAN Foundation is partnering with HCL Foundation by providing support in technical aspects such as digitization, and development of questionnaires, co-creating applications and portals with the relevant stakeholders, and testing and implementing at the grassroots.
                   </p>
+                </div>
               </div>
-          </div>
-          <div class="row content">
-              <div class="col-md-12">
+            </div>
+    
+            <!-- Water DaMS Slide -->
+            <div class="carousel-item">
+              <div class="row content">
+                <div class="col-md-12">
                   <h3 style="color: #0F5FDC;">Water DaMS - Mobile Application</h3>
                   <p>
-                      App-based Water DaMS is a mobile application developed to facilitate holistic data collection, ground level validation and assessment of waterbodies. It supports in developing actionable insights for waterbody rejuvenation, including quantified intervention recommendations based on the identified/recorded problems.
+                    App-based Water DaMS is a mobile application developed to facilitate holistic data collection, ground level validation and assessment of waterbodies. It supports in developing actionable insights for waterbody rejuvenation, including quantified intervention recommendations based on the identified/recorded problems.
                   </p>
+                </div>
               </div>
+            </div>
           </div>
+    
+          <!-- Carousel Controls -->
+          <button class="custom-prev-button">
+            <span class="custom-prev-icon">&#8592;</span>
+          </button>
+          <button class="custom-next-button">
+            <span class="custom-next-icon">&#8594;</span>
+          </button>
+        </div>
       </div>
-  </section>
+    </section>
+  
   
     <!--section id="map" class="map">
       <div class="container">
@@ -260,6 +284,7 @@
             <div class="col-md-4">
                 <div id="detail">
                     <div class="details-header">Details</div>
+                    <p>Click the waterbody to view the meta data</p>
                     <div id="details-content" class="details-content">
                         <!-- Your content goes here -->
                     </div>
@@ -358,82 +383,88 @@
     <!-- ======= Gallery Section ======= -->
     <section id="gallery" class="gallery">
       <div class="container">
-
         <div class="section-title" data-aos="fade-up">
           <h2>Gallery</h2>
           <p>Madurai waterbodies</p>
         </div>
-
+    
         <div class="row g-0" data-aos="fade-left">
-
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
               <a href="{%static 'image/wb1.jpg'%}" class="gallery-lightbox">
                 <img src="{%static 'image/wb1.jpg'%}" alt="" class="img-fluid">
               </a>
+              <div class="caption">Kathiyanoor</div>
             </div>
           </div>
-
+    
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="150">
-              <a href="{%static 'image/wb2.jpg'%}"  class="gallery-lightbox">
-                <img src="{%static 'image/wb2.jpg'%}"  alt="" class="img-fluid">
+              <a href="{%static 'image/wb2.jpg'%}" class="gallery-lightbox">
+                <img src="{%static 'image/wb2.jpg'%}" alt="" class="img-fluid">
               </a>
+              <div class="caption">Nila Oorani</div>
             </div>
           </div>
-
+    
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
               <a href="{%static 'image/vd.jpg'%}" class="gallery-lightbox">
-                <img src="{%static 'image/vd.jpg'%}"  alt="" class="img-fluid">
+                <img src="{%static 'image/vd.jpg'%}" alt="" class="img-fluid">
               </a>
+              <div class="caption">Sooravalimedu</div>
             </div>
           </div>
-
+    
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="250">
               <a href="{%static 'image/wb111.jpg'%}" class="gallery-lightbox">
                 <img src="{%static 'image/wb111.jpg'%}" alt="" class="img-fluid">
               </a>
+              <div class="caption">Thumbaichedimedu</div>
             </div>
           </div>
-
+    
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
               <a href="{%static 'image/wb9.jpg'%}" class="gallery-lightbox">
-                <img src="{%static 'image/wb9.jpg'%}"  alt="" class="img-fluid">
+                <img src="{%static 'image/wb9.jpg'%}" alt="" class="img-fluid">
               </a>
+              <div class="caption">Uthangudi Oorani</div>
             </div>
           </div>
-
+    
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="350">
               <a href="{%static 'image/slide4.jpg'%}" class="gallery-lightbox">
-                <img src="{%static 'image/slide4.jpg'%}"  alt="" class="img-fluid">
+                <img src="{%static 'image/slide4.jpg'%}" alt="" class="img-fluid">
               </a>
+              <div class="caption">Vaigai River</div>
             </div>
           </div>
-
+    
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="400">
               <a href="{%static 'image/wb88.jpeg'%}" class="gallery-lightbox">
                 <img src="{%static 'image/wb88.jpeg'%}" alt="" class="img-fluid">
               </a>
+              <div class="caption">Milakaranai</div>
             </div>
           </div>
-
+    
           <div class="col-lg-3 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="450">
-                <a href="{%static 'image/slide44.jpg'%}" class="gallery-lightbox">
-                    <img src="{%static 'image/slide44.jpg'%}"  alt="" class="img-fluid">
+              <a href="{%static 'image/slide44.jpg'%}" class="gallery-lightbox">
+                <img src="{%static 'image/slid444.jpg'%}" alt="" class="img-fluid">
               </a>
+              <div class="caption">Thathan Oorani</div>
             </div>
           </div>
-
         </div>
-
       </div>
-    </section><!-- End Gallery Section -->
+    </section>
+    
+    <!-- End Gallery Section -->
     
 
     <!-- ======= Testimonials Section ======= -->
@@ -906,7 +937,6 @@
                     <br>
                     <li><a href="https://www.google.com/maps/place/HCL+Technologies/@28.5377636,77.339953,17z/data=!4m7!3m6!1s0x390ce67087435c5f:0x7d6bacb498d0e642!8m2!3d28.5374053!4d77.3429158!15sCm1Db3Jwb3JhdGUgVG93ZXIsIEhDTCBUZWNobm9sb2dpZXMgTHRkLiB8IFRlY2hub2xvZ3kgSHViLCBTRVpQbG90IE5vLiAzQSwgU2VjdG9yIDEyNiB8IE5vaWRhIOKAkyAyMDEzMDQsIEluZGlhIgOIAQFaYSJfY29ycG9yYXRlIHRvd2VyIGhjbCB0ZWNobm9sb2dpZXMgbHRkIHRlY2hub2xvZ3kgaHViIHNlenBsb3Qgbm8gM2Egc2VjdG9yIDEyNiBub2lkYSAyMDEzMDQgaW5kaWGSARBzb2Z0d2FyZV9jb21wYW554AEA!16s%2Fg%2F11bw5_cn0w?entry=tts">View on Map</a></li>
                 </ul>
-                <a href="https://wf5.myhcl.com/partnerapp/">Click Here for HCL Foundation Partner Management System</a>
             </div>
 
             <!-- Right Section with Flagship Programs and Special Initiatives -->
@@ -1048,6 +1078,42 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-omnivore/leaflet-omnivore.min.js"></script>
   <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+  <script>
+    // Select carousel items
+    const items = document.querySelectorAll('.carousel-item');
+    let currentIndex = 0;
+  
+    // Show the current item
+    function showItem(index) {
+      items.forEach((item, i) => {
+        if (i === index) {
+          item.classList.add('active'); // Add active class for the current item
+        } else {
+          item.classList.remove('active'); // Remove active class from other items
+        }
+      });
+    }
+  
+    // Show the next item
+    function nextItem() {
+      currentIndex = (currentIndex + 1) % items.length; // Loop back to the first item
+      showItem(currentIndex);
+    }
+  
+    // Show the previous item
+    function prevItem() {
+      currentIndex = (currentIndex - 1 + items.length) % items.length; // Loop back to the last item
+      showItem(currentIndex);
+    }
+  
+    // Event listeners for buttons
+    document.querySelector('.custom-next-button').addEventListener('click', nextItem);
+    document.querySelector('.custom-prev-button').addEventListener('click', prevItem);
+  
+    // Initialize the first item
+    showItem(currentIndex);
+  </script>
+  
   <!--script>
     var map = L.map('map').setView([9.9252, 78.1198], 12);
 
@@ -1090,6 +1156,10 @@
     // Add markers to the map
     map.addLayer(markers);
 </script-->
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   var map = L.map('map', {
       scrollWheelZoom: false, // Disable scroll wheel zoom by default

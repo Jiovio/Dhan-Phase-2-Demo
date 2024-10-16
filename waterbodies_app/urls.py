@@ -156,6 +156,10 @@ urlpatterns = [
     path('catchment_types/', views.catchment_type_list, name='catchment_type_list'),
     path('catchment_types/update/', views.catchment_type_update, name='catchment_type_update'),
     path('catchment_types/delete/', views.catchment_type_delete, name='catchment_type_delete'),
+     path('water-body/', views.fetch_water_body_data, name='water_body_data'),
+     path('pwdtank', views.tank_data_list_view, name='pwdtank_list'),
+    path('update/<int:pk>/', views.update_tankdata, name='update_tankdata'),
+    path('delete/<int:pk>/', views.delete_tankdata, name='delete_tankdata'),
 ]
     # Add more URL patterns for your app...
 

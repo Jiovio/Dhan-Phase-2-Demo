@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Body Data</title>
+</head>
+<body>
+    <h1>Water Body Details</h1>
+
+    {% if water_params %}
+        <h2>Hydrologic Parameters</h2>
+        <p><strong>Name:</strong> {{ water_params.hydrologicParamaters.name }}</p>
+        <p><strong>Water Spread Area:</strong> {{ water_params.hydrologicParamaters.waterSpreadArea }}</p>
+        <p><strong>Original Capacity:</strong> {{ water_params.hydrologicParamaters.originalCapacity }}</p>
+        <p><strong>No. of Fillings:</strong> {{ water_params.hydrologicParamaters.noOfFillings }}</p>
+        <p><strong>Month of First Filling:</strong> {{ water_params.hydrologicParamaters.monthOfFirstFilling }}</p>
+
+        <h2>Sources of Supply</h2>
+        <p><strong>Sources:</strong> {{ water_params.hydrologicParamaters.sourcesOfSupply }}</p>
+        
+        <h2>Issues in Water Spread Area</h2>
+        <p><strong>Issues:</strong> {{ water_params.waterSpreadAreaDetails.issuesInWaterSpreadArea }}</p>
+
+        <!-- Add more sections based on what you need to display -->
+    {% else %}
+        <p>No data available for this water body.</p>
+    {% endif %}
+
+</body>
+</html>

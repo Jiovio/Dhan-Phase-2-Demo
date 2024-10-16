@@ -305,3 +305,38 @@ class CatchmentType(models.Model):
 
     def __str__(self):
         return self.name
+class TankData(models.Model):
+    tank_num = models.CharField(max_length=100)  # TANK_NUM
+    unique_id = models.CharField(max_length=100)  # Unique_id
+    tank_name = models.CharField(max_length=200)  # Tank_Name
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)  # Latitude
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)  # Longitude
+    village = models.CharField(max_length=200)  # Village
+    block = models.CharField(max_length=200)  # Block
+    taluk = models.CharField(max_length=200)  # Taluk
+    district = models.CharField(max_length=200)  # District
+    subbasin = models.CharField(max_length=200)  # Subbasin
+    basin = models.CharField(max_length=200)  # Basin
+    section = models.CharField(max_length=200)  # Section
+    sub_dn = models.CharField(max_length=200)  # Sub_Dn
+    division = models.CharField(max_length=200)  # Division
+    circle = models.CharField(max_length=200)  # Circle
+    region = models.CharField(max_length=200)  # Region
+    tank_type = models.CharField(max_length=100)  # Tank_Type
+    cap_mcm = models.DecimalField(max_digits=10, decimal_places=3)  # Cap_MCM
+    ftl_m = models.DecimalField(max_digits=6, decimal_places=3)  # FTL_m
+    mwl_m = models.DecimalField(max_digits=6, decimal_places=3)  # MWL_m
+    tbl_m = models.DecimalField(max_digits=6, decimal_places=3)  # TBL_m
+    sto_dep_m = models.DecimalField(max_digits=6, decimal_places=3)  # Sto_Dep_m
+    ayacut_ha = models.DecimalField(max_digits=10, decimal_places=3)  # Ayacut_ha
+    catch_sqkm = models.DecimalField(max_digits=10, decimal_places=3)  # Catch_sqkm
+    wat_spr_ha = models.DecimalField(max_digits=10, decimal_places=3)  # Wat_Spr_ha
+    no_of_weir = models.IntegerField()  # No_of_Weir
+    weir_len_m = models.DecimalField(max_digits=10, decimal_places=3)  # Weir_Len_m
+    no_sluice = models.IntegerField()  # No_Sluice
+    low_sil_m = models.DecimalField(max_digits=10, decimal_places=3)  # Low_Sil_m
+    bund_len_m = models.DecimalField(max_digits=10, decimal_places=3)  # Bund_Len_m
+    dis_cusec = models.DecimalField(max_digits=10, decimal_places=3)  # Dis_cusec
+
+    def __str__(self):
+        return self.tank_name

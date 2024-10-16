@@ -79,7 +79,8 @@ from .models import BundFunctionalities
 from .models import Habitation
 
 from .models import CatchmentType
-
+from django_filters import FilterSet, CharFilter
+from .models import TankData
 from .models import BoundaryDropPoints
 from .forms import BoundaryDropPointsForm
 from .models import BundIssues
@@ -152,10 +153,10 @@ def delete_waterbody(request, pk):
 def dashboardanalytics(request):
     # Get the count of records in the PoOwaterbody model
     waterbodies_count = PoOwaterbody.objects.count()
-
+    
     # Get the count of records in the WaterbodiesTank model
     tanks_count = WaterbodiesTank.objects.count()
-
+    total_tank_data_count = TankData.objects.count() 
     # Fetch all water bodies
     waterbodies = WaterBody.objects.all()
 
@@ -246,6 +247,8 @@ def dashboardanalytics(request):
         'kml_files_json': kml_files_json,
         'total_field_workers_count': total_field_workers_count,
         'total_reviewer_responses_count': total_reviewer_responses_count,
+        'total_tank_data_count': total_tank_data_count,
+        
     }
 
     # Render the dashboard analytical template with the context
@@ -1289,3 +1292,65 @@ def water_body_details(request):
     # Pass the data and error message (if any) to the template
     return render(request, 'waterparams.html', {'water_params': water_params, 'error_message': error_message})
 
+def fetch_water_body_data(request):
+    api_url = "http://waterbody.cloudonweb.in:5000/waterBodyAdmin/waterBodyFieldReviewerResponse/14d56954-7aab-44ba-8b7d-2b3b866fac4a/"
+    
+    try:
+        # Make the API request
+        response = requests.get(api_url)
+        response.raise_for_status()  # Check for HTTP errors
+        
+        # Get the main API response data
+        data = response.json()
+
+        # Parse the "waterParams" field which is a stringified JSON
+        water_params_raw = data.get("waterParams", "{}")
+        
+        # Safely load the stringified JSON from "waterParams"
+        water_params = json.loads(water_params_raw)
+
+    except (requests.RequestException, json.JSONDecodeError) as e:
+        # Handle potential errors
+        print(f"Error fetching data: {e}")
+        return HttpResponse("Error fetching data", status=500)
+
+    # Pass the parsed water_params to the template
+    return render(request, 'demofetch.html', {'water_params': water_params})
+
+
+
+# The main view that handles listing, filtering, and pagination
+def tank_data_list_view(request):
+    search_query = request.GET.get('q', '')  # Search query
+    filtered_tank_data = TankData.objects.filter(tank_name__icontains=search_query) if search_query else TankData.objects.all()
+    
+    # Count the total number of tank data entries
+    total_tank_data_count = filtered_tank_data.count()
+
+    # Paginate the results (10 entries per page)
+    paginator = Paginator(filtered_tank_data, 10)
+    page_number = request.GET.get('page')
+    paginated_tank_data = paginator.get_page(page_number)
+
+    return render(request, 'tank_data_list.html', {
+        'page_obj': paginated_tank_data,
+        'search_query': search_query,
+        'total_tank_data_count': total_tank_data_count  # Include the count in the context
+    })
+
+@csrf_exempt
+def update_tankdata(request, pk):
+    tank = get_object_or_404(TankData, pk=pk)
+    if request.method == 'POST':
+        tank.tank_name = request.POST.get('tank_name')
+        tank.latitude = request.POST.get('latitude')
+        tank.longitude = request.POST.get('longitude')
+        tank.save()
+        return JsonResponse({'message': 'Tank updated successfully'})
+
+@csrf_exempt
+def delete_tankdata(request, pk):
+    tank = get_object_or_404(TankData, pk=pk)
+    if request.method == 'POST':
+        tank.delete()
+        return JsonResponse({'message': 'Tank deleted successfully'})

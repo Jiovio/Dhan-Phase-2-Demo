@@ -50,7 +50,7 @@ from .views import fencetype_list, fencetype_update, fencetype_delete
 from .views import taluk_list, taluk_update, taluk_delete
 from .views import habitation_list, habitation_update, habitation_delete
 from .views import taluk_list, taluk_update, taluk_delete
-
+from .views import waterbody_table_view, waterbody_detail_view
 from waterbodies_app.views import waterbodies_tank_list
 urlpatterns = [
     path('', index, name='index'),
@@ -160,6 +160,11 @@ urlpatterns = [
      path('pwdtank', views.tank_data_list_view, name='pwdtank_list'),
     path('update/<int:pk>/', views.update_tankdata, name='update_tankdata'),
     path('delete/<int:pk>/', views.delete_tankdata, name='delete_tankdata'),
+    
+    path('api/waterbody/', views.WaterBodyFieldReviewerReviewDetailListCreateAPIView.as_view(), name='waterbody-list-create'),
+    path('api/waterbody/<uuid:pk>/', views.WaterBodyFieldReviewerReviewDetailRetrieveUpdateDestroyAPIView.as_view(), name='waterbody-detail'),
+    path('waterbody-table/', waterbody_table_view, name='waterbody-table'),  # Table view
+    path('waterbody-detail/<uuid:pk>/', waterbody_detail_view, name='waterbody-detail'),
 ]
     # Add more URL patterns for your app...
 

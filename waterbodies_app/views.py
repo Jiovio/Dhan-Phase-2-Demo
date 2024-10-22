@@ -85,6 +85,8 @@ from .models import BoundaryDropPoints
 from .forms import BoundaryDropPointsForm
 from .models import BundIssues
 from waterbodies_app.models import Jurisdiction
+from .models import WaterBodyFieldReviewerReviewDetail
+from .serializers import WaterBodyFieldReviewerReviewDetailListSerializer, WaterBodyFieldReviewerReviewDetailSerializer
 logger = logging.getLogger(__name__)
 def water_body_details(request, water_body_id):
     try:
@@ -267,7 +269,11 @@ def index(request):
 
     # Fetch all water bodies
     waterbodies = WaterBody.objects.all()
-
+    waterbodies_count = PoOwaterbody.objects.count()
+    
+    # Get the count of records in the WaterbodiesTank model
+    tanks_count = WaterbodiesTank.objects.count()
+    total_tank_data_count = TankData.objects.count() 
     # Fetch all KML files and convert their URLs to JSON
     fs = FileSystemStorage()
     kml_files = KMLFilesz.objects.all()
@@ -280,6 +286,9 @@ def index(request):
     return render(request, 'index.html', {
         'waterbodies': waterbodies,
         'kml_files_json': kml_files_json,
+        'waterbodies_count': waterbodies_count,
+        'tanks_count': tanks_count,
+        'total_tank_data_count': total_tank_data_count,
         'form': form
     })
 def admin_login(request):
@@ -1354,3 +1363,19 @@ def delete_tankdata(request, pk):
     if request.method == 'POST':
         tank.delete()
         return JsonResponse({'message': 'Tank deleted successfully'})
+    
+class WaterBodyFieldReviewerReviewDetailListCreateAPIView(generics.ListCreateAPIView):
+    queryset = WaterBodyFieldReviewerReviewDetail.objects.all()
+    serializer_class = WaterBodyFieldReviewerReviewDetailListSerializer
+
+class WaterBodyFieldReviewerReviewDetailRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = WaterBodyFieldReviewerReviewDetail.objects.all()
+    serializer_class = WaterBodyFieldReviewerReviewDetailSerializer
+    
+def waterbody_table_view(request):
+    waterbodies = WaterBodyFieldReviewerReviewDetail.objects.all()  # Fetch all records from the database
+    return render(request, 'testjson.html', {'waterbodies': waterbodies})  # Pass the records to the template
+
+def waterbody_detail_view(request, pk):
+    waterbody = get_object_or_404(WaterBodyFieldReviewerReviewDetail, pk=pk)
+    return render(request, 'jsondtails.html', {'waterbody': waterbody})

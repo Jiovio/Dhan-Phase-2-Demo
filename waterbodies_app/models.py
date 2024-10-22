@@ -1,6 +1,7 @@
 # waterbodies_app/models.py
 
 from django.db import models
+from uuid import uuid4
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 class WaterBody(models.Model):
@@ -340,3 +341,30 @@ class TankData(models.Model):
 
     def __str__(self):
         return self.tank_name
+    
+class WaterBodyFieldReviewerReviewDetail(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)  # Use uuid4 to generate unique IDs
+    surveyNumber = models.CharField(max_length=255, blank=True)
+    waterBodyAvailability = models.BooleanField(default=True)
+    waterbodyType = models.CharField(max_length=255, blank=True)
+    waterbodyId = models.CharField(max_length=255, blank=True)
+    waterbodyName = models.CharField(max_length=255, blank=True)
+    district = models.CharField(max_length=255, blank=True)
+    taluk = models.CharField(max_length=255, blank=True)
+    block = models.CharField(max_length=255, blank=True)
+    panchayat = models.CharField(max_length=255, blank=True)
+    village = models.CharField(max_length=255, blank=True)
+    jurisdiction = models.CharField(max_length=255, blank=True)
+    name = models.CharField(max_length=255, blank=True)
+    ward = models.CharField(max_length=255, blank=True)
+    waterParams = models.JSONField()
+    gpsCordinates = models.JSONField()
+    draft_status = models.IntegerField()
+    verify_status = models.IntegerField()
+    createdBy = models.CharField(max_length=255)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    lastModifiedBy = models.CharField(max_length=255, blank=True)
+    lastModifiedDate = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.waterbodyName

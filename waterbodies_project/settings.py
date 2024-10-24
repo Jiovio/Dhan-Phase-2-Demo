@@ -16,14 +16,17 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']  # Directory for static files during development
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+DEBUG = True
+if DEBUG:
+        STATICFILES_DIRS = [BASE_DIR / 'static']  # Directory for static files during development
+else:
+        STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-uo8w^&c_1-u@2gun(&_xof4!s@n%eh27$g4$ig_nt=)qm3guq&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
 
 ALLOWED_HOSTS = ['43.205.187.160', 'localhost', '127.0.0.1']
  # Allowing all hosts temporarily for development, adjust as needed

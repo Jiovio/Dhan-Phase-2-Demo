@@ -4,6 +4,7 @@ from django.db import models
 from uuid import uuid4
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
+
 class WaterBody(models.Model):
     Tank_Name = models.CharField(max_length=255)
     Latitude = models.FloatField()
@@ -368,3 +369,9 @@ class WaterBodyFieldReviewerReviewDetail(models.Model):
 
     def __str__(self):
         return self.waterbodyName
+    
+class Cropings(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name    

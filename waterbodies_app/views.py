@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from .models import Cropings
 from .forms import WaterbodyFilterForm, PoOwaterbodyForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import WaterBody
@@ -1188,6 +1189,26 @@ def catchment_type_delete(request):
         catchment_type = get_object_or_404(CatchmentType, pk=catchment_type_id)
         catchment_type.delete()
         return redirect('catchment_type_list')
+def cropings_list(request):
+    cropings = Cropings.objects.all()
+    return render(request, 'cropings_list.html', {'cropings': cropings})
+
+# Update croping entry
+def cropings_update(request):
+    if request.method == 'POST':
+        croping_id = request.POST.get('id')
+        croping = get_object_or_404(Cropings, pk=croping_id)
+        croping.name = request.POST.get('name')
+        croping.save()
+        return redirect('cropings_list')
+
+# Delete croping entry
+def cropings_delete(request):
+    if request.method == 'POST':
+        croping_id = request.POST.get('id')
+        croping = get_object_or_404(Cropings, pk=croping_id)
+        croping.delete()
+        return redirect('cropings_list')
 def details_view(request):  
     # You can pass context data to the template if needed
     context = {}
@@ -1379,3 +1400,23 @@ def waterbody_table_view(request):
 def waterbody_detail_view(request, pk):
     waterbody = get_object_or_404(WaterBodyFieldReviewerReviewDetail, pk=pk)
     return render(request, 'jsondtails.html', {'waterbody': waterbody})
+
+def overlay_map_view(request):
+    waterbody_name = request.GET.get('name')
+    
+    # Fetch the waterbody object; show 404 if not found
+    waterbody = get_object_or_404(WaterBody, waterbodyName=waterbody_name)
+    
+    # Fetch the matching KML file based on the waterbody name
+    kml_file = KMLFilesz.objects.filter(name=waterbody_name).first()
+    fs = FileSystemStorage()
+
+    # Build the KML file URL if the file is available
+    kml_file_url = fs.url(kml_file.kml_file.name) if kml_file else None
+
+    context = {
+        'waterbody': waterbody,
+        'kml_file_url': kml_file_url,
+    }
+    
+    return render(request, 'overlay_map.html', context)

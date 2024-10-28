@@ -516,13 +516,45 @@ data-template="vertical-menu-template-free">
                                         </div>
                                     </div>
                                 </form>
+
                             </div>
                         </div>
                     </div>
-                </div>
+                
+                  </div>
             </div>
             
+            <h2>GPS Coordinates</h2>
+    <div id="map"></div>
+    
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Extract GPS coordinates from the JSON field (replace long with lng)
+        const gpsCoordinates = {{ waterbody.gpsCordinates|safe }};
+        
+        if (Array.isArray(gpsCoordinates)) {
+            // Convert the gpsCoordinates into a format suitable for a polygon
+            const polygonPoints = gpsCoordinates.map(coord => [coord.lat, coord.long]);
+    
+            // Initialize the map with the first GPS coordinate
+            const map = L.map('map').setView([gpsCoordinates[0].lat, gpsCoordinates[0].long], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    
+            // Add the polygon to the map
+            const polygon = L.polygon(polygonPoints, {
+                color: '#0000FF',      // Polygon border color
+                fillColor: '#0000FF',  // Polygon fill color
+                fillOpacity: 0.5       // Opacity of the fill color
+            }).addTo(map);
             
+            // Optional: Fit the map to the polygon bounds
+            map.fitBounds(polygon.getBounds());
+        } else {
+            console.error("Invalid GPS data format:", gpsCoordinates);
+        }
+    </script>
+    
             <!-- / Content -->
 
             <!-- Footer >

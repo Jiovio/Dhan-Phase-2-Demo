@@ -1399,7 +1399,14 @@ def waterbody_table_view(request):
 
 def waterbody_detail_view(request, pk):
     waterbody = get_object_or_404(WaterBodyFieldReviewerReviewDetail, pk=pk)
-    return render(request, 'jsondtails.html', {'waterbody': waterbody})
+
+    # Parse the JSON data if it's stored as a string in the model
+    try:
+        waterbody_data = json.loads(waterbody.waterParams)  # Adjust this line based on your model field
+    except (ValueError, TypeError) as e:
+        waterbody_data = {}
+
+    return render(request, 'jsondtails.html', {'waterbody': waterbody, 'waterbody_data': waterbody_data})
 
 def overlay_map_view(request):
     waterbody_name = request.GET.get('name')

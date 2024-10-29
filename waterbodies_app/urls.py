@@ -51,7 +51,7 @@ from .views import taluk_list, taluk_update, taluk_delete
 from .views import habitation_list, habitation_update, habitation_delete
 from .views import taluk_list, taluk_update, taluk_delete
 from .views import waterbody_table_view, waterbody_detail_view
-from .views import overlay_map_view 
+
 from waterbodies_app.views import waterbodies_tank_list
 urlpatterns = [
     path('', index, name='index'),
@@ -166,7 +166,7 @@ urlpatterns = [
     path('api/waterbody/<uuid:pk>/', views.WaterBodyFieldReviewerReviewDetailRetrieveUpdateDestroyAPIView.as_view(), name='waterbody-detail'),
     path('waterbody-table/', waterbody_table_view, name='waterbody-table'),  # Table view
     path('waterbody-detail/<uuid:pk>/', waterbody_detail_view, name='waterbody-detail'),
-    path('overlay-map/', overlay_map_view, name='overlay_map'),  # Add this line
+     # Add this line
     path('cropings/', views.cropings_list, name='cropings_list'),
     path('cropings/update/', views.cropings_update, name='cropings_update'),
     path('cropings/delete/', views.cropings_delete, name='cropings_delete'),

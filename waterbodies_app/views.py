@@ -1394,8 +1394,36 @@ class WaterBodyFieldReviewerReviewDetailRetrieveUpdateDestroyAPIView(generics.Re
     serializer_class = WaterBodyFieldReviewerReviewDetailSerializer
     
 def waterbody_table_view(request):
-    waterbodies = WaterBodyFieldReviewerReviewDetail.objects.all()  # Fetch all records from the database
-    return render(request, 'testjson.html', {'waterbodies': waterbodies})  # Pass the records to the template
+    # Fetch all records initially
+    waterbodies = WaterBodyFieldReviewerReviewDetail.objects.all()
+    
+    # Get filter parameters from the request
+    block_filter = request.GET.get('block')
+    taluk_filter = request.GET.get('taluk')
+    waterbody_type_filter = request.GET.get('waterbodyType')
+    village_filter = request.GET.get('village')
+    waterbody_name_filter = request.GET.get('waterbodyName')
+    survey_number_filter = request.GET.get('surveyNumber')
+    waterbody_id_filter = request.GET.get('waterbodyId')
+
+    # Apply filters if they are provided
+    if block_filter:
+        waterbodies = waterbodies.filter(block__icontains=block_filter)
+    if taluk_filter:
+        waterbodies = waterbodies.filter(taluk__icontains=taluk_filter)
+    if waterbody_type_filter:
+        waterbodies = waterbodies.filter(waterbodyType=waterbody_type_filter)
+    if village_filter:
+        waterbodies = waterbodies.filter(village__icontains=village_filter)
+    if waterbody_name_filter:
+        waterbodies = waterbodies.filter(waterbodyName__icontains=waterbody_name_filter)
+    if survey_number_filter:
+        waterbodies = waterbodies.filter(surveyNumber__icontains=survey_number_filter)
+    if waterbody_id_filter:
+        waterbodies = waterbodies.filter(waterbodyId__icontains=waterbody_id_filter)
+
+    # Render the template with the filtered waterbodies
+    return render(request, 'testjson.html', {'waterbodies': waterbodies})
 
 def waterbody_detail_view(request, pk):
     waterbody = get_object_or_404(WaterBodyFieldReviewerReviewDetail, pk=pk)
@@ -1408,22 +1436,3 @@ def waterbody_detail_view(request, pk):
 
     return render(request, 'jsondtails.html', {'waterbody': waterbody, 'waterbody_data': waterbody_data})
 
-def overlay_map_view(request):
-    waterbody_name = request.GET.get('name')
-    
-    # Fetch the waterbody object; show 404 if not found
-    waterbody = get_object_or_404(WaterBody, waterbodyName=waterbody_name)
-    
-    # Fetch the matching KML file based on the waterbody name
-    kml_file = KMLFilesz.objects.filter(name=waterbody_name).first()
-    fs = FileSystemStorage()
-
-    # Build the KML file URL if the file is available
-    kml_file_url = fs.url(kml_file.kml_file.name) if kml_file else None
-
-    context = {
-        'waterbody': waterbody,
-        'kml_file_url': kml_file_url,
-    }
-    
-    return render(request, 'overlay_map.html', context)

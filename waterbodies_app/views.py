@@ -1425,14 +1425,72 @@ def waterbody_table_view(request):
     # Render the template with the filtered waterbodies
     return render(request, 'testjson.html', {'waterbodies': waterbodies})
 
+
+
 def waterbody_detail_view(request, pk):
+    # Fetch the water body object by primary key
     waterbody = get_object_or_404(WaterBodyFieldReviewerReviewDetail, pk=pk)
 
-    # Parse the JSON data if it's stored as a string in the model
+    # Parse the JSON data from the model field
     try:
         waterbody_data = json.loads(waterbody.waterParams)  # Adjust this line based on your model field
-    except (ValueError, TypeError) as e:
+    except (ValueError, TypeError):
         waterbody_data = {}
 
-    return render(request, 'jsondtails.html', {'waterbody': waterbody, 'waterbody_data': waterbody_data})
+    # Extract relevant data sections
+    hydrologic_parameters = waterbody_data.get('hydrologicParamaters', {})
+    water_spread_area_details = waterbody_data.get('waterSpreadAreaDetails', {})
+    embankment_details = waterbody_data.get('embankmentDetails', {})
+    inlet_parameters = waterbody_data.get('inletParameters', {})
+    future_activities = waterbody_data.get('futureActivities', {}).get('activitiesUndertaken', "[]")
+    
+    # Convert future activities string into a list
+    future_activities = json.loads(future_activities)
 
+    # Predefined unit rates for activities
+    UNIT_RATES = {
+        "Earthwork/Desilting/Bund Strengthening": 80,
+    "Retaining Wall Construction": 29250,
+    "Inlet Construction": 350000,
+    "Outlet Construction": 400000,
+    "Revetment Construction": 80000,
+    "Ghat Construction": 500000,
+    "Jungle Clearance": 8,
+    "Walking Pavement Construction": 2000,
+    "Fencing/Wall Construction": 820,
+    "Restoration of Supply Channel": 42,
+    "Creation of New Supply Channel": 560,
+    "Repair of Sluice": 700000,
+    "Surplus Weir": 180000,
+    "Tree Plantation": 450,
+    "Construction/Repair of Well": 350000,
+    "Bund creation": 80,
+    }
+
+    # Calculate estimated costs for future activities
+    estimated_costs = []
+    for activity in future_activities:
+        unit_rate = UNIT_RATES.get(activity, 0)  # Use predefined unit rate or 0 if not found
+        value = 1  # Assuming a default value of 1; modify as needed for actual values
+        estimated_cost = value * unit_rate
+
+        estimated_costs.append({
+            'activity': activity,
+            'value': value,
+            'unit_rate': unit_rate,
+            'estimated_cost': estimated_cost,
+        })
+
+    # Pass all data sections to the template
+    context = {
+        'waterbody': waterbody,
+        'waterbody_data': waterbody_data,
+        'hydrologic_parameters': hydrologic_parameters,
+        'water_spread_area_details': water_spread_area_details,
+        'embankment_details': embankment_details,
+        'inlet_parameters': inlet_parameters,
+        'future_activities': future_activities,
+        'estimated_costs': estimated_costs,
+    }
+
+    return render(request, 'jsondetails.html', context)

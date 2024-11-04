@@ -78,7 +78,7 @@ from .forms import ContactForm
 from .models import Taluk
 from .models import BundFunctionalities
 from .models import Habitation
-
+import re
 from .models import CatchmentType
 from django_filters import FilterSet, CharFilter
 from .models import TankData
@@ -156,7 +156,7 @@ def delete_waterbody(request, pk):
 def dashboardanalytics(request):
     # Get the count of records in the PoOwaterbody model
     waterbodies_count = PoOwaterbody.objects.count()
-    
+    waterbody_count = WaterBodyFieldReviewerReviewDetail.objects.count()
     # Get the count of records in the WaterbodiesTank model
     tanks_count = WaterbodiesTank.objects.count()
     total_tank_data_count = TankData.objects.count() 
@@ -251,6 +251,7 @@ def dashboardanalytics(request):
         'total_field_workers_count': total_field_workers_count,
         'total_reviewer_responses_count': total_reviewer_responses_count,
         'total_tank_data_count': total_tank_data_count,
+        'waterbody_count' : waterbody_count,
         
     }
 
@@ -269,6 +270,7 @@ def index(request):
         form = ContactForm()
 
     # Fetch all water bodies
+    waterbody_count = WaterBodyFieldReviewerReviewDetail.objects.count()
     waterbodies = WaterBody.objects.all()
     waterbodies_count = PoOwaterbody.objects.count()
     
@@ -290,6 +292,7 @@ def index(request):
         'waterbodies_count': waterbodies_count,
         'tanks_count': tanks_count,
         'total_tank_data_count': total_tank_data_count,
+        'waterbody_count ': waterbody_count, 
         'form': form
     })
 def admin_login(request):
@@ -1351,10 +1354,21 @@ def fetch_water_body_data(request):
 
 # The main view that handles listing, filtering, and pagination
 def tank_data_list_view(request):
-    search_query = request.GET.get('q', '')  # Search query
-    filtered_tank_data = TankData.objects.filter(tank_name__icontains=search_query) if search_query else TankData.objects.all()
-    
-    # Count the total number of tank data entries
+    # Get filter parameters from the request
+    search_query = request.GET.get('q', '')       # Tank name search query
+    village_query = request.GET.get('village', '')  # Village filter
+    block_query = request.GET.get('block', '')     # Block filter
+
+    # Apply filters based on the provided query parameters
+    filtered_tank_data = TankData.objects.all()
+    if search_query:
+        filtered_tank_data = filtered_tank_data.filter(tank_name__icontains=search_query)
+    if village_query:
+        filtered_tank_data = filtered_tank_data.filter(village__icontains=village_query)
+    if block_query:
+        filtered_tank_data = filtered_tank_data.filter(block__icontains=block_query)
+
+    # Count the total number of tank data entries after filtering
     total_tank_data_count = filtered_tank_data.count()
 
     # Paginate the results (10 entries per page)
@@ -1365,9 +1379,10 @@ def tank_data_list_view(request):
     return render(request, 'tank_data_list.html', {
         'page_obj': paginated_tank_data,
         'search_query': search_query,
+        'village_query': village_query,
+        'block_query': block_query,
         'total_tank_data_count': total_tank_data_count  # Include the count in the context
     })
-
 @csrf_exempt
 def update_tankdata(request, pk):
     tank = get_object_or_404(TankData, pk=pk)
@@ -1421,67 +1436,118 @@ def waterbody_table_view(request):
         waterbodies = waterbodies.filter(surveyNumber__icontains=survey_number_filter)
     if waterbody_id_filter:
         waterbodies = waterbodies.filter(waterbodyId__icontains=waterbody_id_filter)
-
+    waterbody_count = waterbodies.count()
     # Render the template with the filtered waterbodies
     return render(request, 'testjson.html', {'waterbodies': waterbodies})
 
+def calculate_estimated_cost_and_rate(activity, json_data):
+    """
+    Calculate the estimated cost and unit rate for different activities.
+    """
+    if activity == "Earthwork/Desilting/Bund Strengthening":
+        # Extract bund details from the JSON data
+        bund_details = json_data.get('bundDetails', {})
+        slope_foreside = bund_details.get('slopeforeside', '1:0').split(':')
+        slope_rearside = bund_details.get('sloperearside', '1:0').split(':')
 
+        # Convert slope values to float (default to 0 if not provided)
+        y = float(slope_foreside[1]) if len(slope_foreside) > 1 else 0
+        z = float(slope_rearside[1]) if len(slope_rearside) > 1 else 0
+
+        top_width = float(bund_details.get('bundtopwidth', 0))
+        length_of_bund = float(bund_details.get('bundlength', 0))
+        SOR = 80  # Standard Operating Rate
+
+        # Calculate estimated cost
+        estimated_cost = (27.75 - (3 * y + 3 * z + top_width)) * length_of_bund * SOR
+        return max(estimated_cost, 0), SOR  # Ensure cost is non-negative
+
+    elif activity == "Jungle Clearance":
+        # Extract water spread area details
+        water_spread_details = json_data.get('waterSpreadAreaDetails', {})
+        water_spread_area = float(water_spread_details.get('waterSpreadArea', 0))  # in hectares
+        percentage_spread = water_spread_details.get('percentageOfSpread', '')
+
+        # Handle cases like "<25%" by extracting numeric value
+        try:
+            percentage_value = float(''.join(filter(str.isdigit, percentage_spread))) or 0
+        except ValueError:
+            percentage_value = 0
+
+        SOR = 8  # Standard Operating Rate for Jungle Clearance
+
+        # Calculate area and estimated cost
+        if water_spread_area > 0 and percentage_value > 0:
+            area_in_sq_m = water_spread_area * 10000 * (percentage_value / 100)
+            estimated_cost = area_in_sq_m * SOR
+            return estimated_cost, SOR
+        return 0.0, SOR
+
+    elif activity == "Retaining wall construction":
+        # Use bund length for calculation
+        bund_details = json_data.get('bundDetails', {})
+        bund_length = float(bund_details.get('bundlength', 0))
+
+        SOR = 29250  # Rate per running meter
+
+        if bund_length > 0:
+            estimated_cost = bund_length * SOR
+            return estimated_cost, SOR
+        return 0.0, SOR
+
+    return 0.0, 0  # Default case if activity does not match
 
 def waterbody_detail_view(request, pk):
-    # Fetch the water body object by primary key
+    """
+    View function to display water body details, including cost calculations.
+    """
+    # Get the waterbody object based on the primary key
     waterbody = get_object_or_404(WaterBodyFieldReviewerReviewDetail, pk=pk)
 
-    # Parse the JSON data from the model field
     try:
-        waterbody_data = json.loads(waterbody.waterParams)  # Adjust this line based on your model field
+        waterbody_data = json.loads(waterbody.waterParams)
     except (ValueError, TypeError):
         waterbody_data = {}
 
-    # Extract relevant data sections
+    # Extract relevant sections from the JSON
     hydrologic_parameters = waterbody_data.get('hydrologicParamaters', {})
     water_spread_area_details = waterbody_data.get('waterSpreadAreaDetails', {})
-    embankment_details = waterbody_data.get('embankmentDetails', {})
-    inlet_parameters = waterbody_data.get('inletParameters', {})
+    embankment_details = waterbody_data.get('bundDetails', {})
+    inlet_parameters = waterbody_data.get('sluiceParameters', {})
     future_activities = waterbody_data.get('futureActivities', {}).get('activitiesUndertaken', "[]")
-    
-    # Convert future activities string into a list
-    future_activities = json.loads(future_activities)
 
-    # Predefined unit rates for activities
+    # Parse future activities if they are in string format
+    try:
+        future_activities = json.loads(future_activities)
+    except json.JSONDecodeError:
+        future_activities = []
+
+    # Define unit rates for fixed activities
     UNIT_RATES = {
+        "Surplus Weir": 180000,
+        "Jungle Clearance": 8,
         "Earthwork/Desilting/Bund Strengthening": 80,
-    "Retaining Wall Construction": 29250,
-    "Inlet Construction": 350000,
-    "Outlet Construction": 400000,
-    "Revetment Construction": 80000,
-    "Ghat Construction": 500000,
-    "Jungle Clearance": 8,
-    "Walking Pavement Construction": 2000,
-    "Fencing/Wall Construction": 820,
-    "Restoration of Supply Channel": 42,
-    "Creation of New Supply Channel": 560,
-    "Repair of Sluice": 700000,
-    "Surplus Weir": 180000,
-    "Tree Plantation": 450,
-    "Construction/Repair of Well": 350000,
-    "Bund creation": 80,
+        "Retaining wall construction": 29250,
     }
 
-    # Calculate estimated costs for future activities
+    # Calculate costs for each future activity
     estimated_costs = []
     for activity in future_activities:
-        unit_rate = UNIT_RATES.get(activity, 0)  # Use predefined unit rate or 0 if not found
-        value = 1  # Assuming a default value of 1; modify as needed for actual values
-        estimated_cost = value * unit_rate
+        if activity in ["Earthwork/Desilting/Bund Strengthening", "Jungle Clearance", "Retaining wall construction"]:
+            estimated_cost, unit_rate = calculate_estimated_cost_and_rate(activity, waterbody_data)
+        else:
+            unit_rate = UNIT_RATES.get(activity, 0)
+            value = 1  # Default value for non-dynamic activities
+            estimated_cost = value * unit_rate
 
         estimated_costs.append({
             'activity': activity,
-            'value': value,
-            'unit_rate': unit_rate,
+            'value': "-" if activity in ["Earthwork/Desilting/Bund Strengthening", "Jungle Clearance", "Retaining wall construction"] else value,
+            'unit_rate': unit_rate or "-",
             'estimated_cost': estimated_cost,
         })
 
-    # Pass all data sections to the template
+    # Prepare context data for the template
     context = {
         'waterbody': waterbody,
         'waterbody_data': waterbody_data,
@@ -1493,4 +1559,5 @@ def waterbody_detail_view(request, pk):
         'estimated_costs': estimated_costs,
     }
 
+    # Render the template with the context
     return render(request, 'jsondetails.html', context)

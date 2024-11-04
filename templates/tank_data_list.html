@@ -12,7 +12,7 @@ data-template="vertical-menu-template-free">
     {% load static %}
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
-    <title>Availability</title>
+    <title>PWD Tanks</title>
     <meta name="description" content=""/>
 
     <!-- Favicon -->
@@ -78,12 +78,12 @@ data-template="vertical-menu-template-free">
                     <div data-i18n="CRM">Location Master</div>
                   </a>
                   <ul class="menu-sub">
-                    <li class="submenu-item"><a href="#" class="submenu-link">District</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Block</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Taluk</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">District</a></li>
+                    <li class="submenu-item"><a href="" class="submenu-link">Block</a></li>
+                    <li class="submenu-item"><a href="{% url 'taluk_list' %}" class="submenu-link">Taluk</a></li>
                     <li class="submenu-item"><a href="#" class="submenu-link">Panchayat</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Jurisdiction</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Habitation</a></li>
+                    <li class="submenu-item"><a href="{% url 'jurisdiction_list' %}" class="submenu-link">Jurisdiction</a></li>
+                    <li class="submenu-item"><a href="{% url 'habitation_list' %}" class="submenu-link">Habitation</a></li>
                     <li class="submenu-item"><a href="#" class="submenu-link">Urban Local Bodies</a></li>
                   </ul>
                 </li>
@@ -94,36 +94,36 @@ data-template="vertical-menu-template-free">
                     <div data-i18n="Academy">Waterbody Master</div>
                   </a>
                   <ul class="menu-sub">
-                    <li class="submenu-item"><a href="#" class="submenu-link">Availability</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Ayacutnoncultivation</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Boundary Drop Points</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Bund Issue</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Barrel Type</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Bund Functionality</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Conditions</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Catchment Type</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Cropping</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Cross Section Type</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Distribution Land</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Depth Sill Level</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Exotic Species</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Family Nature</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Field Channel Type</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Fence Condition</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Fence Type</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Ghat Condition</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">
+                    <li class="submenu-item"><a href="{% url 'availability_list' %}" class="submenu-link">Availability</a></li>
+                    <li class="submenu-item"><a href="{% url 'ayacut_non_cultivation_list' %}" class="submenu-link">Ayacutnoncultivation</a></li>
+                    <li class="submenu-item"><a href="{% url 'boundary_drop_points_list' %}" class="submenu-link">Boundary Drop Points</a></li>
+                    <li class="submenu-item"><a href="{% url 'bund_issues_list' %}" class="submenu-link">Bund Issue</a></li>
+                    <li class="submenu-item"><a href="{% url 'barrel_type_list' %}" class="submenu-link">Barrel Type</a></li>
+                    <li class="submenu-item"><a href="{% url 'bund_functionality_list' %}" class="submenu-link">Bund Functionality</a></li>
+                    <li class="submenu-item"><a href="{% url 'conditions_list' %}" class="submenu-link">Conditions</a></li>
+                    <li class="submenu-item"><a href="{% url 'catchment_type_list' %}" class="submenu-link">Catchment Type</a></li>
+                    <li class="submenu-item"><a href="{% url 'cropings_list' %}" class="submenu-link">Cropping</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Cross Section Type</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Distribution Land</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Depth Sill Level</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Exotic Species</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Family Nature</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Field Channel Type</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Fence Condition</a></li>
+                    <li class="submenu-item"><a href="{% url 'fencetype_list' %}" class="submenu-link">Fence Type</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Ghat Condition</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">
                       Inlet Type</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Nature Investment</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Ownership</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Outlet Type</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Oorani Function</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">MWL Stone</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Pitching Condition</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Source</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Spread Issue</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Sluice / Surplus Type</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Surplus Weirs</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Nature Investment</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Ownership</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Outlet Type</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Oorani Function</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">MWL Stone</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Pitching Condition</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Source</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Spread Issue</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Sluice / Surplus Type</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Surplus Weirs</a></li>
                     <li class="submenu-item"><a href="#" class="submenu-link">Slit Trap</a></li>
                     <li class="submenu-item"><a href="#" class="submenu-link">Stream Issue</a></li>
                     <li class="submenu-item"><a href="#" class="submenu-link">Shutter</a></li>
@@ -360,22 +360,41 @@ data-template="vertical-menu-template-free">
             <!-- Content -->
             
             <div class="container-xxl flex-grow-1 container-p-y">
-                <form method="get" action="" class="mt-3">
-                    <div class="row mb-3">
-                        <div class="col-md-3">
-                            <input 
-                                type="text" 
-                                name="q" 
-                                placeholder="Search by Tank Name" 
-                                value="{{ query }}" 
-                                class="form-control"
-                            >
-                        </div>
-                        <div class="col-md-3">
-                            <button type="submit" class="btn btn-primary w-100">Search</button>
-                        </div>
+              <form method="get" action="" class="mt-3">
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <input 
+                            type="text" 
+                            name="q" 
+                            placeholder="Search by Tank Name" 
+                            value="{{ search_query }}" 
+                            class="form-control"
+                        >
                     </div>
-                </form>
+                    <div class="col-md-3">
+                        <input 
+                            type="text" 
+                            name="village" 
+                            placeholder="Search by Village" 
+                            value="{{ village_query }}" 
+                            class="form-control"
+                        >
+                    </div>
+                    <div class="col-md-3">
+                        <input 
+                            type="text" 
+                            name="block" 
+                            placeholder="Search by Block" 
+                            value="{{ block_query }}" 
+                            class="form-control"
+                        >
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                    </div>
+                </div>
+            </form>
+            
               <h4 class="py-3 mb-4"><span class="text-muted fw-light">Table /</span> PWD Tanks</h4>
               <div class="card">
                 <h5 class="card-header">PWD Tanks</h5>
@@ -387,8 +406,7 @@ data-template="vertical-menu-template-free">
                                 <th>Tank Num</th>
                                 <th>Unique ID</th>
                                 <th>Tank Name</th>
-                                <th>Latitude</th>
-                                <th>Longitude</th>
+                                
                                 <th>Village</th>
                                 <th>Block</th>
                                 <th>Taluk</th>
@@ -426,8 +444,7 @@ data-template="vertical-menu-template-free">
                                 <td>{{ tank.tank_num }}</td>
                                 <td>{{ tank.unique_id }}</td>
                                 <td>{{ tank.tank_name }}</td>
-                                <td>{{ tank.latitude }}</td>
-                                <td>{{ tank.longitude }}</td>
+                                
                                 <td>{{ tank.village }}</td>
                                 <td>{{ tank.block }}</td>
                                 <td>{{ tank.taluk }}</td>

@@ -183,7 +183,7 @@ h6 {
   padding: 10px 0 10px 30px;
   font-size: 15px;
   font-weight: 500;
-  font-family: "HCLTech Roobert",sans-serif;
+  font-family: "HCLTech Roobert", sans-serif;
   color: black;
   white-space: nowrap;
   transition: 0.3s;
@@ -308,13 +308,14 @@ h6 {
   }
 
   .navbar ul {
-    display: none;
+    display: none; /* Hide desktop navbar */
   }
 }
 
 .navbar-mobile {
   position: fixed;
   overflow: hidden;
+  display: none; 
   top: 0;
   right: 0;
   left: 0;
@@ -322,6 +323,10 @@ h6 {
   background: rgba(1, 3, 91, 0.9);
   transition: 0.3s;
   z-index: 999;
+}
+
+.navbar-mobile.active {
+  display: block; /* Show when active */
 }
 
 .navbar-mobile .mobile-nav-toggle {

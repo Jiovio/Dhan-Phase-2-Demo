@@ -270,13 +270,14 @@ def index(request):
         form = ContactForm()
 
     # Fetch all water bodies
-    waterbody_count = WaterBodyFieldReviewerReviewDetail.objects.count()
+   
     waterbodies = WaterBody.objects.all()
     waterbodies_count = PoOwaterbody.objects.count()
     
     # Get the count of records in the WaterbodiesTank model
     tanks_count = WaterbodiesTank.objects.count()
     total_tank_data_count = TankData.objects.count() 
+    
     # Fetch all KML files and convert their URLs to JSON
     fs = FileSystemStorage()
     kml_files = KMLFilesz.objects.all()
@@ -292,7 +293,7 @@ def index(request):
         'waterbodies_count': waterbodies_count,
         'tanks_count': tanks_count,
         'total_tank_data_count': total_tank_data_count,
-        'waterbody_count ': waterbody_count, 
+      
         'form': form
     })
 def admin_login(request):

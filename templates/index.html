@@ -385,80 +385,67 @@
         </div>
     
         <div class="row g-0" data-aos="fade-left">
-          <div class="col-lg-3 col-md-4">
+          <!-- Row 1 -->
+          <div class="col-lg-4 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
-              <a href="{%static 'image/wb1.jpg'%}" class="gallery-lightbox">
-                <img src="{%static 'image/wb1.jpg'%}" alt="" class="img-fluid">
+              <a href="{% static 'image/wb1.jpg' %}" class="gallery-lightbox">
+                <img src="{% static 'image/wb1.jpg' %}" alt="Kathiyanoor" class="img-fluid">
               </a>
               <div class="caption">Kathiyanoor</div>
             </div>
           </div>
     
-          <div class="col-lg-3 col-md-4">
+          <div class="col-lg-4 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="150">
-              <a href="{%static 'image/wb2.jpg'%}" class="gallery-lightbox">
-                <img src="{%static 'image/wb2.jpg'%}" alt="" class="img-fluid">
+              <a href="{% static 'image/wb2.jpg' %}" class="gallery-lightbox">
+                <img src="{% static 'image/wb2.jpg' %}" alt="Nila Oorani" class="img-fluid">
               </a>
               <div class="caption">Nila Oorani</div>
             </div>
           </div>
     
-          <div class="col-lg-3 col-md-4">
+          <div class="col-lg-4 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
-              <a href="{%static 'image/vd.jpg'%}" class="gallery-lightbox">
-                <img src="{%static 'image/vd.jpg'%}" alt="" class="img-fluid">
+              <a href="{% static 'image/vd.jpg' %}" class="gallery-lightbox">
+                <img src="{% static 'image/vd.jpg' %}" alt="Sooravalimedu" class="img-fluid">
               </a>
               <div class="caption">Sooravalimedu</div>
             </div>
           </div>
+        </div>
     
-          <div class="col-lg-3 col-md-4">
+        <div class="row g-0" data-aos="fade-left">
+          <!-- Row 2 -->
+          <div class="col-lg-4 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="250">
-              <a href="{%static 'image/wb111.jpg'%}" class="gallery-lightbox">
-                <img src="{%static 'image/wb111.jpg'%}" alt="" class="img-fluid">
+              <a href="{% static 'image/wb111.jpg' %}" class="gallery-lightbox">
+                <img src="{% static 'image/wb111.jpg' %}" alt="Thumbaichedimedu" class="img-fluid">
               </a>
               <div class="caption">Thumbaichedimedu</div>
             </div>
           </div>
     
-          <div class="col-lg-3 col-md-4">
+          <div class="col-lg-4 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
-              <a href="{%static 'image/wb9.jpg'%}" class="gallery-lightbox">
-                <img src="{%static 'image/wb9.jpg'%}" alt="" class="img-fluid">
+              <a href="{% static 'image/wb9.jpg' %}" class="gallery-lightbox">
+                <img src="{% static 'image/wb9.jpg' %}" alt="Uthangudi Oorani" class="img-fluid">
               </a>
               <div class="caption">Uthangudi Oorani</div>
             </div>
           </div>
     
-          <div class="col-lg-3 col-md-4">
+          <div class="col-lg-4 col-md-4">
             <div class="gallery-item" data-aos="zoom-in" data-aos-delay="350">
-              <a href="{%static 'image/slide4.jpg'%}" class="gallery-lightbox">
-                <img src="{%static 'image/slide4.jpg'%}" alt="" class="img-fluid">
-              </a>
-              <div class="caption">Vaigai River</div>
-            </div>
-          </div>
-    
-          <div class="col-lg-3 col-md-4">
-            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="400">
-              <a href="{%static 'image/wb88.jpeg'%}" class="gallery-lightbox">
-                <img src="{%static 'image/wb88.jpeg'%}" alt="" class="img-fluid">
+              <a href="{% static 'image/wb88.jpeg' %}" class="gallery-lightbox">
+                <img src="{% static 'image/wb88.jpeg' %}" alt="Milakaranai" class="img-fluid">
               </a>
               <div class="caption">Milakaranai</div>
-            </div>
-          </div>
-    
-          <div class="col-lg-3 col-md-4">
-            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="450">
-              <a href="{%static 'image/slid444.jpg'%}" class="gallery-lightbox">
-                <img src="{%static 'image/slid444.jpg'%}" alt="" class="img-fluid">
-              </a>
-              <div class="caption">Thathan Oorani</div>
             </div>
           </div>
         </div>
       </div>
     </section>
+    
     
     <!-- End Gallery Section -->
     
@@ -767,32 +754,70 @@
             </li>
 
             <li data-aos="fade-up" data-aos-delay="100">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-2" class="collapsed">How does climate change affect water bodies? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-2" class="collapsed">What are system and non-system tanks? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
               <div id="faq-list-2" class="collapse" data-bs-parent=".faq-list">
+                <p>
+                  Tanks that receive water supply from some other supplemental source, like a river or reservoir, through a supply channel are called system tanks. Because of supplemental sources, water storage in system tanks generally lasts longer than in non-system tanks or rainfed tanks.
+Tanks that receive water supply through runoff, only from their catchments (both free and combined catchments) and the surplus from the above tanks, all of which depend only on rainfall-runoff, without any other supplemental source are known as non-system or rainfed tanks. 
+                </p>
+              </div>
+            </li>
+
+            <li data-aos="fade-up" data-aos-delay="200">
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-3" class="collapsed">What is meant by Perennial and Seasonal water bodies? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <div id="faq-list-3" class="collapse" data-bs-parent=".faq-list">
+                <p>
+                  Perennial waterbodies are those that bear water throughout the year while seasonal waterbodies have water only during a particular period, i.e., the rainy season.
+                </p>
+              </div>
+            </li>
+
+
+            <li data-aos="fade-up" data-aos-delay="300">
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-4" class="collapsed">How does climate change affect water bodies? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <div id="faq-list-4" class="collapse" data-bs-parent=".faq-list">
                 <p>
                   Climate change affects water bodies through rising sea levels, changes in precipitation patterns, increased evaporation rates, and more frequent and intense droughts and floods.
                 </p>
               </div>
             </li>
 
-            <li data-aos="fade-up" data-aos-delay="200">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-3" class="collapsed">Why are water bodies important? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-              <div id="faq-list-3" class="collapse" data-bs-parent=".faq-list">
+            <li data-aos="fade-up" data-aos-delay="400">
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-5" class="collapsed">Why are water bodies important? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <div id="faq-list-5" class="collapse" data-bs-parent=".faq-list">
                 <p>
                   Water bodies are crucial for ecosystems, biodiversity, agriculture, human survival, groundwater recharge, and climate regulation.
                 </p>
               </div>
             </li>
 
-            <li data-aos="fade-up" data-aos-delay="300">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-4" class="collapsed">What are the major threats to water bodies? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-              <div id="faq-list-4" class="collapse" data-bs-parent=".faq-list">
+            <li data-aos="fade-up" data-aos-delay="500">
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-6" class="collapsed">What are the major threats to water bodies? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <div id="faq-list-6" class="collapse" data-bs-parent=".faq-list">
                 <p>
                   Encroachment and Solid waste disposal.
                 </p>
               </div>
             </li>
 
+            <li data-aos="fade-up" data-aos-delay="600">
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-7" class="collapsed">What is Inlet and outlet structure ?  <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <div id="faq-list-7" class="collapse" data-bs-parent=".faq-list">
+                <p>
+                  Inlets and outlets are features of waterbodies that allow water to flow into and out of the waterbody, and limit the rate at which water flows. Inlet structures are built to control the amount of water flowing into the water body at all times. The outlets or drainage pipes are installed at the lowest elevation of the bottom of the water body.
+It has 4 types namely Open Channel, simple conduit, Culvert, and Culvert with shutter.
+                </p>
+              </div>
+            </li>
+
+            <li data-aos="fade-up" data-aos-delay="700">
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-8" class="collapsed">What is silt trap?  <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <div id="faq-list-8" class="collapse" data-bs-parent=".faq-list">
+                <p>
+                  A silt trap is a technique that prevents silt and other unwanted materials from entering a water storage system or drainage system. Silt traps work by temporarily holding water so that silt and other materials can settle to the bottom of the trap and separate from the water. The filtered water can then continue on its way through the system.
+                </p>
+              </div>
+            </li>
             <!--li data-aos="fade-up" data-aos-delay="400">
               <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-5" class="collapsed">Where can I see the Summary Reports of temple tank? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
               <div id="faq-list-5" class="collapse" data-bs-parent=".faq-list">

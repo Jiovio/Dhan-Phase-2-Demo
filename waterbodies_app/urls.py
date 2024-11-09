@@ -51,7 +51,10 @@ from .views import taluk_list, taluk_update, taluk_delete
 from .views import habitation_list, habitation_update, habitation_delete
 from .views import taluk_list, taluk_update, taluk_delete
 from .views import waterbody_table_view, waterbody_detail_view
-
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 from waterbodies_app.views import waterbodies_tank_list
 urlpatterns = [
     path('', index, name='index'),
@@ -161,7 +164,8 @@ urlpatterns = [
      path('pwdtank', views.tank_data_list_view, name='pwdtank_list'),
     path('update/<int:pk>/', views.update_tankdata, name='update_tankdata'),
     path('delete/<int:pk>/', views.delete_tankdata, name='delete_tankdata'),
-    
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/waterbody/', views.WaterBodyFieldReviewerReviewDetailListCreateAPIView.as_view(), name='waterbody-list-create'),
     path('api/waterbody/<uuid:pk>/', views.WaterBodyFieldReviewerReviewDetailRetrieveUpdateDestroyAPIView.as_view(), name='waterbody-detail'),
     path('waterbody-table/', waterbody_table_view, name='waterbody-table'),  # Table view

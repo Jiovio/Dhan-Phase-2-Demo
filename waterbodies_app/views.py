@@ -171,76 +171,9 @@ def dashboardanalytics(request):
         for kml in kml_files
     ])
 
-    # Get a fresh token
-    token = get_jwt_token()
-
-    headers = {
-        "Authorization": f"JWT {token}"
-    }
-
-    # Construct the URL to get the total count of field workers
-    field_workers_url = "http://waterbody.cloudonweb.in:5000/waterBodyAdmin/allusers/?limit=1"
-
-    try:
-        response = requests.get(field_workers_url, headers=headers)
-        response.raise_for_status()
-    except requests.exceptions.ConnectionError as e:
-        logger.error(f"ConnectionError: Unable to connect to the API - {e}")
-        total_field_workers_count = 0  # Set a default value or handle accordingly
-    except requests.exceptions.HTTPError as e:
-        if e.response.status_code == 401:  # Unauthorized, handle token expiration
-            logger.info("Token expired, refreshing token...")
-            token = get_jwt_token()
-            headers["Authorization"] = f"JWT {token}"
-            try:
-                response = requests.get(field_workers_url, headers=headers)
-                response.raise_for_status()
-                data = response.json()
-                total_field_workers_count = data.get('count', 0)
-            except requests.exceptions.RequestException as e:
-                logger.error(f"Failed after refreshing token: {e}")
-                total_field_workers_count = 0
-        else:
-            logger.error(f"HTTPError: {e.response.status_code} - {e.response.text}")
-            total_field_workers_count = 0
-    except Exception as e:
-        logger.error(f"Unexpected error: {e}")
-        total_field_workers_count = 0
-    else:
-        data = response.json()
-        total_field_workers_count = data.get('count', 0)
-
-    # Now get the count of water body reviewer responses
-    reviewer_response_url = "http://waterbody.cloudonweb.in:5000/waterBodyAdmin/waterBodyFieldReviewerResponse/?limit=1"
-
-    try:
-        response = requests.get(reviewer_response_url, headers=headers)
-        response.raise_for_status()
-    except requests.exceptions.ConnectionError as e:
-        logger.error(f"ConnectionError: Unable to connect to the API - {e}")
-        total_reviewer_responses_count = 0  # Set a default value or handle accordingly
-    except requests.exceptions.HTTPError as e:
-        if e.response.status_code == 401:  # Unauthorized, handle token expiration
-            logger.info("Token expired, refreshing token...")
-            token = get_jwt_token()
-            headers["Authorization"] = f"JWT {token}"
-            try:
-                response = requests.get(reviewer_response_url, headers=headers)
-                response.raise_for_status()
-                reviewer_response_data = response.json()
-                total_reviewer_responses_count = reviewer_response_data.get('count', 0)
-            except requests.exceptions.RequestException as e:
-                logger.error(f"Failed after refreshing token: {e}")
-                total_reviewer_responses_count = 0
-        else:
-            logger.error(f"HTTPError: {e.response.status_code} - {e.response.text}")
-            total_reviewer_responses_count = 0
-    except Exception as e:
-        logger.error(f"Unexpected error: {e}")
-        total_reviewer_responses_count = 0
-    else:
-        reviewer_response_data = response.json()
-        total_reviewer_responses_count = reviewer_response_data.get('count', 0)
+    # Set default values for total_field_workers_count and total_reviewer_responses_count
+    total_field_workers_count = 0
+    total_reviewer_responses_count = 0
 
     # Pass the counts, waterbodies, and KML files to the template
     context = {
@@ -248,11 +181,10 @@ def dashboardanalytics(request):
         'tanks_count': tanks_count,
         'waterbodies': waterbodies,
         'kml_files_json': kml_files_json,
-        'total_field_workers_count': total_field_workers_count,
-        'total_reviewer_responses_count': total_reviewer_responses_count,
-        'total_tank_data_count': total_tank_data_count,
-        'waterbody_count' : waterbody_count,
         
+       
+        'total_tank_data_count': total_tank_data_count,
+        'waterbody_count': waterbody_count,
     }
 
     # Render the dashboard analytical template with the context
@@ -1400,6 +1332,19 @@ def delete_tankdata(request, pk):
     if request.method == 'POST':
         tank.delete()
         return JsonResponse({'message': 'Tank deleted successfully'})
+    
+from rest_framework.permissions import IsAuthenticated
+
+class WaterBodyFieldReviewerReviewDetailListCreateAPIView(generics.ListCreateAPIView):
+    queryset = WaterBodyFieldReviewerReviewDetail.objects.all()
+    serializer_class = WaterBodyFieldReviewerReviewDetailListSerializer
+    permission_classes = [IsAuthenticated]  # Require authentication
+
+class WaterBodyFieldReviewerReviewDetailRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = WaterBodyFieldReviewerReviewDetail.objects.all()
+    serializer_class = WaterBodyFieldReviewerReviewDetailSerializer
+    permission_classes = [IsAuthenticated]  # Require authentication
+
     
 class WaterBodyFieldReviewerReviewDetailListCreateAPIView(generics.ListCreateAPIView):
     queryset = WaterBodyFieldReviewerReviewDetail.objects.all()

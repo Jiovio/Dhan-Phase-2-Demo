@@ -1346,13 +1346,7 @@ class WaterBodyFieldReviewerReviewDetailRetrieveUpdateDestroyAPIView(generics.Re
     permission_classes = [IsAuthenticated]  # Require authentication
 
     
-class WaterBodyFieldReviewerReviewDetailListCreateAPIView(generics.ListCreateAPIView):
-    queryset = WaterBodyFieldReviewerReviewDetail.objects.all()
-    serializer_class = WaterBodyFieldReviewerReviewDetailListSerializer
 
-class WaterBodyFieldReviewerReviewDetailRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = WaterBodyFieldReviewerReviewDetail.objects.all()
-    serializer_class = WaterBodyFieldReviewerReviewDetailSerializer
     
 def waterbody_table_view(request):
     # Fetch all records initially

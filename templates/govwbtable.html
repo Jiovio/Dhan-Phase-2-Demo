@@ -365,17 +365,25 @@ data-template="vertical-menu-template-free">
                 <!-- Filter Form -->
                 <form method="get">
                   <div class="row mb-3">
-                      <div class="col-md-4">
+                      <div class="col-md-2">
                           <input type="text" name="taluk" placeholder="Filter by Taluk" value="{{ filter_form.taluk }}" class="form-control">
                       </div>
-                      <div class="col-md-4">
+                      <div class="col-md-2">
                           <input type="text" name="village" placeholder="Filter by Village" value="{{ filter_form.village }}" class="form-control">
                       </div>
-                      <div class="col-md-4">
-                          <button type="submit" class="btn btn-primary">Filter</button>
+                      <div class="col-md-2">
+                          <input type="text" name="ponds_oo" placeholder="Filter by Ponds" value="{{ filter_form.ponds_oo }}" class="form-control">
+                      </div>
+                      <div class="col-md-2">
+                          <input type="text" name="unique_id" placeholder="Filter by Unique ID" value="{{ filter_form.unique_id }}" class="form-control">
+                      </div>
+                      <div class="col-md-2">
+                          <button type="submit" class="btn btn-primary w-100">Filter</button>
                       </div>
                   </div>
               </form>
+              
+              
                 <!--form method="GET" class="mb-4">
                   <div class="input-group">
                     <input type="text" name="unique_id" class="form-control" placeholder="Filter by Unique ID" value="{{ request.GET.unique_id }}" />

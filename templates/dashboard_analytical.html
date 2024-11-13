@@ -415,44 +415,41 @@ data-template="vertical-menu-template-free">
                 </div>
               </div>
               <hr class="my-5" />
-             <!-- Start of Waterbodies Map Section -->
-<div class="row">
-  <div class="col-12 mb-4">
-      <div class="card">
-          <div class="row row-bordered g-0">
-              <div class="col-md-8">
-                  <!-- Filter Options for Waterbody Types -->
-                  <div class="filter-options px-3 py-2">
-                      <label><input type="checkbox" class="filter-checkbox" value="PWD Tanks" checked> PWD Tanks</label>
-                      <label><input type="checkbox" class="filter-checkbox" value="DRDA Tanks" checked> DRDA Tanks</label>
-                      <label><input type="checkbox" class="filter-checkbox" value="DRDA Ponds" checked> DRDA Ponds</label>
+            <!-- Start of Waterbodies Map Section -->
+            <div class="row">
+              <!-- Filter Section -->
+              <div class="col-md-3">
+                  <div class="card p-3">
+                      <h4 class="card-title"> Map Filtering</h4>
+      
+                      <!-- Waterbody Type Filter -->
+                      <label for="typeFilter">Waterbody Type:</label>
+                      <select id="typeFilter" class="form-select mb-3">
+                          <option value="all">All</option>
+                          <option value="PWD Tanks">PWD Tanks</option>
+                          <option value="DRDA Tanks">DRDA Tanks</option>
+                          <option value="DRDA Ponds">DRDA Ponds</option>
+                      </select>
+                      <label for="">Waterbody Size:</label>
+                      <select id="sizeFilter">
+                        <option value="all">All Sizes</option>
+                        <option value="small">Small</option>
+                        <option value="medium">Medium</option>
+                        <option value="large">Large</option>
+                    </select>
+      
+                      <!-- Apply Filter Button -->
+                      <button id="applyFilters" class="btn btn-primary w-100">Apply Filters</button>
                   </div>
-
-                  <h5 class="card-header m-0 me-2 pb-3">Waterbodies Map</h5>
-                  <div id="map" style="height: 570px;"></div>
               </div>
-              <div class="col-md-4">
-                  <div class="card-body">
-                      <div class="text-center"></div>
-                  </div>
-                  <div class="d-flex px-xxl-4 px-lg-2 p-4 gap-xxl-3 gap-lg-1 gap-3 justify-content-between">
-                      <div class="d-flex">
-                          <div class="d-flex flex-column">
-                              <div id="details">
-                                  <div class="details-header">Details</div>
-                                  <p>Click the waterbody to see the metadata</p>
-                                  <div id="details-content" class="details-content"></div>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="d-flex"></div>
-                  </div>
+      
+              <!-- Map Section -->
+              <div class="col-md-9">
+                  <div id="map" style="height: 600px;"></div>
               </div>
           </div>
-      </div>
-  </div>
-</div>
-<!-- End of Waterbodies Map Section -->
+
+<!-- End of Waterbodies Map Section -->           
             </div>
             
             <!-- / Content -->
@@ -499,139 +496,78 @@ data-template="vertical-menu-template-free">
         scrollWheelZoom: false,
         tap: false
     }).setView([9.917, 78.119], 10);
-  
-    // Base layer
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-  
-    // Disable map interaction for mobile
-    function disableMapInteraction() {
-        if (window.innerWidth <= 768) {
-            map.dragging.disable();
-            map.scrollWheelZoom.disable();
-        }
-    }
-  
-    // Enable map interaction
-    function enableMapInteraction() {
-        if (window.innerWidth <= 768) {
-            map.dragging.enable();
-            map.scrollWheelZoom.enable();
-        }
-    }
-  
-    // Enable interactions for larger screens (desktop/laptop)
-    if (window.innerWidth > 768) {
-        map.dragging.enable();
-        map.scrollWheelZoom.enable();
-    }
-  
-    // Handle enabling/disabling map interactions for mobile
-    map.on('focus', enableMapInteraction); // Enable map actions on focus/tap
-    map.on('blur', disableMapInteraction); // Disable on blur (scroll away)
-  
-    // Initial setup for mobile to disable map interaction
-    disableMapInteraction();
-  
-    // Load existing KML files from the database
-    var kmlFiles = JSON.parse('{{ kml_files_json|escapejs }}');
-  
-    // Layer groups for different waterbody types
+
+    // Waterbody Layers
     var pwdTanksLayer = L.layerGroup().addTo(map);
     var drdaTanksLayer = L.layerGroup().addTo(map);
     var drdaPondsLayer = L.layerGroup().addTo(map);
-  
-    // Map types to layers for easier access
+
     var waterbodyLayers = {
         "PWD Tanks": pwdTanksLayer,
         "DRDA Tanks": drdaTanksLayer,
         "DRDA Ponds": drdaPondsLayer
     };
-  
-    // Function to update layer visibility based on selected filters
-    function updateLayerVisibility() {
-        var filters = document.querySelectorAll('.filter-checkbox');
-        filters.forEach(function(filter) {
-            var layerName = filter.value;
-            var layer = waterbodyLayers[layerName];
-  
-            if (filter.checked) {
-                layer.addTo(map);
-            } else {
-                map.removeLayer(layer);
-            }
-        });
-    }
-  
-    // Event listener for filter changes
-    document.querySelectorAll('.filter-checkbox').forEach(function(checkbox) {
-        checkbox.addEventListener('change', updateLayerVisibility);
-    });
-  
-    // Initialize layer visibility based on default checkbox state
-    updateLayerVisibility();
-  
-    // Load KML files and add to respective layer groups
-    kmlFiles.forEach(function(kml, index) {
-        var kmlUrl = kml.kml_file_url;
-        var kmlLayer = omnivore.kml(kmlUrl);
-  
-        kmlLayer.on('ready', function() {
-            var bounds = kmlLayer.getBounds();
-            if (bounds.isValid()) {
-                // Determine the color and layer based on index
-                var color, layerGroup;
-                switch (index % 3) {
-                    case 0:
-                        color = '#007FFF'; // PWD Tanks
-                        layerGroup = pwdTanksLayer;
-                        break;
-                    case 1:
-                        color = '#6CB4EE'; // DRDA Tanks
-                        layerGroup = drdaTanksLayer;
-                        break;
-                    case 2:
-                        color = '#0039a6'; // DRDA Ponds
-                        layerGroup = drdaPondsLayer;
-                        break;
-                }
-  
+
+    // Load KML Files
+    var kmlFiles = JSON.parse('{{ kml_files_json|escapejs }}');
+    loadKMLLayers();
+
+    function loadKMLLayers() {
+        kmlFiles.forEach(function(kml, index) {
+            var kmlUrl = kml.kml_file_url;
+            var kmlLayer = omnivore.kml(kmlUrl);
+
+            kmlLayer.on('ready', function() {
+                var layerGroup = getLayerGroup(index);
                 kmlLayer.eachLayer(function(layer) {
                     layer.setStyle({
-                        color: color,
+                        color: getColor(index),
                         weight: 2,
-                        fillColor: color,
                         fillOpacity: 0.6
                     });
-  
+
                     layer.on('click', function() {
-                        var props = layer.feature.properties;
-                        displayDetails(props);
+                        displayDetails(layer.feature.properties);
                     });
                 });
-  
-                // Add KML layer to the appropriate layer group
                 layerGroup.addLayer(kmlLayer);
-            } else {
-                console.error('Invalid bounds for KML layer:', kmlUrl);
-            }
+            });
+
+            kmlLayer.on('error', function() {
+                console.error('Error loading KML layer:', kmlUrl);
+            });
         });
-  
-        kmlLayer.on('error', function() {
-            console.error('Error loading KML layer:', kmlUrl);
-        });
-    });
-  
-    // Function to display details in the details panel
+    }
+
+    function getLayerGroup(index) {
+        switch (index % 3) {
+            case 0:
+                return pwdTanksLayer;
+            case 1:
+                return drdaTanksLayer;
+            case 2:
+                return drdaPondsLayer;
+        }
+    }
+
+    function getColor(index) {
+        switch (index % 3) {
+            case 0: return '#007FFF';
+            case 1: return '#6CB4EE';
+            case 2: return '#0039a6';
+        }
+    }
+
     function displayDetails(properties) {
         var detailsContent = document.getElementById('details-content');
         detailsContent.innerHTML = '';
-  
         var table = document.createElement('table');
-        var excludedKeys = ['styleUrl', 'hash', 'description', 'name', 'styleHash'];
         for (var key in properties) {
-            if (properties.hasOwnProperty(key) && !excludedKeys.includes(key)) {
+            if (properties.hasOwnProperty(key)) {
                 var row = document.createElement('tr');
                 var cellKey = document.createElement('th');
                 cellKey.textContent = key;
@@ -642,26 +578,23 @@ data-template="vertical-menu-template-free">
                 table.appendChild(row);
             }
         }
-  
         detailsContent.appendChild(table);
-  
-        // Handle description as HTML
-        if (properties.description) {
-            var descriptionContainer = document.createElement('div');
-            descriptionContainer.innerHTML = properties.description;
-            detailsContent.appendChild(descriptionContainer);
-        }
     }
-  
-    // Optional: Re-enable interactions if the window is resized (e.g., switching from mobile to desktop)
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            map.dragging.enable();
-            map.scrollWheelZoom.enable();
-        } else {
-            disableMapInteraction(); // Re-disable for mobile sizes
-        }
-    });
-  </script>
+
+    document.getElementById('applyFilters').addEventListener('click', applyFilters);
+
+    function applyFilters() {
+        var typeFilter = document.getElementById('typeFilter').value;
+
+        Object.keys(waterbodyLayers).forEach(function(layerName) {
+            var layer = waterbodyLayers[layerName];
+            map.removeLayer(layer);
+            if (typeFilter === 'all' || layerName === typeFilter) {
+                layer.addTo(map);
+            }
+        });
+    }
+</script>
+
   </body>
 </html>

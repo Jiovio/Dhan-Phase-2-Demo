@@ -6,7 +6,7 @@ class Command(BaseCommand):
     help = 'Import water bodies from an Excel file'
 
     def handle(self, *args, **options):
-        excel_file_path = 'C:\\waterbodies_project\\wbtank.xlsx'  # Replace with the actual path of your Excel file
+        excel_file_path = 'C:\\waterdams_project\\DRDAtank.xlsx'  # Replace with the actual path of your Excel file
 
         # Clear existing records
         WaterbodiesTank.objects.all().delete()

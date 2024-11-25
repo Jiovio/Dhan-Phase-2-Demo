@@ -1,25 +1,27 @@
 import pandas as pd
 from django.core.management.base import BaseCommand
-from waterbodies_app.models import PoOwaterbody  # Ensure this path matches your actual model path
+from waterbodies_app.models import PoOwaterbody  # Update this with your actual model path
 
 class Command(BaseCommand):
     help = 'Import water bodies from an Excel file'
 
     def handle(self, *args, **options):
-        excel_file_path = 'C:\\waterbodies_project\\PO.xlsx'  # Replace with the actual path of your Excel file
-
-        # Clear existing records
-        PoOwaterbody.objects.all().delete()
+        excel_file_path = 'C:\\waterdams_project\\DRDApo.xlsx'  # Update with the path to your Excel file
 
         def convert_to_decimal(value):
             try:
                 return float(value)
             except (ValueError, TypeError):
-                return None  # or 0.0 or some other default value
+                return None
 
         try:
+            # Load data from the Excel file
             waterbodies_data = pd.read_excel(excel_file_path)
 
+            # Clear all existing records
+            PoOwaterbody.objects.all().delete()
+
+            # Import the new data
             for _, row in waterbodies_data.iterrows():
                 PoOwaterbody.objects.create(
                     unique_id=row['Unique_id'],
@@ -43,6 +45,8 @@ class Command(BaseCommand):
                 )
 
             self.stdout.write(self.style.SUCCESS('Water bodies imported successfully!'))
+        except FileNotFoundError:
+            self.stdout.write(self.style.ERROR(f'File not found: {excel_file_path}'))
         except pd.errors.EmptyDataError:
             self.stdout.write(self.style.WARNING('The Excel file is empty.'))
         except pd.errors.ParserError as e:

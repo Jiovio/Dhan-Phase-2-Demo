@@ -6,7 +6,7 @@ class Command(BaseCommand):
     help = 'Import tanks from Excel file'
 
     def handle(self, *args, **options):
-        excel_file_path = 'C:\\waterbodies_project\\tank.xlsx'  # Replace with the actual path of your Excel file
+        excel_file_path = 'C:\\waterdams_project\\PWDtank.xlsx'  # Replace with the actual path of your Excel file
 
         try:
             tanks_data = pd.read_excel(excel_file_path)

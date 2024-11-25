@@ -401,13 +401,14 @@ data-template="vertical-menu-template-free">
                   <table class="table">
                     <thead>
                       <tr class="text-nowrap">
-                        <th>District</th>
+                        <th>Unique_id</th>
+                        
                         <th>Tank Name</th>
-                        <th>Tank Type</th>
+                        <th>District</th>
                         <th>Block</th>
                         <th>Panchayat</th>
                         <th>Village</th>
-                        
+                        <th>Tank Type</th>
                         <th>Ayacut (ha)</th>
                         <th>Wat Spr Ar</th>
                         <th>Cap MCM</th>
@@ -430,12 +431,15 @@ data-template="vertical-menu-template-free">
                     <tbody class="table-border-bottom-0">
                       {% for tank in tanks %}
                       <tr>
+                        <td>{{tank.unique_id}}
+                          <td>{{ tank.tank_name }}</td>
                         <td>{{ tank.district }}</td>
-                        <td>{{ tank.tank_name }}</td>
-                        <td>{{ tank.tank_type }}</td>
                         <td>{{ tank.block }}</td>
                         <td>{{ tank.panchayat }}</td>
                         <td>{{ tank.village }}</td>
+                        <td>{{ tank.tank_type }}</td>
+                        
+                        
                        
                         <td>{{ tank.ayacut_ha }}</td>
                         <td>{{ tank.wat_spr_ar }}</td>

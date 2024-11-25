@@ -188,7 +188,7 @@ data-template="vertical-menu-template-free">
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
+                  <a href="{% url 'waterbody-table'%}" class="menu-link">
                     <div data-i18n="Without navbar">Reviews</div>
                   </a>
                 </li>
@@ -415,35 +415,43 @@ data-template="vertical-menu-template-free">
                 </div>
               </div>
               <hr class="my-5" />
-            <!-- Start of Waterbodies Map Section -->
-            <div class="row">
-              <!-- Filter Section -->
-              <div class="col-md-3">
-                  <div class="card p-3">
-                      <h4 class="card-title"> Map Filtering</h4>
-      
-                      <!-- Waterbody Type Filter -->
-                      <label for="typeFilter">Waterbody Type:</label>
-                      <select id="typeFilter" class="form-select mb-3">
-                          <option value="all">All</option>
-                          <option value="PWD Tanks">PWD Tanks</option>
-                          <option value="DRDA Tanks">DRDA Tanks</option>
-                          <option value="DRDA Ponds">DRDA Ponds</option>
-                      </select>
-                      
-      
-                      <!-- Apply Filter Button -->
-                      <button id="applyFilters" class="btn btn-primary w-100">Apply Filters</button>
-                  </div>
-              </div>
-      
-              <!-- Map Section -->
-              <div class="col-md-9">
-                  <div id="map" style="height: 600px;"></div>
-              </div>
-          </div>
+   <!-- Start of Waterbodies Map Section -->
+<div class="card">
+  <div class="row g-0">
+    <!-- Filter Section -->
+    <div class="col-md-4 border-end">
+      <div class="p-3">
+        <h4 class="card-title mb-3">Map Filtering</h4>
 
-<!-- End of Waterbodies Map Section -->           
+        <!-- Waterbody Types -->
+        <label for="typeFilter">Waterbody Type:</label>
+        <select id="typeFilter" class="form-select mb-3">
+          <option value="all">All</option>
+          <option value="PWD Tanks">PWD Tanks</option>
+          <option value="DRDA Tanks">DRDA Tanks</option>
+          <option value="DRDA Ponds">DRDA Ponds</option>
+        </select>
+
+        <label for="minSize">Min Water Spread Area (sq.km):</label>
+        <input type="number" id="minSize" placeholder="Min size">
+        <label for="maxSize">Max Water Spread Area (sq.km):</label>
+        <input type="number" id="maxSize" placeholder="Max size">
+<br><br>
+        <button id="applyFilters" class="btn btn-primary mt-3">Apply Filters</button>
+      </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="col-md-8">
+      <div id="map" style="height: 600px;"></div>
+    </div>
+  </div>
+</div>
+<!-- End of Waterbodies Map Section -->
+
+
+
+           
             </div>
             
             <!-- / Content -->
@@ -589,6 +597,5 @@ data-template="vertical-menu-template-free">
         });
     }
 </script>
-
   </body>
 </html>

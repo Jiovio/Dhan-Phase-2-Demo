@@ -1348,10 +1348,14 @@ class WaterBodyFieldReviewerReviewDetailRetrieveUpdateDestroyAPIView(generics.Re
     
 
     
+from django.shortcuts import render, get_object_or_404
+from .models import WaterBodyFieldReviewerReviewDetail
+import json
+
 def waterbody_table_view(request):
     # Fetch all records initially
     waterbodies = WaterBodyFieldReviewerReviewDetail.objects.all()
-    
+
     # Get filter parameters from the request
     block_filter = request.GET.get('block')
     taluk_filter = request.GET.get('taluk')
@@ -1360,6 +1364,8 @@ def waterbody_table_view(request):
     waterbody_name_filter = request.GET.get('waterbodyName')
     survey_number_filter = request.GET.get('surveyNumber')
     waterbody_id_filter = request.GET.get('waterbodyId')
+    percentage_of_spread_filter = request.GET.get('percentageOfSpread')
+    year_of_renovation_filter = request.GET.get('yearOfRenovation')
 
     # Apply filters if they are provided
     if block_filter:
@@ -1376,7 +1382,28 @@ def waterbody_table_view(request):
         waterbodies = waterbodies.filter(surveyNumber__icontains=survey_number_filter)
     if waterbody_id_filter:
         waterbodies = waterbodies.filter(waterbodyId__icontains=waterbody_id_filter)
-    waterbody_count = waterbodies.count()
+
+    # Filter by percentageOfSpread if provided
+    if percentage_of_spread_filter or year_of_renovation_filter:
+        waterbodies_filtered = []
+        for waterbody in waterbodies:
+            try:
+                waterbody_data = json.loads(waterbody.waterParams)
+                water_spread_area_details = waterbody_data.get('waterSpreadAreaDetails', {})
+                percentage_of_spread = water_spread_area_details.get('percentageOfSpread', '')
+                year_of_renovation = waterbody_data.get('yearOfRenovation', '')
+
+                # Apply the filters
+                if (not percentage_of_spread_filter or percentage_of_spread_filter in percentage_of_spread) and \
+                   (not year_of_renovation_filter or year_of_renovation_filter == year_of_renovation):
+                    waterbodies_filtered.append(waterbody)
+            except (ValueError, TypeError):
+                continue
+        waterbodies = waterbodies_filtered
+
+    # Get the total count of filtered waterbodies
+    
+
     # Render the template with the filtered waterbodies
     return render(request, 'testjson.html', {'waterbodies': waterbodies})
 

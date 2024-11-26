@@ -50,6 +50,9 @@ from .views import fencetype_list, fencetype_update, fencetype_delete
 from .views import taluk_list, taluk_update, taluk_delete
 from .views import habitation_list, habitation_update, habitation_delete
 from .views import taluk_list, taluk_update, taluk_delete
+from .views import TankDataListAPI
+from .views import WaterbodiesTankListAPI
+from .views import PoOwaterbodyListAPI
 from .views import waterbody_table_view, waterbody_detail_view
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -168,6 +171,9 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/waterbody/', views.WaterBodyFieldReviewerReviewDetailListCreateAPIView.as_view(), name='waterbody-list-create'),
     path('api/waterbody/<uuid:pk>/', views.WaterBodyFieldReviewerReviewDetailRetrieveUpdateDestroyAPIView.as_view(), name='waterbody-detail'),
+     path('api/tank-data/', TankDataListAPI.as_view(), name='tank-data-api'),
+     path('api/drdatanks/', WaterbodiesTankListAPI.as_view(), name='drda-tanks-list'),   
+     path('api/drdaponds/', PoOwaterbodyListAPI.as_view(), name='drda-ponds-list'),
     path('waterbody-table/', waterbody_table_view, name='waterbody-table'),  # Table view
     path('waterbody-detail/<uuid:pk>/', waterbody_detail_view, name='waterbody-detail'),
      # Add this line

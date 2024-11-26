@@ -79,7 +79,12 @@ from .models import Taluk
 from .models import BundFunctionalities
 from .models import Habitation
 import re
+from rest_framework.pagination import PageNumberPagination
+from .serializers import TankDataSerializer
+from rest_framework.generics import ListAPIView
+from .serializers import WaterbodiesTankSerializer
 from .models import CatchmentType
+from .serializers import PoOwaterbodySerializer
 from django_filters import FilterSet, CharFilter
 from .models import TankData
 from .models import BoundaryDropPoints
@@ -1347,16 +1352,47 @@ class WaterBodyFieldReviewerReviewDetailRetrieveUpdateDestroyAPIView(generics.Re
 
     
 
+
+# Define a custom pagination class (optional)
+class TankDataPagination(PageNumberPagination):
+    page_size = 10  # Number of records per page
+    page_size_query_param = 'page_size'  # Allow clients to specify the page size
+    max_page_size = 100  # Maximum number of records per page
+
+class TankDataListAPI(ListAPIView):
+    queryset = TankData.objects.all()
+    serializer_class = TankDataSerializer
+    pagination_class = TankDataPagination  # Use custom pagination
+    
+class WaterbodiesTankPagination(PageNumberPagination):
+    page_size = 10  # Number of records per page
+    page_size_query_param = 'page_size'  # Allow clients to set page size
+    max_page_size = 100  # Maximum records per page
+
+class WaterbodiesTankListAPI(ListAPIView):
+    queryset = WaterbodiesTank.objects.all()
+    serializer_class = WaterbodiesTankSerializer
+    pagination_class = WaterbodiesTankPagination  # Enable pagination
+    
+class PoOwaterbodyPagination(PageNumberPagination):
+    page_size = 10  # Number of records per page
+    page_size_query_param = 'page_size'  # Allow clients to set page size
+    max_page_size = 100  # Maximum records per page
+
+class PoOwaterbodyListAPI(ListAPIView):
+    queryset = PoOwaterbody.objects.all()
+    serializer_class = PoOwaterbodySerializer
+    pagination_class = PoOwaterbodyPagination  # Enable pagination
     
 from django.shortcuts import render, get_object_or_404
 from .models import WaterBodyFieldReviewerReviewDetail
 import json
 
 def waterbody_table_view(request):
-    # Fetch all records initially
+    # Fetch all waterbodies initially
     waterbodies = WaterBodyFieldReviewerReviewDetail.objects.all()
 
-    # Get filter parameters from the request
+    # Get filter parameters
     block_filter = request.GET.get('block')
     taluk_filter = request.GET.get('taluk')
     waterbody_type_filter = request.GET.get('waterbodyType')
@@ -1365,9 +1401,9 @@ def waterbody_table_view(request):
     survey_number_filter = request.GET.get('surveyNumber')
     waterbody_id_filter = request.GET.get('waterbodyId')
     percentage_of_spread_filter = request.GET.get('percentageOfSpread')
-    year_of_renovation_filter = request.GET.get('yearOfRenovation')
+    future_activity_filter = request.GET.get('futureActivity')
 
-    # Apply filters if they are provided
+    # Apply field-based filters
     if block_filter:
         waterbodies = waterbodies.filter(block__icontains=block_filter)
     if taluk_filter:
@@ -1383,29 +1419,34 @@ def waterbody_table_view(request):
     if waterbody_id_filter:
         waterbodies = waterbodies.filter(waterbodyId__icontains=waterbody_id_filter)
 
-    # Filter by percentageOfSpread if provided
-    if percentage_of_spread_filter or year_of_renovation_filter:
-        waterbodies_filtered = []
+    # Parse JSON-based filters
+    if percentage_of_spread_filter or future_activity_filter:
+        filtered_waterbodies = []
         for waterbody in waterbodies:
             try:
+                # Parse waterParams JSON
                 waterbody_data = json.loads(waterbody.waterParams)
                 water_spread_area_details = waterbody_data.get('waterSpreadAreaDetails', {})
-                percentage_of_spread = water_spread_area_details.get('percentageOfSpread', '')
-                year_of_renovation = waterbody_data.get('yearOfRenovation', '')
+                future_activities = json.loads(
+                    waterbody_data.get('futureActivities', {}).get('activitiesUndertaken', "[]")
+                )
 
-                # Apply the filters
+                # Get percentageOfSpread
+                percentage_of_spread = water_spread_area_details.get('percentageOfSpread', '')
+
+                # Apply filters
                 if (not percentage_of_spread_filter or percentage_of_spread_filter in percentage_of_spread) and \
-                   (not year_of_renovation_filter or year_of_renovation_filter == year_of_renovation):
-                    waterbodies_filtered.append(waterbody)
+                   (not future_activity_filter or future_activity_filter in future_activities):
+                    filtered_waterbodies.append(waterbody)
             except (ValueError, TypeError):
                 continue
-        waterbodies = waterbodies_filtered
 
-    # Get the total count of filtered waterbodies
-    
+        waterbodies = filtered_waterbodies
 
-    # Render the template with the filtered waterbodies
+    # Pass the filtered waterbodies to the template
     return render(request, 'testjson.html', {'waterbodies': waterbodies})
+
+
 
 def calculate_estimated_cost_and_rate(activity, json_data):
     """

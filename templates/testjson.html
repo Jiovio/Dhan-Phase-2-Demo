@@ -400,6 +400,30 @@ data-template="vertical-menu-template-free">
                             <option value="25%-50%" {% if request.GET.percentageOfSpread == '25%-50%' %}selected{% endif %}>25%-50%</option>
                         </select>
                     </div>
+<!-- Future Activities Filter -->
+<div class="col-md-3">
+  <label for="futureActivity" class="form-label">Required Interventions:</label>
+  <select name="futureActivity" id="futureActivity" class="form-select">
+      <option value="">--Select--</option>
+      <option value="Earthwork/Desilting" {% if request.GET.futureActivity == 'Earthwork/Desilting' %}selected{% endif %}>Earthwork/Desilting</option>
+      <option value="Retaining wall construction" {% if request.GET.futureActivity == 'Retaining wall construction' %}selected{% endif %}>Retaining wall construction</option>
+      <option value="Repair of Sluice" {% if request.GET.futureActivity == 'Repair of Sluice' %}selected{% endif %}>Repair of Sluice</option>
+      <option value="Surplus Weir" {% if request.GET.futureActivity == 'Surplus Weir' %}selected{% endif %}>Surplus Weir</option>
+      <option value="Inlet construction" {% if request.GET.futureActivity == 'Inlet construction' %}selected{% endif %}>Inlet construction</option>
+      <option value="Outlet Construction" {% if request.GET.futureActivity == 'Outlet Construction' %}selected{% endif %}>Outlet Construction</option>
+      <option value="Bund Strengthening" {% if request.GET.futureActivity == 'Bund Strengthening' %}selected{% endif %}>Bund Strengthening</option>
+      <option value="Revetment construction" {% if request.GET.futureActivity == 'Revetment construction' %}selected{% endif %}>Revetment construction</option>
+      <option value="Ghat construction" {% if request.GET.futureActivity == 'Ghat construction' %}selected{% endif %}>Ghat construction</option>
+      <option value="Jungle Clearance" {% if request.GET.futureActivity == 'Jungle Clearance' %}selected{% endif %}>Jungle Clearance</option>
+      <option value="Walking Pavement construction" {% if request.GET.futureActivity == 'Walking Pavement construction' %}selected{% endif %}>Walking Pavement construction</option>
+      <option value="Tree plantation" {% if request.GET.futureActivity == 'Tree plantation' %}selected{% endif %}>Tree plantation</option>
+      <option value="Fencing/Wall Construction" {% if request.GET.futureActivity == 'Fencing/Wall Construction' %}selected{% endif %}>Fencing/Wall Construction</option>
+      <option value="Construction/repair of well" {% if request.GET.futureActivity == 'Construction/repair of well' %}selected{% endif %}>Construction/repair of well</option>
+      <option value="Restoration of supply channel" {% if request.GET.futureActivity == 'Restoration of supply channel' %}selected{% endif %}>Restoration of supply channel</option>
+      <option value="Creation of new supply channel" {% if request.GET.futureActivity == 'Creation of new supply channel' %}selected{% endif %}>Creation of new supply channel</option>
+  </select>
+</div>
+
                     <!--div class="col-md-2">
                       <label for="yearOfRenovation">Year of Renovation:</label>
         <select name="yearOfRenovation" id="yearOfRenovation">

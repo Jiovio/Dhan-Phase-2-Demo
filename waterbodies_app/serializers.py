@@ -39,3 +39,10 @@ class PoOwaterbodySerializer(serializers.ModelSerializer):
     class Meta:
         model = PoOwaterbody
         fields = '__all__'  # Include all fields in the API response
+        
+from .models import UserProfile
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['id', 'user', 'first_name', 'last_name', 'email', 'mobile_number', 'address', 'role', 'pincode']

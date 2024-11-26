@@ -1384,6 +1384,18 @@ class PoOwaterbodyListAPI(ListAPIView):
     serializer_class = PoOwaterbodySerializer
     pagination_class = PoOwaterbodyPagination  # Enable pagination
     
+from .models import UserProfile
+from .serializers import UserProfileSerializer
+
+# List all user profiles or create a new one
+class UserProfileListCreateView(generics.ListCreateAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+
+# Retrieve, update, or delete a specific user profile
+class UserProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
 from django.shortcuts import render, get_object_or_404
 from .models import WaterBodyFieldReviewerReviewDetail
 import json

@@ -54,6 +54,8 @@ from .views import TankDataListAPI
 from .views import WaterbodiesTankListAPI
 from .views import PoOwaterbodyListAPI
 from .views import UserProfileListCreateView, UserProfileDetailView
+from .views import GenerateWaterBodyUniqueIdAPIView
+
 from .views import waterbody_table_view, waterbody_detail_view
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -173,8 +175,10 @@ urlpatterns = [
     path('api/waterbody/', views.WaterBodyFieldReviewerReviewDetailListCreateAPIView.as_view(), name='waterbody-list-create'),
     path('api/waterbody/<uuid:pk>/', views.WaterBodyFieldReviewerReviewDetailRetrieveUpdateDestroyAPIView.as_view(), name='waterbody-detail'),
      path('api/tank-data/', TankDataListAPI.as_view(), name='tank-data-api'),
-     path('api/drdatanks/', WaterbodiesTankListAPI.as_view(), name='drda-tanks-list'),   
-     path('api/drdaponds/', PoOwaterbodyListAPI.as_view(), name='drda-ponds-list'),
+     path('api/generate-waterbody-id/', GenerateWaterBodyUniqueIdAPIView.as_view(), name='generate-waterbody-id'),
+
+    path('api/drdatanks/', WaterbodiesTankListAPI.as_view(), name='drda-tanks-list'),   
+    path('api/drdaponds/', PoOwaterbodyListAPI.as_view(), name='drda-ponds-list'),
     path('userprofile/', UserProfileListCreateView.as_view(), name='userprofile-list-create'),
     path('userprofile/<int:pk>/', UserProfileDetailView.as_view(), name='userprofile-detail'),
     path('waterbody-table/', waterbody_table_view, name='waterbody-table'),  # Table view

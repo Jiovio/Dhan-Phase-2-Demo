@@ -75,6 +75,7 @@ from xml.etree import ElementTree as ET
 from .models import Pond
 from .models import Contact
 from .forms import ContactForm
+from django.db.models import Max
 from .models import Taluk
 from .models import BundFunctionalities
 from .models import Habitation
@@ -1350,7 +1351,31 @@ class WaterBodyFieldReviewerReviewDetailRetrieveUpdateDestroyAPIView(generics.Re
     serializer_class = WaterBodyFieldReviewerReviewDetailSerializer
     permission_classes = [IsAuthenticated]  # Require authentication
 
-    
+class GenerateWaterBodyUniqueIdAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        formatCode = request.query_params.get("Code")
+        if not formatCode:
+            return Response({"error": "Code query parameter is required"}, status=400)
+
+        # Fetch the latest waterbodyId
+        latest_record = WaterBodyFieldReviewerReviewDetail.objects.filter(
+            waterbodyId__startswith=formatCode
+        ).only("waterbodyId").order_by("-id").first()
+
+        if latest_record and latest_record.waterbodyId:
+            # Extract and increment the sequence number
+            waterBodySeqNumber = latest_record.waterbodyId.removeprefix(formatCode)
+            try:
+                next_id = formatCode + str("%02d" % (int(waterBodySeqNumber) + 1))
+            except ValueError:
+                return Response({"error": "Invalid waterbodyId format in database"}, status=500)
+        else:
+            # Start with the first ID
+            next_id = formatCode + "01"
+
+        return Response({"unique_id": next_id})
 
 
 # Define a custom pagination class (optional)

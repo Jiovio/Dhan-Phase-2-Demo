@@ -1408,7 +1408,48 @@ class PoOwaterbodyListAPI(ListAPIView):
     queryset = PoOwaterbody.objects.all()
     serializer_class = PoOwaterbodySerializer
     pagination_class = PoOwaterbodyPagination  # Enable pagination
-    
+
+class TankDataDetailAPI(APIView):
+    def get(self, request, unique_id, *args, **kwargs):
+        # Filter TankData by unique_id
+        tank_data = TankData.objects.filter(unique_id=unique_id)
+
+        # If no data found
+        if not tank_data.exists():
+            return Response({"error": "TankData not found for this unique_id"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Serialize the data
+        serializer = TankDataSerializer(tank_data, many=True)
+
+        return Response(serializer.data)
+class WaterbodiesTankDetailAPI(APIView):
+    def get(self, request, unique_id, *args, **kwargs):
+        # Filter WaterbodiesTank by unique_id
+        waterbodies_tank = WaterbodiesTank.objects.filter(unique_id=unique_id)
+
+        # If no data found
+        if not waterbodies_tank.exists():
+            return Response({"error": "WaterbodiesTank not found for this unique_id"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Serialize the data
+        serializer = WaterbodiesTankSerializer(waterbodies_tank, many=True)
+
+        return Response(serializer.data)
+class PoOwaterbodyDetailAPI(APIView):
+    def get(self, request, unique_id, *args, **kwargs):
+        # Filter PoOwaterbody by unique_id
+        poo_waterbody = PoOwaterbody.objects.filter(unique_id=unique_id)
+
+        # If no data found
+        if not poo_waterbody.exists():
+            return Response({"error": "PoOwaterbody not found for this unique_id"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Serialize the data
+        serializer = PoOwaterbodySerializer(poo_waterbody, many=True)
+
+        return Response(serializer.data)
+
+
 from .models import UserProfile
 from .serializers import UserProfileSerializer
 
@@ -1424,21 +1465,21 @@ class UserProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
 from django.shortcuts import render, get_object_or_404
 from .models import WaterBodyFieldReviewerReviewDetail
 import json
-
 def waterbody_table_view(request):
     # Fetch all waterbodies initially
     waterbodies = WaterBodyFieldReviewerReviewDetail.objects.all()
 
     # Get filter parameters
-    block_filter = request.GET.get('block')
-    taluk_filter = request.GET.get('taluk')
-    waterbody_type_filter = request.GET.get('waterbodyType')
-    village_filter = request.GET.get('village')
-    waterbody_name_filter = request.GET.get('waterbodyName')
-    survey_number_filter = request.GET.get('surveyNumber')
-    waterbody_id_filter = request.GET.get('waterbodyId')
-    percentage_of_spread_filter = request.GET.get('percentageOfSpread')
-    future_activity_filter = request.GET.get('futureActivity')
+    block_filter = request.GET.get('block', '').strip()
+    taluk_filter = request.GET.get('taluk', '').strip()
+    waterbody_type_filter = request.GET.get('waterbodyType', '').strip()
+    village_filter = request.GET.get('village', '').strip()
+    waterbody_name_filter = request.GET.get('waterbodyName', '').strip()
+    survey_number_filter = request.GET.get('surveyNumber', '').strip()
+    waterbody_id_filter = request.GET.get('waterbodyId', '').strip()
+    percentage_of_spread_filter = request.GET.get('percentageOfSpread', '').strip()
+    future_activity_filter = request.GET.get('futureActivity', '').strip()
+    retaining_wall_filter = request.GET.get('presenceOfRetainingWall', '').strip()
 
     # Apply field-based filters
     if block_filter:
@@ -1446,7 +1487,7 @@ def waterbody_table_view(request):
     if taluk_filter:
         waterbodies = waterbodies.filter(taluk__icontains=taluk_filter)
     if waterbody_type_filter:
-        waterbodies = waterbodies.filter(waterbodyType=waterbody_type_filter)
+        waterbodies = waterbodies.filter(waterbodyType__iexact=waterbody_type_filter)
     if village_filter:
         waterbodies = waterbodies.filter(village__icontains=village_filter)
     if waterbody_name_filter:
@@ -1457,31 +1498,41 @@ def waterbody_table_view(request):
         waterbodies = waterbodies.filter(waterbodyId__icontains=waterbody_id_filter)
 
     # Parse JSON-based filters
-    if percentage_of_spread_filter or future_activity_filter:
+    if percentage_of_spread_filter or future_activity_filter or retaining_wall_filter:
         filtered_waterbodies = []
         for waterbody in waterbodies:
             try:
                 # Parse waterParams JSON
                 waterbody_data = json.loads(waterbody.waterParams)
+
+                # Extract relevant fields from JSON
                 water_spread_area_details = waterbody_data.get('waterSpreadAreaDetails', {})
-                future_activities = json.loads(
-                    waterbody_data.get('futureActivities', {}).get('activitiesUndertaken', "[]")
-                )
+                future_activities = waterbody_data.get('futureActivities', {}).get('activitiesUndertaken', [])
+                retaining_wall_status = waterbody_data.get('presenceOfRetainingWall', '')
+
+                # Convert future activities to a list if stored as JSON string
+                if isinstance(future_activities, str):
+                    future_activities = json.loads(future_activities)
 
                 # Get percentageOfSpread
                 percentage_of_spread = water_spread_area_details.get('percentageOfSpread', '')
 
                 # Apply filters
-                if (not percentage_of_spread_filter or percentage_of_spread_filter in percentage_of_spread) and \
-                   (not future_activity_filter or future_activity_filter in future_activities):
+                if (
+                    (not percentage_of_spread_filter or percentage_of_spread_filter in str(percentage_of_spread)) and
+                    (not future_activity_filter or future_activity_filter in future_activities) and
+                    (not retaining_wall_filter or retaining_wall_filter.lower() == retaining_wall_status.lower())
+                ):
                     filtered_waterbodies.append(waterbody)
-            except (ValueError, TypeError):
-                continue
+
+            except (ValueError, TypeError, json.JSONDecodeError):
+                continue  # Skip records with invalid or missing JSON
 
         waterbodies = filtered_waterbodies
 
     # Pass the filtered waterbodies to the template
     return render(request, 'testjson.html', {'waterbodies': waterbodies})
+
 
 
 

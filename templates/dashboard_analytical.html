@@ -14,7 +14,7 @@ data-template="vertical-menu-template-free">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
     <title>Dashboard</title>
     <meta name="description" content=""/>
-
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon/favicon.ico' %}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
@@ -432,11 +432,14 @@ data-template="vertical-menu-template-free">
           <option value="DRDA Ponds">DRDA Ponds</option>
         </select>
 
-        <label for="minSize">Min Water Spread Area (sq.km):</label>
-        <input type="number" id="minSize" placeholder="Min size">
-        <label for="maxSize">Max Water Spread Area (sq.km):</label>
-        <input type="number" id="maxSize" placeholder="Max size">
-<br><br>
+        <!-- Size Filter -->
+        <label for="sizeFilter">Size:</label>
+        <select id="sizeFilter" class="form-select mb-3">
+          <option value="all">All</option>
+          <option value="small">Small</option>
+          <option value="large">Large</option>
+        </select>
+
         <button id="applyFilters" class="btn btn-primary mt-3">Apply Filters</button>
       </div>
     </div>
@@ -448,7 +451,6 @@ data-template="vertical-menu-template-free">
   </div>
 </div>
 <!-- End of Waterbodies Map Section -->
-
 
 
            
@@ -532,8 +534,11 @@ data-template="vertical-menu-template-free">
                         fillOpacity: 0.6
                     });
 
+                    // Deferring heavy operations using setTimeout to optimize click performance
                     layer.on('click', function() {
-                        displayDetails(layer.feature.properties);
+                        setTimeout(() => {
+                            displayDetails(layer.feature.properties); // Delaying the displayDetails function
+                        }, 0);
                     });
                 });
                 layerGroup.addLayer(kmlLayer);
@@ -564,38 +569,65 @@ data-template="vertical-menu-template-free">
         }
     }
 
+    // Optimizing the display of layer details in a more efficient manner
     function displayDetails(properties) {
-        var detailsContent = document.getElementById('details-content');
-        detailsContent.innerHTML = '';
-        var table = document.createElement('table');
-        for (var key in properties) {
+        const fragment = document.createDocumentFragment(); // Create a document fragment to minimize reflows
+        for (const key in properties) {
             if (properties.hasOwnProperty(key)) {
-                var row = document.createElement('tr');
-                var cellKey = document.createElement('th');
+                const row = document.createElement('tr');
+                const cellKey = document.createElement('th');
+                const cellValue = document.createElement('td');
                 cellKey.textContent = key;
-                var cellValue = document.createElement('td');
                 cellValue.textContent = properties[key];
                 row.appendChild(cellKey);
                 row.appendChild(cellValue);
-                table.appendChild(row);
+                fragment.appendChild(row);
             }
         }
-        detailsContent.appendChild(table);
+        const detailsContent = document.getElementById('details-content');
+        detailsContent.innerHTML = ''; // Clear previous content
+        detailsContent.appendChild(fragment); // Append new content all at once
     }
 
+    // Apply size and type filters
     document.getElementById('applyFilters').addEventListener('click', applyFilters);
 
     function applyFilters() {
         var typeFilter = document.getElementById('typeFilter').value;
+        var sizeFilter = document.getElementById('sizeFilter').value;
 
         Object.keys(waterbodyLayers).forEach(function(layerName) {
             var layer = waterbodyLayers[layerName];
             map.removeLayer(layer);
-            if (typeFilter === 'all' || layerName === typeFilter) {
+            if ((typeFilter === 'all' || layerName === typeFilter) && passesSizeFilter(layer, sizeFilter)) {
                 layer.addTo(map);
             }
         });
     }
-</script>
+
+    // Size filter logic
+    function passesSizeFilter(layer, sizeFilter) {
+        var sizeCondition = true;
+        var sizeThresholds = {
+            small: 10000, // For example, areas less than 10,000 sq meters are considered small
+            large: 10000  // Areas greater than 10,000 sq meters are considered large
+        };
+
+        // Loop through each layer to determine the polygon size
+        layer.eachLayer(function(polygonLayer) {
+            var area = turf.area(polygonLayer.toGeoJSON());
+            
+            // Apply size filter logic
+            if (sizeFilter === 'small' && area >= sizeThresholds.small) {
+                sizeCondition = false; // Filter out larger polygons for small size
+            } else if (sizeFilter === 'large' && area < sizeThresholds.large) {
+                sizeCondition = false; // Filter out smaller polygons for large size
+            }
+        });
+
+        return sizeCondition;
+    }
+</script> 
+
   </body>
 </html>

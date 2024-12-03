@@ -52,6 +52,7 @@ from .views import habitation_list, habitation_update, habitation_delete
 from .views import taluk_list, taluk_update, taluk_delete
 from .views import TankDataListAPI
 from .views import WaterbodiesTankListAPI
+from .views import TankDataDetailAPI, WaterbodiesTankDetailAPI, PoOwaterbodyDetailAPI
 from .views import PoOwaterbodyListAPI
 from .views import UserProfileListCreateView, UserProfileDetailView
 from .views import GenerateWaterBodyUniqueIdAPIView
@@ -176,7 +177,9 @@ urlpatterns = [
     path('api/waterbody/<uuid:pk>/', views.WaterBodyFieldReviewerReviewDetailRetrieveUpdateDestroyAPIView.as_view(), name='waterbody-detail'),
      path('api/tank-data/', TankDataListAPI.as_view(), name='tank-data-api'),
      path('api/generate-waterbody-id/', GenerateWaterBodyUniqueIdAPIView.as_view(), name='generate-waterbody-id'),
-
+   path('api/tank-data/<str:unique_id>/', TankDataDetailAPI.as_view(), name='tank_data_detail'),
+    path('api/drdatanks/<str:unique_id>/', WaterbodiesTankDetailAPI.as_view(), name='waterbodies_tank_detail'),
+    path('api/drdaponds/<str:unique_id>/', PoOwaterbodyDetailAPI.as_view(), name='poo_waterbody_detail'),
     path('api/drdatanks/', WaterbodiesTankListAPI.as_view(), name='drda-tanks-list'),   
     path('api/drdaponds/', PoOwaterbodyListAPI.as_view(), name='drda-ponds-list'),
     path('userprofile/', UserProfileListCreateView.as_view(), name='userprofile-list-create'),

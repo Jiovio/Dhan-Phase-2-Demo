@@ -187,6 +187,8 @@ urlpatterns = [
     path('waterbody-table/', waterbody_table_view, name='waterbody-table'),  # Table view
     path('waterbody-detail/<uuid:pk>/', waterbody_detail_view, name='waterbody-detail'),
      # Add this line
+      path('polygon/', views.map_polygon, name='polygon'),
+
     path('cropings/', views.cropings_list, name='cropings_list'),
     path('cropings/update/', views.cropings_update, name='cropings_update'),
     path('cropings/delete/', views.cropings_delete, name='cropings_delete'),

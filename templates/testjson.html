@@ -48,32 +48,33 @@ data-template="vertical-menu-template-free">
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
         <!-- Menu -->
-
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo">
-            <a href="" class="app-brand-link">
+            <a href="{% url 'analytics' %}" class="app-brand-link">
               <span class="app-brand-logo demo">
                 <img src="{% static 'image/waterdams.png' %}" alt="Water DaMS Logo" style="width: 150px; height: auto;">
               </span>
-             
+              
             </a>
-
+    
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
               <i class="bx bx-chevron-left bx-sm align-middle"></i>
             </a>
           </div>
-
+    
           <div class="menu-inner-shadow"></div>
-
+    
           <ul class="menu-inner py-1">
-            <!-- MasterData -->
+            <!-- MasterData >
             <li class="menu-item active open">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Dashboards">MasterData</div>
               </a>
               <ul class="menu-sub">
-                <!-- Location Master -->
+
+
+                <!-- Location Master >
                 <li class="menu-item has-submenu">
                   <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <div data-i18n="CRM">Location Master</div>
@@ -89,7 +90,7 @@ data-template="vertical-menu-template-free">
                   </ul>
                 </li>
           
-                <!-- Waterbody Master -->
+                <!-- Waterbody Master >
                 <li class="menu-item has-submenu">
                   <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <div data-i18n="Academy">Waterbody Master</div>
@@ -140,9 +141,21 @@ data-template="vertical-menu-template-free">
                   </ul>
                 </li>
               </ul>
+            </li-->
+          <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-shield"></i>
+                <div data-i18n="Layouts">Dashboard</div>
+              </a>
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="{% url 'analytics' %}" class="menu-link">
+                    <div data-i18n="Without menu">Dashboard</div>
+                  </a>
+                </li>
+              </ul>
             </li>
-          
-            <!-- User Management -->
+            <!-- User Management >
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-user"></i>
@@ -150,19 +163,19 @@ data-template="vertical-menu-template-free">
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
+                  <a href="{% url 'fieldworkers' %}" class="menu-link">
                     <div data-i18n="Without menu">User</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
+                  <a href="{% url 'roles_table' %}" class="menu-link">
                     <div data-i18n="Without navbar">Role</div>
                   </a>
                 </li>
               </ul>
-            </li>
+            </li-->
           
-            <!-- Permission Management -->
+            <!-- Permission Management >
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-shield"></i>
@@ -170,12 +183,12 @@ data-template="vertical-menu-template-free">
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
+                  <a href="{% url 'selectroles' %}" class="menu-link">
                     <div data-i18n="Without menu">Permission</div>
                   </a>
                 </li>
               </ul>
-            </li>
+            </li-->
           
             <!-- Waterbody Details -->
             <li class="menu-item">
@@ -190,7 +203,7 @@ data-template="vertical-menu-template-free">
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
+                  <a href="{% url 'waterbody-table'%}" class="menu-link">
                     <div data-i18n="Without navbar">Reviews</div>
                   </a>
                 </li>
@@ -220,30 +233,18 @@ data-template="vertical-menu-template-free">
             <!--Settings-->
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-file"></i>
+                <i class="menu-icon tf-icons bx bx-cog"></i>
+
                 <div data-i18n="Layouts">Settings</div>
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
-                    <div data-i18n="Without menu">Profile</div>
+                  <a href="{%url 'change_password' %}" class="menu-link">
+                    <div data-i18n="Without menu">settings</div>
                   </a>
                 </li>
-                <li class="menu-item">
-                  <a href="#" class="menu-link">
-                    <div data-i18n="Without navbar">Security</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="#" class="menu-link">
-                    <div data-i18n="Without navbar">Notification</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="#" class="menu-link">
-                    <div data-i18n="Without navbar">Language</div>
-                  </a>
-                </li>
+                
+                
               </ul>
             </li>
           </ul>
@@ -364,7 +365,7 @@ data-template="vertical-menu-template-free">
               <h4 class="py-3 mb-4"><span class="text-muted fw-light">Table /</span> Review Summary</h4>
               <form method="get" action="{% url 'waterbody-table' %}" class="mb-4">
                 <div class="row g-3">
-            
+                
                     <div class="col-md-2">
                         <label for="surveyNumber" class="form-label">Survey Number:</label>
                         <input type="text" name="surveyNumber" id="surveyNumber" class="form-control" value="{{ request.GET.surveyNumber }}">
@@ -373,6 +374,7 @@ data-template="vertical-menu-template-free">
                         <label for="waterbodyId" class="form-label">Waterbody ID:</label>
                         <input type="text" name="waterbodyId" id="waterbodyId" class="form-control" value="{{ request.GET.waterbodyId }}">
                     </div>
+                    
                     <div class="col-md-2">
                         <label for="block" class="form-label">Block:</label>
                         <input type="text" name="block" id="block" class="form-control" value="{{ request.GET.block }}">
@@ -385,6 +387,15 @@ data-template="vertical-menu-template-free">
                         <label for="village" class="form-label">Village:</label>
                         <input type="text" name="village" id="village" class="form-control" value="{{ request.GET.village }}">
                     </div>
+                    <div class="col-md-2">
+                      <label for="jurisdiction" class="form-label">Jurisdiction:</label>
+                      <select name="jurisdiction" id="jurisdiction" class="form-select">
+                          <option value="">--Select--</option>
+                          <option value="Corporation" {% if request.GET.jurisdiction == 'Corporation' %}selected{% endif %}>Corporation</option>
+                          <option value="Village Panchayat" {% if request.GET.jurisdiction == 'Village Panchayat' %}selected{% endif %}>Village Panchayat</option>
+                      </select>
+                  </div>
+                  
                     <div class="col-md-2">
                         <label for="percentageOfSpread" class="form-label">Water Spread Area:</label>
                         <select name="percentageOfSpread" id="percentageOfSpread" class="form-select">
@@ -429,21 +440,13 @@ data-template="vertical-menu-template-free">
                         </select>
                     </div>
             
-                    <!-- New Filter: Presence of Retaining Wall >
-                    <div class="col-md-2">
-                        <label for="presenceOfRetainingWall" class="form-label"> Retaining Wall:</label>
-                        <select name="presenceOfRetainingWall" id="presenceOfRetainingWall" class="form-select">
-                            <option value="">--Select--</option>
-                            <option value="Present" {% if request.GET.presenceOfRetainingWall == 'Present' %}selected{% endif %}>Present</option>
-                            <option value="Absent" {% if request.GET.presenceOfRetainingWall == 'Absent' %}selected{% endif %}>Absent</option>
-                        </select>
-                    </div-->
                 </div>
             
                 <div class="mt-3">
                     <button type="submit" class="btn btn-primary">Filter</button>
                 </div>
             </form>
+            
             
             
               <div class="card">

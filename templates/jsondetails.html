@@ -47,83 +47,84 @@ data-template="vertical-menu-template-free">
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
         <!-- Menu -->
-
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo">
-            <a href="" class="app-brand-link">
+            <a href="{% url 'analytics' %}" class="app-brand-link">
               <span class="app-brand-logo demo">
                 <img src="{% static 'image/waterdams.png' %}" alt="Water DaMS Logo" style="width: 150px; height: auto;">
               </span>
               
             </a>
-
+    
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
               <i class="bx bx-chevron-left bx-sm align-middle"></i>
             </a>
           </div>
-
+    
           <div class="menu-inner-shadow"></div>
-
+    
           <ul class="menu-inner py-1">
-            <!-- MasterData -->
+            <!-- MasterData >
             <li class="menu-item active open">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Dashboards">MasterData</div>
               </a>
               <ul class="menu-sub">
-                <!-- Location Master -->
+
+
+                <!-- Location Master >
                 <li class="menu-item has-submenu">
                   <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <div data-i18n="CRM">Location Master</div>
                   </a>
                   <ul class="menu-sub">
-                    <li class="submenu-item"><a href="#" class="submenu-link">District</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Block</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Taluk</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">District</a></li>
+                    <li class="submenu-item"><a href="" class="submenu-link">Block</a></li>
+                    <li class="submenu-item"><a href="{% url 'taluk_list' %}" class="submenu-link">Taluk</a></li>
                     <li class="submenu-item"><a href="#" class="submenu-link">Panchayat</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Jurisdiction</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Habitation</a></li>
+                    <li class="submenu-item"><a href="{% url 'jurisdiction_list' %}" class="submenu-link">Jurisdiction</a></li>
+                    <li class="submenu-item"><a href="{% url 'habitation_list' %}" class="submenu-link">Habitation</a></li>
                     <li class="submenu-item"><a href="#" class="submenu-link">Urban Local Bodies</a></li>
                   </ul>
                 </li>
           
-                <!-- Waterbody Master -->
+                <!-- Waterbody Master >
                 <li class="menu-item has-submenu">
                   <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <div data-i18n="Academy">Waterbody Master</div>
                   </a>
                   <ul class="menu-sub">
-                    <li class="submenu-item"><a href="#" class="submenu-link">Availability</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Ayacutnoncultivation</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Boundary Drop Points</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Bund Issue</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Barrel Type</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Bund Functionality</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Conditions</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Catchment Type</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Cropping</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Cross Section Type</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Distribution Land</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Depth Sill Level</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Exotic Species</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Family Nature</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Field Channel Type</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Fence Condition</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Fence Type</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Ghat Condition</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">
+                    <li class="submenu-item"><a href="{% url 'availability_list' %}" class="submenu-link">Availability</a></li>
+                    <li class="submenu-item"><a href="{% url 'ayacut_non_cultivation_list' %}" class="submenu-link">Ayacutnoncultivation</a></li>
+                    <li class="submenu-item"><a href="{% url 'boundary_drop_points_list' %}" class="submenu-link">Boundary Drop Points</a></li>
+                    <li class="submenu-item"><a href="{% url 'bund_issues_list' %}" class="submenu-link">Bund Issue</a></li>
+                    <li class="submenu-item"><a href="{% url 'barrel_type_list' %}" class="submenu-link">Barrel Type</a></li>
+                    <li class="submenu-item"><a href="{% url 'bund_functionality_list' %}" class="submenu-link">Bund Functionality</a></li>
+                    <li class="submenu-item"><a href="{% url 'conditions_list' %}" class="submenu-link">Conditions</a></li>
+                    <li class="submenu-item"><a href="{% url 'catchment_type_list' %}" class="submenu-link">Catchment Type</a></li>
+                    <li class="submenu-item"><a href="{% url 'cropings_list' %}" class="submenu-link">Cropping</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Cross Section Type</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Distribution Land</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Depth Sill Level</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Exotic Species</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Family Nature</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Field Channel Type</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Fence Condition</a></li>
+                    <li class="submenu-item"><a href="{% url 'fencetype_list' %}" class="submenu-link">Fence Type</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Ghat Condition</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">
                       Inlet Type</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Nature Investment</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Ownership</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Outlet Type</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Oorani Function</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">MWL Stone</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Pitching Condition</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Source</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Spread Issue</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Sluice / Surplus Type</a></li>
-                    <li class="submenu-item"><a href="#" class="submenu-link">Surplus Weirs</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Nature Investment</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Ownership</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Outlet Type</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Oorani Function</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">MWL Stone</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Pitching Condition</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Source</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Spread Issue</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Sluice / Surplus Type</a></li>
+                    <li class="submenu-item"><a href="{% url 'district_list' %}" class="submenu-link">Surplus Weirs</a></li>
                     <li class="submenu-item"><a href="#" class="submenu-link">Slit Trap</a></li>
                     <li class="submenu-item"><a href="#" class="submenu-link">Stream Issue</a></li>
                     <li class="submenu-item"><a href="#" class="submenu-link">Shutter</a></li>
@@ -139,9 +140,21 @@ data-template="vertical-menu-template-free">
                   </ul>
                 </li>
               </ul>
+            </li-->
+          <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-shield"></i>
+                <div data-i18n="Layouts">Dashboard</div>
+              </a>
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="{% url 'analytics' %}" class="menu-link">
+                    <div data-i18n="Without menu">Dashboard</div>
+                  </a>
+                </li>
+              </ul>
             </li>
-          
-            <!-- User Management -->
+            <!-- User Management >
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-user"></i>
@@ -149,19 +162,19 @@ data-template="vertical-menu-template-free">
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
+                  <a href="{% url 'fieldworkers' %}" class="menu-link">
                     <div data-i18n="Without menu">User</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
+                  <a href="{% url 'roles_table' %}" class="menu-link">
                     <div data-i18n="Without navbar">Role</div>
                   </a>
                 </li>
               </ul>
-            </li>
+            </li-->
           
-            <!-- Permission Management -->
+            <!-- Permission Management >
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-shield"></i>
@@ -169,12 +182,12 @@ data-template="vertical-menu-template-free">
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
+                  <a href="{% url 'selectroles' %}" class="menu-link">
                     <div data-i18n="Without menu">Permission</div>
                   </a>
                 </li>
               </ul>
-            </li>
+            </li-->
           
             <!-- Waterbody Details -->
             <li class="menu-item">
@@ -189,7 +202,7 @@ data-template="vertical-menu-template-free">
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
+                  <a href="{% url 'waterbody-table'%}" class="menu-link">
                     <div data-i18n="Without navbar">Reviews</div>
                   </a>
                 </li>
@@ -219,30 +232,18 @@ data-template="vertical-menu-template-free">
             <!--Settings-->
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-file"></i>
+                <i class="menu-icon tf-icons bx bx-cog"></i>
+
                 <div data-i18n="Layouts">Settings</div>
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
-                    <div data-i18n="Without menu">Profile</div>
+                  <a href="{%url 'change_password' %}" class="menu-link">
+                    <div data-i18n="Without menu">settings</div>
                   </a>
                 </li>
-                <li class="menu-item">
-                  <a href="#" class="menu-link">
-                    <div data-i18n="Without navbar">Security</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="#" class="menu-link">
-                    <div data-i18n="Without navbar">Notification</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="#" class="menu-link">
-                    <div data-i18n="Without navbar">Language</div>
-                  </a>
-                </li>
+                
+                
               </ul>
             </li>
           </ul>

@@ -415,39 +415,39 @@ data-template="vertical-menu-template-free">
                 </div>
               </div>
               <hr class="my-5" />
-   <!-- Start of Waterbodies Map Section -->
+ <!-- Start of Waterbodies Map Section -->
 <div class="card">
   <div class="row g-0">
-    <!-- Filter Section -->
-    <div class="col-md-4 border-end">
-      <div class="p-3">
-        <h4 class="card-title mb-3">Map Filtering</h4>
+      <!-- Filter Section -->
+      <div class="col-md-4 border-end">
+          <div class="p-3">
+              <h4 class="card-title mb-3">Map Filtering</h4>
 
-        <!-- Waterbody Types -->
-        <label for="typeFilter">Waterbody Type:</label>
-        <select id="typeFilter" class="form-select mb-3">
-          <option value="all">All</option>
-          <option value="PWD Tanks">PWD Tanks</option>
-          <option value="DRDA Tanks">DRDA Tanks</option>
-          <option value="DRDA Ponds">DRDA Ponds</option>
-        </select>
+              <!-- Waterbody Types -->
+              <label for="typeFilter">Waterbody Type:</label>
+              <select id="typeFilter" class="form-select mb-3">
+                  <option value="all">All</option>
+                  <option value="PWD Tanks">PWD Tanks</option>
+                  <option value="DRDA Tanks">DRDA Tanks</option>
+                  <option value="DRDA Ponds">DRDA Ponds</option>
+              </select>
 
-        <!-- Size Filter -->
-        <label for="sizeFilter">Size:</label>
-        <select id="sizeFilter" class="form-select mb-3">
-          <option value="all">All</option>
-          <option value="small">Small</option>
-          <option value="large">Large</option>
-        </select>
+              <!-- Size Filter -->
+              <label for="sizeFilter">Size:</label>
+              <select id="sizeFilter" class="form-select mb-3">
+                  <option value="all">All</option>
+                  <option value="small">Small</option>
+                  <option value="large">Large</option>
+              </select>
 
-        <button id="applyFilters" class="btn btn-primary mt-3">Apply Filters</button>
+              <button id="applyFilters" class="btn btn-primary mt-3">Apply Filters</button>
+          </div>
       </div>
-    </div>
 
-    <!-- Map Section -->
-    <div class="col-md-8">
-      <div id="map" style="height: 600px;"></div>
-    </div>
+      <!-- Map Section -->
+      <div class="col-md-8">
+          <div id="map" style="height: 600px;"></div>
+      </div>
   </div>
 </div>
 <!-- End of Waterbodies Map Section -->
@@ -534,11 +534,9 @@ data-template="vertical-menu-template-free">
                         fillOpacity: 0.6
                     });
 
-                    // Deferring heavy operations using setTimeout to optimize click performance
+                    // Handle click events for displaying details
                     layer.on('click', function() {
-                        setTimeout(() => {
-                            displayDetails(layer.feature.properties); // Delaying the displayDetails function
-                        }, 0);
+                        displayDetails(layer.feature.properties);
                     });
                 });
                 layerGroup.addLayer(kmlLayer);
@@ -569,9 +567,9 @@ data-template="vertical-menu-template-free">
         }
     }
 
-    // Optimizing the display of layer details in a more efficient manner
+    // Display layer details
     function displayDetails(properties) {
-        const fragment = document.createDocumentFragment(); // Create a document fragment to minimize reflows
+        const fragment = document.createDocumentFragment();
         for (const key in properties) {
             if (properties.hasOwnProperty(key)) {
                 const row = document.createElement('tr');
@@ -585,11 +583,11 @@ data-template="vertical-menu-template-free">
             }
         }
         const detailsContent = document.getElementById('details-content');
-        detailsContent.innerHTML = ''; // Clear previous content
-        detailsContent.appendChild(fragment); // Append new content all at once
+        detailsContent.innerHTML = '';
+        detailsContent.appendChild(fragment);
     }
 
-    // Apply size and type filters
+    // Apply filters
     document.getElementById('applyFilters').addEventListener('click', applyFilters);
 
     function applyFilters() {
@@ -597,37 +595,41 @@ data-template="vertical-menu-template-free">
         var sizeFilter = document.getElementById('sizeFilter').value;
 
         Object.keys(waterbodyLayers).forEach(function(layerName) {
-            var layer = waterbodyLayers[layerName];
-            map.removeLayer(layer);
-            if ((typeFilter === 'all' || layerName === typeFilter) && passesSizeFilter(layer, sizeFilter)) {
-                layer.addTo(map);
+            var layerGroup = waterbodyLayers[layerName];
+            map.removeLayer(layerGroup);
+            if (
+                (typeFilter === 'all' || layerName === typeFilter) &&
+                passesSizeFilter(layerGroup, sizeFilter)
+            ) {
+                layerGroup.addTo(map);
             }
         });
     }
 
-    // Size filter logic
-    function passesSizeFilter(layer, sizeFilter) {
-        var sizeCondition = true;
-        var sizeThresholds = {
-            small: 10000, // For example, areas less than 10,000 sq meters are considered small
-            large: 10000  // Areas greater than 10,000 sq meters are considered large
-        };
+    function passesSizeFilter(layerGroup, sizeFilter) {
+        var sizeThreshold = 10000; // Threshold: 10,000 sq meters
 
-        // Loop through each layer to determine the polygon size
-        layer.eachLayer(function(polygonLayer) {
-            var area = turf.area(polygonLayer.toGeoJSON());
-            
-            // Apply size filter logic
-            if (sizeFilter === 'small' && area >= sizeThresholds.small) {
-                sizeCondition = false; // Filter out larger polygons for small size
-            } else if (sizeFilter === 'large' && area < sizeThresholds.large) {
-                sizeCondition = false; // Filter out smaller polygons for large size
+        if (sizeFilter === 'all') {
+            return true; // No filtering for 'all'
+        }
+
+        var isValid = false;
+
+        layerGroup.eachLayer(function(layer) {
+            if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
+                var area = turf.area(layer.toGeoJSON());
+
+                if (
+                    (sizeFilter === 'small' && area < sizeThreshold) ||
+                    (sizeFilter === 'large' && area >= sizeThreshold)
+                ) {
+                    isValid = true;
+                }
             }
         });
 
-        return sizeCondition;
+        return isValid;
     }
-</script> 
-
+</script>
   </body>
 </html>

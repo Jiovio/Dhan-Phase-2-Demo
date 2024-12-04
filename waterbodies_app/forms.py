@@ -77,3 +77,11 @@ class PoOwaterbodyForm(forms.ModelForm):
     class Meta:
         model = PoOwaterbody
         fields = '__all__'
+        
+from .models import WaterBodyFieldReviewerReviewDetail
+
+class WaterBodyTypeFilterForm(forms.Form):
+    waterbodyType = forms.ChoiceField(
+        choices=[("", "All")] + [(x, x) for x in WaterBodyFieldReviewerReviewDetail.objects.values_list('waterbodyType', flat=True).distinct()],
+        required=False,
+    )

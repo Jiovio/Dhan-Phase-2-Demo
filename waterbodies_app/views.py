@@ -1656,15 +1656,39 @@ def waterbody_detail_view(request, pk):
 
     # Render the template with the context
     return render(request, 'jsondetails.html', context)
+import json
+from django.shortcuts import render
+from .models import WaterBodyFieldReviewerReviewDetail
+from .forms import WaterBodyTypeFilterForm
+
 def map_polygon(request):
-    # Fetch all rows with gpsCordinates
-    waterbodies = WaterBodyFieldReviewerReviewDetail.objects.all()
+    # Initialize the form
+    form = WaterBodyTypeFilterForm(request.GET)
 
-    # Prepare data to be passed to the template
-    polygons_data = []
-    for waterbody in waterbodies:
-        gps_coordinates = waterbody.gpsCordinates
-        # Make sure gps_coordinates is in the correct format (list of dicts)
-        polygons_data.append(gps_coordinates)
+    # Filter the queryset
+    queryset = WaterBodyFieldReviewerReviewDetail.objects.all()
+    if form.is_valid() and form.cleaned_data.get("waterbodyType"):
+        queryset = queryset.filter(waterbodyType=form.cleaned_data["waterbodyType"])
 
-    return render(request, 'map_polygon.html', {'polygons_data': polygons_data})
+    # Prepare GeoJSON data
+    features = []
+    for body in queryset:
+        gps_coordinates = body.gpsCordinates
+        if isinstance(gps_coordinates, str):
+            try:
+                gps_coordinates = json.loads(gps_coordinates)
+            except json.JSONDecodeError:
+                gps_coordinates = []
+
+        if isinstance(gps_coordinates, list):
+            coordinates = [[coord["long"], coord["lat"]] for coord in gps_coordinates]
+            feature = {
+                "type": "Feature",
+                "geometry": {"type": "Polygon", "coordinates": [coordinates]},
+                "properties": {"name": body.waterbodyName, "id": body.waterbodyId},
+            }
+            features.append(feature)
+
+    geojson_data = {"type": "FeatureCollection", "features": features}
+
+    return render(request, "map_polygon.html", {"form": form, "geojson_data": geojson_data})

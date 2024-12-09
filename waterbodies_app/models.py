@@ -342,6 +342,7 @@ class TankData(models.Model):
 
     def __str__(self):
         return self.tank_name
+
     
 class WaterBodyFieldReviewerReviewDetail(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)  # Use uuid4 to generate unique IDs
@@ -360,6 +361,7 @@ class WaterBodyFieldReviewerReviewDetail(models.Model):
     ward = models.CharField(max_length=255, blank=True)
     waterParams = models.JSONField()
     gpsCordinates = models.JSONField()
+    
     draft_status = models.IntegerField()
     verify_status = models.IntegerField()
     createdBy = models.CharField(max_length=255)

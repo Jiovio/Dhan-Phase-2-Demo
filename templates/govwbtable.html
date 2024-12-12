@@ -364,7 +364,7 @@ data-template="vertical-menu-template-free">
                 <h4 class="py-3 mb-4"><span class="text-muted fw-light">Table /</span> Ponds & Ooranis</h4>
         
                 <!-- Filter Form -->
-                <form method="get">
+                <form method="get" id="filter-form">
                   <div class="row mb-3">
                       <div class="col-md-2">
                           <input type="text" name="taluk" placeholder="Filter by Taluk" value="{{ filter_form.taluk }}" class="form-control">
@@ -373,16 +373,23 @@ data-template="vertical-menu-template-free">
                           <input type="text" name="village" placeholder="Filter by Village" value="{{ filter_form.village }}" class="form-control">
                       </div>
                       <div class="col-md-2">
-                          <input type="text" name="ponds_oo" placeholder="Filter by Ponds" value="{{ filter_form.ponds_oo }}" class="form-control">
+                          <input type="text" name="latitude" id="latitude" placeholder="Your Latitude" value="{{ filter_form.latitude }}" class="form-control" readonly>
                       </div>
                       <div class="col-md-2">
-                          <input type="text" name="unique_id" placeholder="Filter by Unique ID" value="{{ filter_form.unique_id }}" class="form-control">
+                          <input type="text" name="longitude" id="longitude" placeholder="Your Longitude" value="{{ filter_form.longitude }}" class="form-control" readonly>
+                      </div>
+                      <div class="col-md-2">
+                          <input type="text" name="radius" placeholder="Radius (km)" value="{{ filter_form.radius }}" class="form-control">
+                      </div>
+                      <div class="col-md-2">
+                          <button type="button" class="btn btn-info w-100" id="get-location">Get Location</button>
                       </div>
                       <div class="col-md-2">
                           <button type="submit" class="btn btn-primary w-100">Filter</button>
                       </div>
                   </div>
               </form>
+              
               
               
                 <!--form method="GET" class="mb-4">
@@ -628,6 +635,20 @@ data-template="vertical-menu-template-free">
             }
         });
     </script>
+    <script>
+      document.getElementById("get-location").addEventListener("click", function () {
+          if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(function (position) {
+                  document.getElementById("latitude").value = position.coords.latitude;
+                  document.getElementById("longitude").value = position.coords.longitude;
+              }, function (error) {
+                  alert("Unable to retrieve location. Please enable location services.");
+              });
+          } else {
+              alert("Geolocation is not supported by this browser.");
+          }
+      });
+  </script>
     
     <!-- endbuild -->
 

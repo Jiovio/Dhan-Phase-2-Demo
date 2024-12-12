@@ -108,22 +108,55 @@ def water_body_details(request, water_body_id):
         return render(request, 'error.html', {'error_message': str(e)})
 def tableau_visualization(request):
     return render(request, 'map.html')
+from django.db.models import F
+from math import radians, cos, sin, sqrt, atan2
+
+def calculate_distance(lat1, lon1, lat2, lon2):
+    # Convert latitude and longitude from degrees to radians
+    lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
+    # Haversine formula
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    radius_of_earth_km = 6371
+    return radius_of_earth_km * c
+
 def tabledesign(request):
     # Get filter values from the request
     taluk_filter = request.GET.get('taluk', '')
     village_filter = request.GET.get('village', '')
+    latitude = request.GET.get('latitude', '')
+    longitude = request.GET.get('longitude', '')
+    radius = request.GET.get('radius', '')
 
-    # Fetch all records from the PoOwaterbody model, applying filters
+    # Fetch all records from the PoOwaterbody model
     waterbodies_list = PoOwaterbody.objects.all()
 
-    # Apply filters if they exist
+    # Apply text filters if they exist
     if taluk_filter:
-        waterbodies_list = waterbodies_list.filter(taluk__icontains=taluk_filter)  # Case-insensitive search
+        waterbodies_list = waterbodies_list.filter(taluk__icontains=taluk_filter)
     if village_filter:
-        waterbodies_list = waterbodies_list.filter(village__icontains=village_filter)  # Case-insensitive search
+        waterbodies_list = waterbodies_list.filter(village__icontains=village_filter)
+
+    # Apply nearby filter
+    if latitude and longitude and radius:
+        try:
+            latitude = float(latitude)
+            longitude = float(longitude)
+            radius = float(radius)
+
+            # Filter waterbodies by distance
+            waterbodies_list = [
+                wb for wb in waterbodies_list
+                if calculate_distance(latitude, longitude, wb.latitude, wb.longitude) <= radius
+            ]
+        except ValueError:
+            # Handle invalid input
+            pass
 
     # Paginate the records
-    paginator = Paginator(waterbodies_list, 10)  # Show 10 records per page
+    paginator = Paginator(waterbodies_list, 10)
     page_number = request.GET.get('page')
     waterbodies = paginator.get_page(page_number)
 
@@ -134,10 +167,12 @@ def tabledesign(request):
     context = {
         'waterbodies': waterbodies,
         'forms': forms,
-        'filter_form': request.GET,  # Include the filter values in the context
+        'filter_form': request.GET,
     }
 
     return render(request, 'govwbtable.html', context)
+
+
 
 # Update waterbody view (AJAX-based)
 def update_waterbody(request, pk):

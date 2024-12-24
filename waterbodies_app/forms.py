@@ -85,3 +85,6 @@ class WaterBodyTypeFilterForm(forms.Form):
         choices=[("", "All")] + [(x, x) for x in WaterBodyFieldReviewerReviewDetail.objects.values_list('waterbodyType', flat=True).distinct()],
         required=False,
     )
+    latitude = forms.FloatField(required=False, label="Latitude")
+    longitude = forms.FloatField(required=False, label="Longitude")
+    radius = forms.FloatField(required=False, label="Radius (km)")

@@ -185,6 +185,8 @@ urlpatterns = [
     path('userprofile/', UserProfileListCreateView.as_view(), name='userprofile-list-create'),
     path('userprofile/<int:pk>/', UserProfileDetailView.as_view(), name='userprofile-detail'),
     path('waterbody-table/', waterbody_table_view, name='waterbody-table'),  # Table view
+    path('waterbody/<uuid:pk>/download/', views.download_waterbody_pdf, name='waterbody-download'),
+
     path('waterbody-detail/<uuid:pk>/', waterbody_detail_view, name='waterbody-detail'),
      # Add this line
       path("map_polygon/", views.map_polygon, name="map_polygon"),

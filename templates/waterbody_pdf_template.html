@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Waterbody Details</title>
+</head>
+<body>
+    <h1>Waterbody Details</h1>
+    <p><strong>Survey Number:</strong> {{ waterbody.surveyNumber }}</p>
+    <p><strong>Waterbody ID:</strong> {{ waterbody.waterbodyId }}</p>
+    <p><strong>Waterbody Name:</strong> {{ waterbody.waterbodyName }}</p>
+    <p><strong>Waterbody Type:</strong> {{ waterbody.waterbodyType }}</p>
+    <p><strong>District:</strong> {{ waterbody.district }}</p>
+    <p><strong>Taluk:</strong> {{ waterbody.taluk }}</p>
+    <p><strong>Block:</strong> {{ waterbody.block }}</p>
+    <p><strong>Village:</strong> {{ waterbody.village }}</p>
+    <p><strong>Jurisdiction:</strong> {{ waterbody.jurisdiction }}</p>
+    <p><strong>Ward:</strong> {{ waterbody.ward }}</p>
+
+    <h2>Water Parameters</h2>
+    <ul>
+        {% for key, value in water_params.items %}
+        <li><strong>{{ key }}:</strong> {{ value }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>GPS Coordinates</h2>
+    {% if gps_coordinates %}
+        <p><strong>Coordinates:</strong></p>
+        <ul>
+            {% for coord in gps_coordinates %}
+            <li>Latitude: {{ coord.latitude }}, Longitude: {{ coord.longitude }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No GPS coordinates available.</p>
+    {% endif %}
+</body>
+</html>

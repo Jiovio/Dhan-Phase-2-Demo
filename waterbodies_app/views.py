@@ -110,18 +110,19 @@ def tableau_visualization(request):
     return render(request, 'map.html')
 from django.db.models import F
 from math import radians, cos, sin, sqrt, atan2
+import logging
 
 def calculate_distance(lat1, lon1, lat2, lon2):
     # Convert latitude and longitude from degrees to radians
     lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
-    # Haversine formula
     dlat = lat2 - lat1
     dlon = lon2 - lon1
     a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
     radius_of_earth_km = 6371
-    return radius_of_earth_km * c
-
+    distance = radius_of_earth_km * c
+    logging.info(f"Distance between ({lat1}, {lon1}) and ({lat2}, {lon2}): {distance} km")
+    return distance
 def tabledesign(request):
     # Get filter values from the request
     taluk_filter = request.GET.get('taluk', '')
@@ -171,6 +172,7 @@ def tabledesign(request):
     }
 
     return render(request, 'govwbtable.html', context)
+
 
 
 
@@ -1513,7 +1515,7 @@ def waterbody_table_view(request):
     survey_number_filter = request.GET.get('surveyNumber')
     waterbody_id_filter = request.GET.get('waterbodyId')
     percentage_of_spread_filter = request.GET.get('percentageOfSpread')
-    future_activity_filter = request.GET.get('futureActivity')
+    future_activity_filter = request.GET.getlist('futureActivity')  # Get list of selected future activities
     retaining_wall_filter = request.GET.get('presenceOfRetainingWall')  # New filter
     jurisdiction_filter = request.GET.get('jurisdiction')  # New filter
 
@@ -1552,13 +1554,24 @@ def waterbody_table_view(request):
                 percentage_of_spread = water_spread_area_details.get('percentageOfSpread', '')
 
                 # Apply filters
+                # Check if any of the selected future activities match
+                future_activity_match = (
+                    not future_activity_filter or any(
+                        activity in future_activity_filter for activity in future_activities
+                    )
+                )
+                
+                # Check if retaining wall status matches
+                retaining_wall_match = not retaining_wall_filter or retaining_wall_filter == retaining_wall_status
+
                 if (
                     (not percentage_of_spread_filter or percentage_of_spread_filter in percentage_of_spread) and
-                    (not future_activity_filter or future_activity_filter in future_activities) and
-                    (not retaining_wall_filter or retaining_wall_filter == retaining_wall_status)
+                    future_activity_match and
+                    retaining_wall_match
                 ):
                     filtered_waterbodies.append(waterbody)
-            except (ValueError, TypeError):
+            except (ValueError, TypeError) as e:
+                print(f"Error processing waterbody {waterbody.id}: {e}")
                 continue
 
         waterbodies = filtered_waterbodies
@@ -1696,14 +1709,50 @@ from django.shortcuts import render
 from .models import WaterBodyFieldReviewerReviewDetail
 from .forms import WaterBodyTypeFilterForm
 
-def map_polygon(request):
-    # Initialize the form
-    form = WaterBodyTypeFilterForm(request.GET)
+import json
+from math import radians, sin, cos, sqrt, atan2
 
-    # Filter the queryset
+def haversine(lat1, lon1, lat2, lon2):
+    # Earth radius in kilometers
+    R = 6371.0
+    dlat = radians(lat2 - lat1)
+    dlon = radians(lon2 - lon1)
+    a = sin(dlat / 2)**2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    return R * c
+
+def map_polygon(request):
+    form = WaterBodyTypeFilterForm(request.GET)
     queryset = WaterBodyFieldReviewerReviewDetail.objects.all()
-    if form.is_valid() and form.cleaned_data.get("waterbodyType"):
-        queryset = queryset.filter(waterbodyType=form.cleaned_data["waterbodyType"])
+
+    if form.is_valid():
+        # Filter by waterbody type
+        if form.cleaned_data.get("waterbodyType"):
+            queryset = queryset.filter(waterbodyType=form.cleaned_data["waterbodyType"])
+
+        # Filter by nearby waterbodies
+        lat = form.cleaned_data.get("latitude")
+        lon = form.cleaned_data.get("longitude")
+        radius = form.cleaned_data.get("radius")
+
+        if lat is not None and lon is not None and radius is not None:
+            nearby_ids = []
+            for body in queryset:
+                gps_coordinates = body.gpsCordinates
+                if isinstance(gps_coordinates, str):
+                    try:
+                        gps_coordinates = json.loads(gps_coordinates)
+                    except json.JSONDecodeError:
+                        gps_coordinates = []
+
+                if isinstance(gps_coordinates, list):
+                    for coord in gps_coordinates:
+                        dist = haversine(lat, lon, coord["lat"], coord["long"])
+                        if dist <= radius:
+                            nearby_ids.append(body.id)
+                            break
+
+            queryset = queryset.filter(id__in=nearby_ids)
 
     # Prepare GeoJSON data
     features = []
@@ -1727,3 +1776,36 @@ def map_polygon(request):
     geojson_data = {"type": "FeatureCollection", "features": features}
 
     return render(request, "map_polygon.html", {"form": form, "geojson_data": geojson_data})
+
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from .models import WaterBodyFieldReviewerReviewDetail
+import json
+
+def download_waterbody_pdf(request, pk):
+    waterbody = WaterBodyFieldReviewerReviewDetail.objects.get(pk=pk)
+    template = get_template('waterbody_pdf_template.html')
+    
+    # Parse JSON fields
+    try:
+        water_params = json.loads(waterbody.waterParams) if isinstance(waterbody.waterParams, str) else waterbody.waterParams
+    except (ValueError, TypeError):
+        water_params = {}
+
+    try:
+        gps_coordinates = json.loads(waterbody.gpsCordinates) if isinstance(waterbody.gpsCordinates, str) else waterbody.gpsCordinates
+    except (ValueError, TypeError):
+        gps_coordinates = {}
+
+    context = {
+        'waterbody': waterbody,
+        'water_params': water_params,
+        'gps_coordinates': gps_coordinates,
+    }
+    html = template.render(context)
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="Waterbody_{waterbody.waterbodyId}.pdf"'
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response

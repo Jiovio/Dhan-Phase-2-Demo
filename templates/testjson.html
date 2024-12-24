@@ -408,28 +408,92 @@ data-template="vertical-menu-template-free">
                     
                     <!-- Future Activities Filter -->
                     <div class="col-md-3">
-                        <label for="futureActivity" class="form-label">Required Interventions:</label>
-                        <select name="futureActivity" id="futureActivity" class="form-select">
-                            <option value="">--Select--</option>
-                            <option value="Earthwork/Desilting" {% if request.GET.futureActivity == 'Earthwork/Desilting' %}selected{% endif %}>Earthwork/Desilting</option>
-                            <option value="Retaining wall construction" {% if request.GET.futureActivity == 'Retaining wall construction' %}selected{% endif %}>Retaining wall construction</option>
-                            <option value="Repair of Sluice" {% if request.GET.futureActivity == 'Repair of Sluice' %}selected{% endif %}>Repair of Sluice</option>
-                            <option value="Surplus Weir" {% if request.GET.futureActivity == 'Surplus Weir' %}selected{% endif %}>Surplus Weir</option>
-                            <option value="Inlet construction" {% if request.GET.futureActivity == 'Inlet construction' %}selected{% endif %}>Inlet construction</option>
-                            <option value="Outlet Construction" {% if request.GET.futureActivity == 'Outlet Construction' %}selected{% endif %}>Outlet Construction</option>
-                            <option value="Bund Strengthening" {% if request.GET.futureActivity == 'Bund Strengthening' %}selected{% endif %}>Bund Strengthening</option>
-                            <option value="Revetment construction" {% if request.GET.futureActivity == 'Revetment construction' %}selected{% endif %}>Revetment construction</option>
-                            <option value="Ghat construction" {% if request.GET.futureActivity == 'Ghat construction' %}selected{% endif %}>Ghat construction</option>
-                            <option value="Jungle Clearance" {% if request.GET.futureActivity == 'Jungle Clearance' %}selected{% endif %}>Jungle Clearance</option>
-                            <option value="Walking Pavement construction" {% if request.GET.futureActivity == 'Walking Pavement construction' %}selected{% endif %}>Walking Pavement construction</option>
-                            <option value="Tree plantation" {% if request.GET.futureActivity == 'Tree plantation' %}selected{% endif %}>Tree plantation</option>
-                            <option value="Fencing/Wall Construction" {% if request.GET.futureActivity == 'Fencing/Wall Construction' %}selected{% endif %}>Fencing/Wall Construction</option>
-                            <option value="Construction/repair of well" {% if request.GET.futureActivity == 'Construction/repair of well' %}selected{% endif %}>Construction/repair of well</option>
-                            <option value="Restoration of supply channel" {% if request.GET.futureActivity == 'Restoration of supply channel' %}selected{% endif %}>Restoration of supply channel</option>
-                            <option value="Creation of new supply channel" {% if request.GET.futureActivity == 'Creation of new supply channel' %}selected{% endif %}>Creation of new supply channel</option>
-                        </select>
-                    </div>
-                    
+                      <label for="futureActivity" class="form-label">Required Interventions:</label>
+                      <div>
+                          <label>
+                              <input type="checkbox" name="futureActivity[]" value="Earthwork/Desilting" 
+                              {% if 'Earthwork/Desilting' in request.GET.futureActivity %}checked{% endif %}> 
+                              Earthwork/Desilting
+                          </label><br>
+                          <label>
+                              <input type="checkbox" name="futureActivity[]" value="Retaining wall construction" 
+                              {% if 'Retaining wall construction' in request.GET.futureActivity %}checked{% endif %}> 
+                              Retaining wall construction
+                          </label><br>
+                          <label>
+                              <input type="checkbox" name="futureActivity[]" value="Repair of Sluice" 
+                              {% if 'Repair of Sluice' in request.GET.futureActivity %}checked{% endif %}> 
+                              Repair of Sluice
+                          </label><br>
+                          <label>
+                              <input type="checkbox" name="futureActivity[]" value="Surplus Weir" 
+                              {% if 'Surplus Weir' in request.GET.futureActivity %}checked{% endif %}> 
+                              Surplus Weir
+                          </label><br>
+                          <label>
+                              <input type="checkbox" name="futureActivity[]" value="Bund Strengthening" 
+                              {% if 'Bund Strengthening' in request.GET.futureActivity %}checked{% endif %}> 
+                              Bund Strengthening
+                          </label><br>
+                          <label>
+                              <input type="checkbox" name="futureActivity[]" value="Weir Construction" 
+                              {% if 'Weir Construction' in request.GET.futureActivity %}checked{% endif %}> 
+                              Weir Construction
+                          </label><br>
+                          <label>
+                              <input type="checkbox" name="futureActivity[]" value="Vegetation Removal" 
+                              {% if 'Vegetation Removal' in request.GET.futureActivity %}checked{% endif %}> 
+                              Vegetation Removal
+                          </label><br>
+                          <label>
+                              <input type="checkbox" name="futureActivity[]" value="Silt Removal" 
+                              {% if 'Silt Removal' in request.GET.futureActivity %}checked{% endif %}> 
+                              Silt Removal
+                          </label><br>
+                          <label>
+                              <input type="checkbox" name="futureActivity[]" value="Inlet construction" 
+                              {% if 'Inlet construction' in request.GET.futureActivity %}checked{% endif %}> 
+                              Inlet construction
+                          </label><br>
+                          <label>
+                              <input type="checkbox" name="futureActivity[]" value="Outlet Construction" 
+                              {% if 'Outlet Construction' in request.GET.futureActivity %}checked{% endif %}> 
+                              Outlet Construction
+                          </label><br>
+                          <label>
+                              <input type="checkbox" name="futureActivity[]" value="Walking Pavement construction" 
+                              {% if 'Walking Pavement construction' in request.GET.futureActivity %}checked{% endif %}> 
+                              Walking Pavement construction
+                          </label><br>
+                          <label>
+                              <input type="checkbox" name="futureActivity[]" value="Tree plantation" 
+                              {% if 'Tree plantation' in request.GET.futureActivity %}checked{% endif %}> 
+                              Tree plantation
+                          </label><br>
+                          <label>
+                              <input type="checkbox" name="futureActivity[]" value="Fencing/Wall Construction" 
+                              {% if 'Fencing/Wall Construction' in request.GET.futureActivity %}checked{% endif %}> 
+                              Fencing/Wall Construction
+                          </label><br>
+                          <label>
+                              <input type="checkbox" name="futureActivity[]" value="Construction/repair of well" 
+                              {% if 'Construction/repair of well' in request.GET.futureActivity %}checked{% endif %}> 
+                              Construction/repair of well
+                          </label><br>
+                          <label>
+                              <input type="checkbox" name="futureActivity[]" value="Restoration of supply channel" 
+                              {% if 'Restoration of supply channel' in request.GET.futureActivity %}checked{% endif %}> 
+                              Restoration of supply channel
+                          </label><br>
+                          <label>
+                              <input type="checkbox" name="futureActivity[]" value="Creation of new supply channel" 
+                              {% if 'Creation of new supply channel' in request.GET.futureActivity %}checked{% endif %}> 
+                              Creation of new supply channel
+                          </label><br>
+                      </div>
+                  </div>
+                  
+                  
                     <div class="col-md-2">
                         <label for="waterbodyType" class="form-label">Type of Waterbody:</label>
                         <select name="waterbodyType" id="waterbodyType" class="form-select">
@@ -492,8 +556,12 @@ data-template="vertical-menu-template-free">
                                 
                                 
                                 
+                                
                                 <td><a href="{% url 'waterbody-detail' waterbody.id %}"><i class="fas fa-eye"></i></a></td>
-                            </tr>
+                                <td><a href="{% url 'waterbody-download' waterbody.id %}"><i class="fas fa-download"></i></a>
+                              </td>
+                              </tr>
+
                             {% endfor %}
                         </tbody>
                     </table>

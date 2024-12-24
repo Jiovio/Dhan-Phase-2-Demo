@@ -373,17 +373,17 @@ data-template="vertical-menu-template-free">
                           <input type="text" name="village" placeholder="Filter by Village" value="{{ filter_form.village }}" class="form-control">
                       </div>
                       <div class="col-md-2">
-                          <input type="text" name="latitude" id="latitude" placeholder="Your Latitude" value="{{ filter_form.latitude }}" class="form-control" readonly>
-                      </div>
-                      <div class="col-md-2">
-                          <input type="text" name="longitude" id="longitude" placeholder="Your Longitude" value="{{ filter_form.longitude }}" class="form-control" readonly>
-                      </div>
-                      <div class="col-md-2">
-                          <input type="text" name="radius" placeholder="Radius (km)" value="{{ filter_form.radius }}" class="form-control">
-                      </div>
-                      <div class="col-md-2">
-                          <button type="button" class="btn btn-info w-100" id="get-location">Get Location</button>
-                      </div>
+                        <input type="text" name="latitude" id="latitude" placeholder="Your Latitude" value="{{ filter_form.latitude }}" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" name="longitude" id="longitude" placeholder="Your Longitude" value="{{ filter_form.longitude }}" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" name="radius" placeholder="Radius (km)" value="{{ filter_form.radius }}" class="form-control">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-info w-100" id="get-location">Get Location</button>
+                    </div>
                       <div class="col-md-2">
                           <button type="submit" class="btn btn-primary w-100">Filter</button>
                       </div>
@@ -636,19 +636,19 @@ data-template="vertical-menu-template-free">
         });
     </script>
     <script>
-      document.getElementById("get-location").addEventListener("click", function () {
+      document.getElementById('get-location').addEventListener('click', () => {
           if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(function (position) {
-                  document.getElementById("latitude").value = position.coords.latitude;
-                  document.getElementById("longitude").value = position.coords.longitude;
-              }, function (error) {
-                  alert("Unable to retrieve location. Please enable location services.");
+              navigator.geolocation.getCurrentPosition((position) => {
+                  document.getElementById('latitude').value = position.coords.latitude;
+                  document.getElementById('longitude').value = position.coords.longitude;
+              }, (error) => {
+                  alert('Unable to retrieve your location. Please allow location access.');
               });
           } else {
-              alert("Geolocation is not supported by this browser.");
+              alert('Geolocation is not supported by your browser.');
           }
       });
-  </script>
+    </script>
     
     <!-- endbuild -->
 

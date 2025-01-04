@@ -1771,6 +1771,7 @@ def map_polygon(request):
                 "geometry": {"type": "Polygon", "coordinates": [coordinates]},
                 "properties": {"name": body.waterbodyName, "id": body.waterbodyId},
             }
+            
             features.append(feature)
 
     geojson_data = {"type": "FeatureCollection", "features": features}

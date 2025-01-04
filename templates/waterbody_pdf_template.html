@@ -17,22 +17,23 @@
     <p><strong>Ward:</strong> {{ waterbody.ward }}</p>
 
     <h2>Water Parameters</h2>
-    <ul>
-        {% for key, value in water_params.items %}
-        <li><strong>{{ key }}:</strong> {{ value }}</li>
-        {% endfor %}
-    </ul>
-
-    <h2>GPS Coordinates</h2>
-    {% if gps_coordinates %}
-        <p><strong>Coordinates:</strong></p>
-        <ul>
-            {% for coord in gps_coordinates %}
-            <li>Latitude: {{ coord.latitude }}, Longitude: {{ coord.longitude }}</li>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, value in water_params.items %}
+            <tr>
+                <td>{{ key }}</td>
+                <td>{{ value }}</td>
+            </tr>
             {% endfor %}
-        </ul>
-    {% else %}
-        <p>No GPS coordinates available.</p>
-    {% endif %}
+        </tbody>
+    </table>
+
+    
 </body>
 </html>

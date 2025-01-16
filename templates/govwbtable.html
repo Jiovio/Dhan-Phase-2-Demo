@@ -163,7 +163,7 @@ data-template="vertical-menu-template-free">
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="{% url 'fieldworkers' %}" class="menu-link">
+                  
                     <div data-i18n="Without menu">User</div>
                   </a>
                 </li>
@@ -366,29 +366,60 @@ data-template="vertical-menu-template-free">
                 <!-- Filter Form -->
                 <form method="get" id="filter-form">
                   <div class="row mb-3">
+                      <!-- Taluk Dropdown -->
                       <div class="col-md-2">
-                          <input type="text" name="taluk" placeholder="Filter by Taluk" value="{{ filter_form.taluk }}" class="form-control">
+                          <select name="taluk" class="form-control">
+                              <option value="">Filter by Taluk</option>
+                              {% for taluk in filter_form.fields.taluk.choices %}
+                                  <option value="{{ taluk.0 }}" {% if request.GET.taluk == taluk.0 %}selected{% endif %}>
+                                      {{ taluk.1 }}
+                                  </option>
+                              {% endfor %}
+                          </select>
                       </div>
+              
+                      <!-- Village Dropdown -->
                       <div class="col-md-2">
-                          <input type="text" name="village" placeholder="Filter by Village" value="{{ filter_form.village }}" class="form-control">
+                          <select name="village" class="form-control">
+                              <option value="">Filter by Village</option>
+                              {% for village in filter_form.fields.village.choices %}
+                                  <option value="{{ village.0 }}" {% if request.GET.village == village.0 %}selected{% endif %}>
+                                      {{ village.1 }}
+                                  </option>
+                              {% endfor %}
+                          </select>
                       </div>
+              
+                      <!-- Latitude -->
                       <div class="col-md-2">
-                        <input type="text" name="latitude" id="latitude" placeholder="Your Latitude" value="{{ filter_form.latitude }}" class="form-control" readonly>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" name="longitude" id="longitude" placeholder="Your Longitude" value="{{ filter_form.longitude }}" class="form-control" readonly>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" name="radius" placeholder="Radius (km)" value="{{ filter_form.radius }}" class="form-control">
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-info w-100" id="get-location">Get Location</button>
-                    </div>
+                          <input type="text" name="latitude" id="latitude" placeholder="Your Latitude"
+                                 value="{{ request.GET.latitude }}" class="form-control" readonly>
+                      </div>
+              
+                      <!-- Longitude -->
                       <div class="col-md-2">
+                          <input type="text" name="longitude" id="longitude" placeholder="Your Longitude"
+                                 value="{{ request.GET.longitude }}" class="form-control" readonly>
+                      </div>
+              
+                      <!-- Radius -->
+                      <div class="col-md-2">
+                          <input type="text" name="radius" placeholder="Radius (km)"
+                                 value="{{ request.GET.radius }}" class="form-control">
+                      </div>
+              
+                      <!-- Get Location Button -->
+                      <div class="col-md-1">
+                          <button type="button" class="btn btn-info w-100" id="get-location">📍</button>
+                      </div>
+              
+                      <!-- Filter Button -->
+                      <div class="col-md-1">
                           <button type="submit" class="btn btn-primary w-100">Filter</button>
                       </div>
                   </div>
               </form>
+              
               
               
               
@@ -507,17 +538,17 @@ data-template="vertical-menu-template-free">
                     <!-- Pagination Controls -->
                             <!-- Pagination Controls -->
                             <div class="pagination">
-                              <ul class="pagination"> <!-- Use ul for better Bootstrap compatibility -->
+                              <ul class="pagination">
                                   <!-- First and Previous Links -->
                                   {% if waterbodies.has_previous %}
                                       <li class="page-item">
-                                          <a class="page-link" href="?page=1" aria-label="First">
-                                              <span aria-hidden="true">&laquo;&laquo;</span> <!-- First page symbol -->
+                                          <a class="page-link" href="?page=1&{{ request.GET.urlencode }}" aria-label="First">
+                                              <span aria-hidden="true">&laquo;&laquo;</span>
                                           </a>
                                       </li>
                                       <li class="page-item">
-                                          <a class="page-link" href="?page={{ waterbodies.previous_page_number }}" aria-label="Previous">
-                                              <span aria-hidden="true">&laquo;</span> <!-- Previous page symbol -->
+                                          <a class="page-link" href="?page={{ waterbodies.previous_page_number }}&{{ request.GET.urlencode }}" aria-label="Previous">
+                                              <span aria-hidden="true">&laquo;</span>
                                           </a>
                                       </li>
                                   {% else %}
@@ -532,22 +563,24 @@ data-template="vertical-menu-template-free">
                                   <!-- Page Numbers -->
                                   {% for num in waterbodies.paginator.page_range %}
                                       {% if waterbodies.number == num %}
-                                          <li class="page-item active"><span class="page-link">{{ num }}</span></li> <!-- Active page -->
+                                          <li class="page-item active"><span class="page-link">{{ num }}</span></li>
                                       {% elif num > waterbodies.number|add:'-5' and num < waterbodies.number|add:'5' %}
-                                          <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                          <li class="page-item">
+                                              <a class="page-link" href="?page={{ num }}&{{ request.GET.urlencode }}">{{ num }}</a>
+                                          </li>
                                       {% endif %}
                                   {% endfor %}
                           
                                   <!-- Next and Last Links -->
                                   {% if waterbodies.has_next %}
                                       <li class="page-item">
-                                          <a class="page-link" href="?page={{ waterbodies.next_page_number }}" aria-label="Next">
-                                              <span aria-hidden="true">&raquo;</span> <!-- Next page symbol -->
+                                          <a class="page-link" href="?page={{ waterbodies.next_page_number }}&{{ request.GET.urlencode }}" aria-label="Next">
+                                              <span aria-hidden="true">&raquo;</span>
                                           </a>
                                       </li>
                                       <li class="page-item">
-                                          <a class="page-link" href="?page={{ waterbodies.paginator.num_pages }}" aria-label="Last">
-                                              <span aria-hidden="true">&raquo;&raquo;</span> <!-- Last page symbol -->
+                                          <a class="page-link" href="?page={{ waterbodies.paginator.num_pages }}&{{ request.GET.urlencode }}" aria-label="Last">
+                                              <span aria-hidden="true">&raquo;&raquo;</span>
                                           </a>
                                       </li>
                                   {% else %}
@@ -560,6 +593,7 @@ data-template="vertical-menu-template-free">
                                   {% endif %}
                               </ul>
                           </div>
+                          
                           
                 </div>
             </div>

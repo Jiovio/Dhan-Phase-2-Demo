@@ -163,7 +163,7 @@ data-template="vertical-menu-template-free">
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="{% url 'fieldworkers' %}" class="menu-link">
+                  
                     <div data-i18n="Without menu">User</div>
                   </a>
                 </li>
@@ -376,17 +376,35 @@ data-template="vertical-menu-template-free">
                     </div>
                     
                     <div class="col-md-2">
-                        <label for="block" class="form-label">Block:</label>
-                        <input type="text" name="block" id="block" class="form-control" value="{{ request.GET.block }}">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="taluk" class="form-label">Taluk:</label>
-                        <input type="text" name="taluk" id="taluk" class="form-control" value="{{ request.GET.taluk }}">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="village" class="form-label">Village:</label>
-                        <input type="text" name="village" id="village" class="form-control" value="{{ request.GET.village }}">
-                    </div>
+                      <label for="block" class="form-label">Block:</label>
+                      <select name="block" id="block" class="form-control">
+                          <option value="">-- Select Block --</option>
+                          {% for block in blocks %}
+                              <option value="{{ block }}" {% if request.GET.block == block %}selected{% endif %}>{{ block }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+                  
+                  <div class="col-md-2">
+                      <label for="taluk" class="form-label">Taluk:</label>
+                      <select name="taluk" id="taluk" class="form-control">
+                          <option value="">-- Select Taluk --</option>
+                          {% for taluk in taluks %}
+                              <option value="{{ taluk }}" {% if request.GET.taluk == taluk %}selected{% endif %}>{{ taluk }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+                  
+                  <div class="col-md-2">
+                      <label for="village" class="form-label">Village:</label>
+                      <select name="village" id="village" class="form-control">
+                          <option value="">-- Select Village --</option>
+                          {% for village in villages %}
+                              <option value="{{ village }}" {% if request.GET.village == village %}selected{% endif %}>{{ village }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+                  
                     <div class="col-md-2">
                       <label for="jurisdiction" class="form-label">Jurisdiction:</label>
                       <select name="jurisdiction" id="jurisdiction" class="form-select">
@@ -406,7 +424,7 @@ data-template="vertical-menu-template-free">
                         </select>
                     </div>
                     
-                    <!-- Future Activities Filter -->
+                    <!-- Future Activities Filter >
                     <div class="col-md-3">
                       <label for="futureActivity" class="form-label">Required Interventions:</label>
                       <div>
@@ -491,7 +509,7 @@ data-template="vertical-menu-template-free">
                               Creation of new supply channel
                           </label><br>
                       </div>
-                  </div>
+                  </div-->
                   
                   
                     <div class="col-md-2">
@@ -534,6 +552,7 @@ data-template="vertical-menu-template-free">
                                 <th>Ward</th>
                                 
                                 <th>Actions</th>
+                                <th>Download</th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">

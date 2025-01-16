@@ -22,7 +22,6 @@ from .views import(
     tableau_visualization,
     dashboardanalytics,
     
-    water_body_details,
     
     
     
@@ -39,7 +38,7 @@ from .views import custom_login_view
 from .views import register_view
 from .views import user_list_view
 from .views import pond_list
-from .views import fetch_water_spread_data
+
 from .views import upload_kml
 from .views import  map_view
 from waterbodies_app.views import powaterbodies_list
@@ -81,7 +80,7 @@ urlpatterns = [
      path('volunteer/', volunteer_form, name='volunteer_form'),
      path('volunteers/', volunteers_list, name='volunteers_list'),
      #path('field-workers/', field_worker_list, name='field_worker_list'),
-    path('water_body_details/<int:water_body_id>/', water_body_details, name='water_body_details'),
+    
 
      path('waterbody-lists/', waterbody_lists, name='waterbody_lists'),
 
@@ -96,12 +95,12 @@ urlpatterns = [
     path('custom-login/', custom_login_view, name='custom_login'),
     path('upload_kml/', upload_kml, name='upload_kml'),
     path('map/', map_view, name='map_view'),
-    path('water-spread-details/', fetch_water_spread_data, name='water_spread_details'),
+   
    #path('register/field-worker/', register_field_worker, name='register_field_worker'),
-   path('apii/', views.fetch_api_data, name='fetch_api_data'),
-    path('waterbody-reviewer-response/', views.waterbody_reviewer_response, name='waterbody_reviewer_response'),
+  
+    
     path('metadata/', metadata_view, name='metadata_view'),
-    path('waterbody-fieldworkers/', views.field_workers, name='fieldworkers'),
+  
     path('powaterbodies/', powaterbodies_list, name='powaterbodies_list'),
      path('kml-files/', kml_files_list, name='kml_files_list'),
      path('govwb/', tabledesign, name='govwb'),
@@ -142,7 +141,7 @@ urlpatterns = [
      path('habitations/', views.habitation_list, name='habitation_list'),
     path('habitations/update/', views.habitation_update, name='habitation_update'),
     path('habitations/delete/', views.habitation_delete, name='habitation_delete'),
-    path('waterbody-details/', water_body_details, name='water_body_details'),
+    
      path('availabilities/', views.availability_list, name='availability_list'),
     path('availabilities/update/', views.availability_update, name='availability_update'),
     path('availabilities/delete/', views.availability_delete, name='availability_delete'),
@@ -167,7 +166,7 @@ urlpatterns = [
     path('catchment_types/', views.catchment_type_list, name='catchment_type_list'),
     path('catchment_types/update/', views.catchment_type_update, name='catchment_type_update'),
     path('catchment_types/delete/', views.catchment_type_delete, name='catchment_type_delete'),
-     path('water-body/', views.fetch_water_body_data, name='water_body_data'),
+    
      path('pwdtank', views.tank_data_list_view, name='pwdtank_list'),
     path('update/<int:pk>/', views.update_tankdata, name='update_tankdata'),
     path('delete/<int:pk>/', views.delete_tankdata, name='delete_tankdata'),

@@ -9,6 +9,8 @@ from .models import WaterBody
 from waterbodies_app.models import Availability
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django import forms
+
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from .models import Cropings
@@ -95,17 +97,16 @@ from waterbodies_app.models import Jurisdiction
 from .models import WaterBodyFieldReviewerReviewDetail
 from .serializers import WaterBodyFieldReviewerReviewDetailListSerializer, WaterBodyFieldReviewerReviewDetailSerializer
 logger = logging.getLogger(__name__)
-def water_body_details(request, water_body_id):
-    try:
-        water_body = WaterBody.objects.get(id=water_body_id)
-        kml_file_path = 'C:\waterbodies_project\static\Kalathi_kanmoi.kml'  # Replace this with the actual path to your KML file
-        return render(request, 'water_body_details.html', {'water_body': water_body, 'kml_file_path': kml_file_path})
-    except WaterBody.DoesNotExist:
+#def water_body_details(request, water_body_id):
+ ##      water_body = WaterBody.objects.get(id=water_body_id)
+   #     kml_file_path = 'C:\waterbodies_project\static\Kalathi_kanmoi.kml'  # Replace this with the actual path to your KML file
+     #   return render(request, 'water_body_details.html', {'water_body': water_body, 'kml_file_path': kml_file_path})
+    #except WaterBody.DoesNotExist:
         # Handle the case when the water body is not found
-        return render(request, 'water_body_not_found.html')
-    except Exception as e:
+     #   return render(request, 'water_body_not_found.html')
+    #except Exception as e:
         # Handle other exceptions
-        return render(request, 'error.html', {'error_message': str(e)})
+     #   return render(request, 'error.html', {'error_message': str(e)})
 def tableau_visualization(request):
     return render(request, 'map.html')
 from django.db.models import F
@@ -123,52 +124,67 @@ def calculate_distance(lat1, lon1, lat2, lon2):
     distance = radius_of_earth_km * c
     logging.info(f"Distance between ({lat1}, {lon1}) and ({lat2}, {lon2}): {distance} km")
     return distance
+class WaterbodyFilterForm(forms.Form):
+    taluk = forms.ChoiceField(
+        choices=[('', 'All Taluks')] + [(t, t) for t in PoOwaterbody.objects.values_list('taluk', flat=True).distinct()],
+        required=False,
+        label="Taluk"
+    )
+    village = forms.ChoiceField(
+        choices=[('', 'All Villages')] + [(v, v) for v in PoOwaterbody.objects.values_list('village', flat=True).distinct()],
+        required=False,
+        label="Village"
+    )
+
 def tabledesign(request):
-    # Get filter values from the request
-    taluk_filter = request.GET.get('taluk', '')
-    village_filter = request.GET.get('village', '')
+    # Initialize filter form with GET data
+    filter_form = WaterbodyFilterForm(request.GET or None)
+
+    # Fetch all records
+    waterbodies_list = PoOwaterbody.objects.all()
+
+    # Apply dropdown filters if valid
+    if filter_form.is_valid():
+        taluk_filter = filter_form.cleaned_data.get('taluk')
+        village_filter = filter_form.cleaned_data.get('village')
+
+        if taluk_filter:
+            waterbodies_list = waterbodies_list.filter(taluk=taluk_filter)
+        if village_filter:
+            waterbodies_list = waterbodies_list.filter(village=village_filter)
+
+    # Apply nearby filter using latitude, longitude, and radius
     latitude = request.GET.get('latitude', '')
     longitude = request.GET.get('longitude', '')
     radius = request.GET.get('radius', '')
 
-    # Fetch all records from the PoOwaterbody model
-    waterbodies_list = PoOwaterbody.objects.all()
-
-    # Apply text filters if they exist
-    if taluk_filter:
-        waterbodies_list = waterbodies_list.filter(taluk__icontains=taluk_filter)
-    if village_filter:
-        waterbodies_list = waterbodies_list.filter(village__icontains=village_filter)
-
-    # Apply nearby filter
     if latitude and longitude and radius:
         try:
             latitude = float(latitude)
             longitude = float(longitude)
             radius = float(radius)
 
-            # Filter waterbodies by distance
+            # Filter by distance
             waterbodies_list = [
                 wb for wb in waterbodies_list
-                if calculate_distance(latitude, longitude, wb.latitude, wb.longitude) <= radius
+                if wb.latitude and wb.longitude and calculate_distance(latitude, longitude, wb.latitude, wb.longitude) <= radius
             ]
         except ValueError:
-            # Handle invalid input
-            pass
+            pass  # Handle invalid input
 
-    # Paginate the records
+    # Paginate records
     paginator = Paginator(waterbodies_list, 10)
     page_number = request.GET.get('page')
     waterbodies = paginator.get_page(page_number)
 
-    # Create a form for each waterbody for the update modal
+    # Create update forms for modals
     forms = {waterbody.id: PoOwaterbodyForm(instance=waterbody) for waterbody in waterbodies}
 
-    # Pass the paginated records and forms to the template
+    # Pass data to template
     context = {
         'waterbodies': waterbodies,
         'forms': forms,
-        'filter_form': request.GET,
+        'filter_form': filter_form,
     }
 
     return render(request, 'govwbtable.html', context)
@@ -576,24 +592,6 @@ def pond_list(request):
     ponds = Pond.objects.all()
     return render(request, 'pond_list.html', {'ponds': ponds})
 
-def fetch_water_spread_data(request):
-    api_url = 'http://waterbody.cloudonweb.in:5000/waterBodyAdmin/waterBodyFieldReviewerResponse'  # Replace with your actual API URL
-    headers = {'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzIyMTQxNjExLCJqdGkiOiIyNjc4MTU5ZjA5NTg0YWY0YmI3MGVkM2U4MmUyYmI2MyIsInVzZXJfaWQiOjF9.-zWVM9HmPgbgPTmdrpiPRWOecW8_V6cjweP9yXdc7tM'}  # Add any required headers
-
-    response = requests.get(api_url, headers=headers)
-
-    if response.status_code == 200:
-        data = response.json()
-        context = {
-            'waterSpreadAreaIssues': data.get('waterSpreadAreaDetails', {}).get('issuesInWaterSpreadArea', '[]'),
-            'waterSpreadInvasiveSpecies': data.get('waterSpreadAreaDetails', {}).get('invasiveSpecies', '[]'),
-            'percentageOfSpread': data.get('waterSpreadAreaDetails', {}).get('percentageOfSpread', '')
-        }
-        context['waterSpreadAreaIssues'] = json.loads(context['waterSpreadAreaIssues'])
-        context['waterSpreadInvasiveSpecies'] = json.loads(context['waterSpreadInvasiveSpecies'])
-        return render(request, 'water_spread_details.html', context)
-    else:
-        return JsonResponse({'error': 'Failed to fetch data'}, status=response.status_code)
 def kml_files_list(request):
     fs = FileSystemStorage()
     kml_files = KMLFilesz.objects.all()
@@ -671,105 +669,9 @@ def metadata_view(request):
         })
 
     return render(request, 'metadata_view.html', {'metadata': metadata})
-def fetch_api_data(request):
-    # Step 1: Authenticate and obtain JWT token
-    auth_url = 'http://waterbody.cloudonweb.in:5000/auth/jwt/create'
-    credentials = {
-        'username': 'superadmin',  # Replace with your actual username
-        'password': '09fghAsd'   # Replace with your actual password
-    }
-    auth_response = requests.post(auth_url, data=credentials)
-    
-    if auth_response.status_code == 200:
-        token = auth_response.json().get('access_token')
-    else:
-        token = None
 
-    # Step 2: Use the token to access the protected API
-    if token:
-        api_url = 'http://waterbody.cloudonweb.in:5000/waterBodyAdmin/waterbodytempletanktypes/'
-        headers = {
-            'Authorization': f'Bearer {token}'
-        }
-        response = requests.get(api_url, headers=headers)
-        
-        if response.status_code == 200:
-            data = response.json()
-            results = data.get('results', [])
-        else:
-            results = []
-            print("Failed to fetch data. Response content:", response.content)
-    else:
-        results = []
-        print("Failed to obtain JWT token.")
 
-    # Step 3: Render the data in a template
-    return render(request, 'api1.html', {'results': results})
-def get_jwt_token():
-    auth_url = "http://waterbody.cloudonweb.in:5000/auth/jwt/create"  # Replace with the actual auth URL
-    credentials = {
-        "username": "superadmin",  # Replace with your username
-        "password": "09fghAsd"   # Replace with your password
-    }
 
-    response = requests.post(auth_url, data=credentials)
-    
-    if response.status_code == 200:
-        return response.json().get('access')  # Assuming the token is returned under 'access' key
-    else:
-        raise Exception("Failed to obtain JWT token. Check your credentials.")
-def waterbody_reviewer_response(request):
-    base_url = "http://waterbody.cloudonweb.in:5000/waterBodyAdmin/waterBodyFieldReviewerResponse/"
-    
-    # Get a fresh token
-    token = get_jwt_token()
-
-    headers = {
-        "Authorization": f"JWT {token}"
-    }
-
-    # Get the offset parameter from the URL (default to 340 if not provided)
-    offset = int(request.GET.get('offset', 340))
-    limit = 10  # Number of items per page
-
-    # Get filter parameters from the request
-    survey_number = request.GET.get('surveyNumber', '')
-    waterbody_id = request.GET.get('waterbodyId', '')
-    waterbody_type = request.GET.get('waterbodyType', '')
-
-    # Construct the URL with the current offset and any filters
-    url = f"{base_url}?offset={offset}&limit={limit}"
-    
-    # Add filter parameters to the URL if they are provided
-    if survey_number:
-        url += f"&surveyNumber={survey_number}"
-    if waterbody_id:
-        url += f"&waterbodyId={waterbody_id}"
-    if waterbody_type:
-        url += f"&waterbodyType={waterbody_type}"
-
-    # Make the API request
-    response = requests.get(url, headers=headers)
-    
-    # Handle token expiration by checking the status code
-    if response.status_code == 401:  # Unauthorized
-        token = get_jwt_token()
-        headers["Authorization"] = f"JWT {token}"
-        response = requests.get(url, headers=headers)
-    
-    data = response.json()
-
-    # Determine next and previous offsets
-    next_offset = offset + limit if data.get('next') else None
-    previous_offset = offset - limit if offset - limit >= 0 else None
-
-    return render(request, 'waterbody_reviewer_response.html', {
-        'data': data.get('results', []),  # Pass the results to the template
-        'next_offset': next_offset,
-        'previous_offset': previous_offset,
-        'current_offset': offset,
-        'filter_form': request.GET  # Pass the filter values to the template
-    })
 
 
     
@@ -789,26 +691,66 @@ def powaterbodies_list(request):
     return render(request, 'powaterbodies_list.html', context)
 
 
+def calculate_distance(lat1, lon1, lat2, lon2):
+    lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    radius_of_earth_km = 6371
+    return radius_of_earth_km * c
+
+# Filter Form
+class TankFilterForm(forms.Form):
+    village = forms.ChoiceField(
+        choices=[('', 'All Villages')] + [(v, v) for v in WaterbodiesTank.objects.values_list('village', flat=True).distinct()],
+        required=False, label="Village", widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    block = forms.ChoiceField(
+        choices=[('', 'All Blocks')] + [(b, b) for b in WaterbodiesTank.objects.values_list('block', flat=True).distinct()],
+        required=False, label="Block", widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    panchayat = forms.ChoiceField(
+        choices=[('', 'All Panchayats')] + [(p, p) for p in WaterbodiesTank.objects.values_list('panchayat', flat=True).distinct()],
+        required=False, label="Panchayat", widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    latitude = forms.FloatField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Latitude'}))
+    longitude = forms.FloatField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Longitude'}))
+    radius = forms.FloatField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Radius (km)'}))
+
+# Updated View
 def waterbodies_tank_list(request):
-    # Fetch all tanks
     tank_list = WaterbodiesTank.objects.all()
+    form = TankFilterForm(request.GET or None)
 
-    # Apply filters if any
-    village = request.GET.get('village')
-    block = request.GET.get('block')
-    panchayat = request.GET.get('panchayat')
+    if form.is_valid():
+        village = form.cleaned_data.get('village')
+        block = form.cleaned_data.get('block')
+        panchayat = form.cleaned_data.get('panchayat')
+        latitude = form.cleaned_data.get('latitude')
+        longitude = form.cleaned_data.get('longitude')
+        radius = form.cleaned_data.get('radius')
 
-    if village:
-        tank_list = tank_list.filter(village__icontains=village)
-    if block:
-        tank_list = tank_list.filter(block__icontains=block)
-    if panchayat:
-        tank_list = tank_list.filter(panchayat__icontains=panchayat)
+        if village:
+            tank_list = tank_list.filter(village__icontains=village)
+        if block:
+            tank_list = tank_list.filter(block__icontains=block)
+        if panchayat:
+            tank_list = tank_list.filter(panchayat__icontains=panchayat)
 
-    # Apply pagination
-    paginator = Paginator(tank_list, 10)  # Show 10 tanks per page
+        if latitude and longitude and radius:
+            try:
+                latitude, longitude, radius = float(latitude), float(longitude), float(radius)
+                tank_list = [
+                    tank for tank in tank_list
+                    if calculate_distance(latitude, longitude, tank.latitude, tank.longitude) <= radius
+                ]
+            except (TypeError, ValueError):
+                pass  # Ignore invalid values
+
+    paginator = Paginator(tank_list, 10)
     page_number = request.GET.get('page')
-
+    
     try:
         tanks = paginator.page(page_number)
     except PageNotAnInteger:
@@ -816,8 +758,7 @@ def waterbodies_tank_list(request):
     except EmptyPage:
         tanks = paginator.page(paginator.num_pages)
 
-    # Render the template with the paginated and filtered tank list
-    return render(request, 'waterbodies_tank_list.html', {'tanks': tanks})
+    return render(request, 'drda_tanks.html', {'tanks': tanks, 'form': form})
 
 
 def update_tank(request, tank_id):
@@ -837,52 +778,6 @@ def delete_tank(request, tank_id):
         return redirect('waterbodies_tank_list')  # Redirect after delete
     return render(request, 'confirm_delete.html', {'tank': tank})  # Render confirmation if needed
 
-def field_workers(request):
-    base_url = "http://waterbody.cloudonweb.in:5000/waterBodyAdmin/allusers/"
-    
-    # Get a fresh token
-    token = get_jwt_token()
-
-    headers = {
-        "Authorization": f"JWT {token}"
-    }
-
-    # Get the offset parameter from the URL
-    offset = int(request.GET.get('offset', 0))
-    limit = 10  # Number of items per page
-
-    # Get the username filter parameter
-    username_filter = request.GET.get('username', '')
-
-    # Construct the URL with the current offset and filter
-    url = f"{base_url}?offset={offset}&limit={limit}"
-
-    if username_filter:  # Add the username filter to the URL if provided
-        url += f"&username={username_filter}"
-
-    response = requests.get(url, headers=headers)
-    
-    # Handle token expiration by checking the status code
-    if response.status_code == 401:  # Unauthorized
-        token = get_jwt_token()
-        headers["Authorization"] = f"JWT {token}"
-        response = requests.get(url, headers=headers)
-    
-    data = response.json()
-    field_workers_count = data.get('count', 0)
-
-    # Determine next and previous offsets
-    next_offset = offset + limit if data.get('next') else None
-    previous_offset = offset - limit if offset - limit >= 0 else None
-
-    return render(request, 'waterbody_fieldworker.html', {
-        'data': data.get('results', []),  # Ensure results are empty if not found
-        'next_offset': next_offset,
-        'previous_offset': previous_offset,
-        'current_offset': offset,
-        'field_workers_count': field_workers_count,
-        'filter_form': request.GET  # Pass the filter values to the template
-    })
 
 
 
@@ -1269,74 +1164,27 @@ def save_permission(request):
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
     return JsonResponse({'success': False})
-def water_body_details(request):
-    api_url = "http://waterbody.cloudonweb.in:5000/waterBodyAdmin/waterBodyFieldReviewerResponse/"
-    water_params = {}
-    error_message = None
 
-    try:
-        # Get the JWT token
-        token = get_jwt_token()
-        
-        # Include the JWT token in the Authorization header
-        headers = {
-            'Authorization': f'Bearer {token}'
-        }
 
-        # Fetch data from the API
-        response = requests.get(api_url, headers=headers)
-        response.raise_for_status()  # Raise HTTPError for bad responses (4xx/5xx)
-        
-        # Parse the response
-        data = response.json()
-        water_params = json.loads(data.get('waterParams', '{}'))
-        
-    except requests.exceptions.RequestException as e:
-        error_message = f"Error fetching data from API: {e}"
-    except json.JSONDecodeError as e:
-        error_message = f"Error parsing JSON: {e}"
-    except Exception as e:
-        error_message = f"Error obtaining JWT token: {e}"
-    
-    # Pass the data and error message (if any) to the template
-    return render(request, 'waterparams.html', {'water_params': water_params, 'error_message': error_message})
-
-def fetch_water_body_data(request):
-    api_url = "http://waterbody.cloudonweb.in:5000/waterBodyAdmin/waterBodyFieldReviewerResponse/14d56954-7aab-44ba-8b7d-2b3b866fac4a/"
-    
-    try:
-        # Make the API request
-        response = requests.get(api_url)
-        response.raise_for_status()  # Check for HTTP errors
-        
-        # Get the main API response data
-        data = response.json()
-
-        # Parse the "waterParams" field which is a stringified JSON
-        water_params_raw = data.get("waterParams", "{}")
-        
-        # Safely load the stringified JSON from "waterParams"
-        water_params = json.loads(water_params_raw)
-
-    except (requests.RequestException, json.JSONDecodeError) as e:
-        # Handle potential errors
-        print(f"Error fetching data: {e}")
-        return HttpResponse("Error fetching data", status=500)
-
-    # Pass the parsed water_params to the template
-    return render(request, 'demofetch.html', {'water_params': water_params})
 
 
 
 # The main view that handles listing, filtering, and pagination
+from geopy.distance import geodesic  # For radius filtering
+
 def tank_data_list_view(request):
     # Get filter parameters from the request
-    search_query = request.GET.get('q', '')       # Tank name search query
-    village_query = request.GET.get('village', '')  # Village filter
+    search_query = request.GET.get('q', '')        # Tank name search query
+    village_query = request.GET.get('village', '') # Village filter
     block_query = request.GET.get('block', '')     # Block filter
+    latitude = request.GET.get('latitude')         # Latitude filter
+    longitude = request.GET.get('longitude')       # Longitude filter
+    radius = request.GET.get('radius')            # Radius filter in km
 
-    # Apply filters based on the provided query parameters
+    # Initial queryset
     filtered_tank_data = TankData.objects.all()
+
+    # Apply text-based filters
     if search_query:
         filtered_tank_data = filtered_tank_data.filter(tank_name__icontains=search_query)
     if village_query:
@@ -1344,20 +1192,44 @@ def tank_data_list_view(request):
     if block_query:
         filtered_tank_data = filtered_tank_data.filter(block__icontains=block_query)
 
-    # Count the total number of tank data entries after filtering
-    total_tank_data_count = filtered_tank_data.count()
+    # Apply radius-based filtering if latitude, longitude, and radius are provided
+    if latitude and longitude and radius:
+        try:
+            user_location = (float(latitude), float(longitude))
+            radius_km = float(radius)
 
-    # Paginate the results (10 entries per page)
+            # Filter by distance
+            filtered_tank_data = [
+                tank for tank in filtered_tank_data
+                if tank.latitude and tank.longitude and
+                   geodesic(user_location, (tank.latitude, tank.longitude)).km <= radius_km
+            ]
+        except ValueError:
+            pass  # Ignore invalid input for latitude, longitude, or radius
+
+    # Count after filtering
+    total_tank_data_count = len(filtered_tank_data)
+
+    # Paginate results (10 per page)
     paginator = Paginator(filtered_tank_data, 10)
     page_number = request.GET.get('page')
     paginated_tank_data = paginator.get_page(page_number)
 
-    return render(request, 'tank_data_list.html', {
+    # For dropdowns, get unique villages and blocks
+    unique_villages = TankData.objects.values_list('village', flat=True).distinct()
+    unique_blocks = TankData.objects.values_list('block', flat=True).distinct()
+
+    return render(request, 'pwd_tanks.html', {
         'page_obj': paginated_tank_data,
         'search_query': search_query,
         'village_query': village_query,
         'block_query': block_query,
-        'total_tank_data_count': total_tank_data_count  # Include the count in the context
+        'latitude': latitude,
+        'longitude': longitude,
+        'radius': radius,
+        'total_tank_data_count': total_tank_data_count,
+        'unique_villages': unique_villages,
+        'unique_blocks': unique_blocks,
     })
 @csrf_exempt
 def update_tankdata(request, pk):
@@ -1506,6 +1378,11 @@ def waterbody_table_view(request):
     # Fetch all waterbodies initially
     waterbodies = WaterBodyFieldReviewerReviewDetail.objects.all()
 
+    # Fetch distinct values for dropdowns
+    blocks = WaterBodyFieldReviewerReviewDetail.objects.values_list('block', flat=True).distinct()
+    taluks = WaterBodyFieldReviewerReviewDetail.objects.values_list('taluk', flat=True).distinct()
+    villages = WaterBodyFieldReviewerReviewDetail.objects.values_list('village', flat=True).distinct()
+
     # Get filter parameters
     block_filter = request.GET.get('block')
     taluk_filter = request.GET.get('taluk')
@@ -1521,13 +1398,13 @@ def waterbody_table_view(request):
 
     # Apply field-based filters
     if block_filter:
-        waterbodies = waterbodies.filter(block__icontains=block_filter)
+        waterbodies = waterbodies.filter(block=block_filter)
     if taluk_filter:
-        waterbodies = waterbodies.filter(taluk__icontains=taluk_filter)
+        waterbodies = waterbodies.filter(taluk=taluk_filter)
+    if village_filter:
+        waterbodies = waterbodies.filter(village=village_filter)
     if waterbody_type_filter:
         waterbodies = waterbodies.filter(waterbodyType=waterbody_type_filter)
-    if village_filter:
-        waterbodies = waterbodies.filter(village__icontains=village_filter)
     if waterbody_name_filter:
         waterbodies = waterbodies.filter(waterbodyName__icontains=waterbody_name_filter)
     if survey_number_filter:
@@ -1535,7 +1412,7 @@ def waterbody_table_view(request):
     if waterbody_id_filter:
         waterbodies = waterbodies.filter(waterbodyId__icontains=waterbody_id_filter)
     if jurisdiction_filter:
-        waterbodies = waterbodies.filter(jurisdiction__icontains=jurisdiction_filter)  # Apply jurisdiction filter
+        waterbodies = waterbodies.filter(jurisdiction__icontains=jurisdiction_filter)
 
     # Parse JSON-based filters
     if percentage_of_spread_filter or future_activity_filter or retaining_wall_filter:
@@ -1545,9 +1422,7 @@ def waterbody_table_view(request):
                 # Parse waterParams JSON
                 waterbody_data = json.loads(waterbody.waterParams)
                 water_spread_area_details = waterbody_data.get('waterSpreadAreaDetails', {})
-                future_activities = json.loads(
-                    waterbody_data.get('futureActivities', {}).get('activitiesUndertaken', "[]")
-                )
+                future_activities = waterbody_data.get('futureActivities', {}).get('activitiesUndertaken', [])
                 retaining_wall_status = waterbody_data.get('presenceOfRetainingWall', '')
 
                 # Get percentageOfSpread
@@ -1556,28 +1431,33 @@ def waterbody_table_view(request):
                 # Apply filters
                 # Check if any of the selected future activities match
                 future_activity_match = (
-                    not future_activity_filter or any(
-                        activity in future_activity_filter for activity in future_activities
-                    )
+                    not future_activity_filter or any(activity in future_activities for activity in future_activity_filter)
                 )
-                
+
                 # Check if retaining wall status matches
                 retaining_wall_match = not retaining_wall_filter or retaining_wall_filter == retaining_wall_status
 
-                if (
-                    (not percentage_of_spread_filter or percentage_of_spread_filter in percentage_of_spread) and
-                    future_activity_match and
-                    retaining_wall_match
-                ):
+                # Check percentage of spread
+                percentage_match = (
+                    not percentage_of_spread_filter or percentage_of_spread_filter in str(percentage_of_spread)
+                )
+
+                if future_activity_match and retaining_wall_match and percentage_match:
                     filtered_waterbodies.append(waterbody)
-            except (ValueError, TypeError) as e:
+
+            except (ValueError, TypeError, json.JSONDecodeError) as e:
                 print(f"Error processing waterbody {waterbody.id}: {e}")
                 continue
 
         waterbodies = filtered_waterbodies
 
     # Pass the filtered waterbodies to the template
-    return render(request, 'testjson.html', {'waterbodies': waterbodies})
+    return render(request, 'testjson.html', {
+        'waterbodies': waterbodies,
+        'blocks': blocks,
+        'taluks': taluks,
+        'villages': villages,
+    })
 
 
 
@@ -1810,3 +1690,4 @@ def download_waterbody_pdf(request, pk):
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+ 

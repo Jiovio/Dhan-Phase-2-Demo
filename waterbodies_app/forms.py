@@ -77,6 +77,19 @@ class PoOwaterbodyForm(forms.ModelForm):
     class Meta:
         model = PoOwaterbody
         fields = '__all__'
+class WaterbodyFilterForm(forms.Form):
+    taluk = forms.ModelChoiceField(
+        queryset=PoOwaterbody.objects.values_list('taluk', flat=True).distinct(),
+        required=False,
+        empty_label="All Taluks",
+        label="Taluk"
+    )
+    village = forms.ModelChoiceField(
+        queryset=PoOwaterbody.objects.values_list('village', flat=True).distinct(),
+        required=False,
+        empty_label="All Villages",
+        label="Village"
+    )
         
 from .models import WaterBodyFieldReviewerReviewDetail
 

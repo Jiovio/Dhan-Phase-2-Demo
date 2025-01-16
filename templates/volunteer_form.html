@@ -12,13 +12,18 @@ body {
         font-family: 'Roboto', sans-serif;
     }
     /* Container for the layout */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: linear-gradient(to top right, #0060D9, #2AC5A7);
+}
 .contact-container {
+    min-height: 100vh;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     padding: 40px;
-    
-    background: linear-gradient(to top right, #0060D9, #2AC5A7);
 }
 
 /* Left content styling */
